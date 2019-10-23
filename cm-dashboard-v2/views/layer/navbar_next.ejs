@@ -1,0 +1,298 @@
+<div class="container-fluid" id="navbar">
+    <hr style="border:1.5px solid;">
+    <div style="text-align: center">
+        <% if(language==0) {%>
+            <a style="font-size: 18px;" href="javascript:history.go(0)">護聯網平台</a>
+        <% }else if(language==1){%>
+            <a style="font-size: 18px;" href="javascript:history.go(0)">護聯網平台</a>
+        <% }else if(language==2){%>
+            <a style="font-size: 18px;" href="javascript:history.go(0)">護聯網平台</a>
+        <% } %>
+    </div>
+    <hr style="border:1.5px solid;">
+
+    <div style="height:20%;">
+        <img id="warning_icon" src="/image/warning.png" width="20px" height="20px" style="margin-left: 90%;visibility: hidden;"/>
+        <% if(language==0) {%>
+            <a　style="font-size: 20px">姓名:　</a>
+        <% }else if(language==1){%>
+            <a　style="font-size: 20px">姓名:　</a>
+        <% }else if(language==2){%>
+            <a　style="font-size: 20px">Name:　</a>
+        <% } %>
+        <a id="patient_name" style="font-size: 20px"></a><br>
+        <% if(language==0) {%>
+            <a　style="font-size: 20px">樓層:　</a>
+        <% }else if(language==1){%>
+            <a　style="font-size: 20px">楼层:　</a>
+        <% }else if(language==2){%>
+            <a　style="font-size: 20px">Floor:　</a>
+        <% } %>
+        <a id="patient_floor" 　style="font-size: 20px"></a><br>
+        <% if(language==0) {%>
+            <a　style="font-size: 20px">房號:　</a>
+        <% }else if(language==1){%>
+            <a　style="font-size: 20px">房号:　</a>
+        <% }else if(language==2){%>
+            <a　style="font-size: 20px">RoomNumber:　</a>
+        <% } %>
+        <a id="patient_room" 　style="font-size: 10px"></a><br>
+        <img src="/image/back.png" width="20px" height="20px" onclick="javascript:history.go(0)"
+            style="margin-left: 90%;" />
+    </div>
+
+    <hr>
+
+    <% if(checkdata == null) {%>
+    <div style="height: 80%;">
+        <% if(language==0) {%>
+            <span>設備皆無告警值設定</span>
+        <% }else if(language==1){%>
+            <span>设备皆无告警值设定</span>
+        <% }else if(language==2){%>
+            <span>No alarm value setting on the device</span>
+        <% } %>
+    </div>
+    <% }else{ %>
+    <div style="height: 80%;">
+
+        <div class="accordion" id="accordionExample">
+
+        <% var warning_icon=0 %>
+        <% for(x=2;x<13;x++) {%>
+            <% for(y=0;y<threshold.length;y++) {%>
+                <% var ww = JSON.parse(JSON.stringify(threshold[y])) %>
+                <% if(ww[0].Devicetype==x) {%>
+                <% if(ww[0].Threshold!=null) {%>
+                <!-- <% console.log("--------------------") %> -->
+                <!-- <% console.log(mac[y]) %> -->
+                <!-- <% console.log("devicetpye"+x) %> -->
+                <% var threshold_value = JSON.parse(ww[0].Threshold) %>
+                <!-- <% console.log(threshold_value) %> -->
+                <% var warnings %>
+                <% var flagv %>
+                <% var warnings_time = new Array(); %>
+                <% switch(x) {
+                        case 2: 
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                        break;
+                        case 3:
+                            warnings=0;
+                            warnings_time = new Array();
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                            var t3data = checkdata[y];
+                            for(t3=0;t3<t3data.length;t3++){
+                                flagv=0;
+                                if(threshold_value[0]!="NULL" && flagv==0 ){
+                                    if(t3data[t3].Breathe>threshold_value[0]){
+                                        <!-- console.log(threshold_value[0]); -->
+                                        <!-- console.log(t3data[t3].Breathe); -->
+                                        warnings++;
+                                        var n = {"id":t3data[t3].id,"Time":t3data[t3].Time,"Name":"Breathe","Value":t3data[t3].Breathe};
+                                        warnings_time.push(n);
+                                        flagv=1;
+                                    }
+                                }
+                                if(threshold_value[1]!="NULL" && flagv==0 ){
+                                    if(t3data[t3].Bloodoxygen>threshold_value[1]){
+                                        <!-- console.log(threshold_value[1]); -->
+                                        <!-- console.log(t3data[t3].Bloodoxygen); -->
+                                        warnings++;
+                                        var n = {"id":t3data[t3].id,"Time":t3data[t3].Time,"Name":"Bloodoxygen","Value":t3data[t3].Bloodoxygen};
+                                        warnings_time.push(n);
+                                        flagv=1;
+                                    }
+                                }
+                                if(threshold_value[2]!="NULL" && flagv==0 ){
+                                    if(t3data[t3].Heartrate>threshold_value[2]){
+                                        <!-- console.log(threshold_value[2]); -->
+                                        <!-- console.log(t3data[t3].Heartrate); -->
+                                        warnings++;
+                                        var n = {"id":t3data[t3].id,"Time":t3data[t3].Time,"Name":"Heartrate","Value":t3data[t3].Heartrate};
+                                        warnings_time.push(n);
+                                        flagv=1;
+                                    }
+                                }
+                            }
+                            <!-- console.log("warnings:"+warnings); -->
+                            <!-- console.log(warnings_time); -->
+                            %>
+                            <% if(JSON.stringify(warnings_time)!="[]") {%>
+                            <% warning_icon++ %>
+                            <div class="card">
+                                <div class="card-header" id="type<%= x %>">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#type<%= x %>_c" aria-expanded="false" aria-controls="type<%= x %>_c">
+                                            <img src="/image/sleeptape.png" alt="font" width="40px" height="40px" />
+                                            <% if(language==0) {%>
+                                                告警值超標共/<%= warnings %> 次
+                                            <% }else if(language==1){%>
+                                                告警值超标共/<%= warnings %> 次
+                                            <% }else if(language==2){%>
+                                                The alarm value exceeded the standard /<%= warnings %> times.
+                                            <% } %>
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="type<%= x %>_c" class="collapse" aria-labelledby="type<%= x %>" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <% for(t3time=0;t3time<warnings_time.length;t3time++) {%>
+                                            <span id="type3-<%= warnings_time[t3time].id %>"><%= warnings_time[t3time].Time %><br>
+                                                <%= warnings_time[t3time].Name %>：<%= warnings_time[t3time].Value %></span>&nbsp;&nbsp;&nbsp;<button onclick="resolve('<%= mac[y].Mac %>','<%= warnings_time[t3time].id %>')">
+                                                    <% if(language==0) {%>
+                                                        排除
+                                                    <% }else if(language==1){%>
+                                                        排除
+                                                    <% }else if(language==2){%>
+                                                        Exclude
+                                                    <% } %>
+                                                </button>
+                                                <hr style="border: 1px solid black">
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                        <% break;
+                        case 4:
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                        break;
+                        case 5:
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                        break;
+                        case 6:
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                        break;
+                        case 7:
+                            warnings=0;
+                            warnings_time = new Array();
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                            var t7data = checkdata[y];
+                            for(t7=0;t7<t7data.length;t7++){
+                                flagv=0;
+                                if(threshold_value[0]!="NULL" && flagv==0 ){
+                                    if(t7data[t7].SBP>threshold_value[0]){
+                                        <!-- console.log(threshold_value[0]); -->
+                                        <!-- console.log(t7data[t7].SBP); -->
+                                        warnings++;
+                                        var n = {"id":t7data[t7].id,"Time":t7data[t7].Time,"Name":"SBP","Value":t7data[t7].SBP};
+                                        warnings_time.push(n);
+                                        flagv=1;
+                                    }
+                                }
+                                if(threshold_value[1]!="NULL" && flagv==0 ){
+                                    if(t7data[t7].DBP>threshold_value[1]){
+                                        <!-- console.log(threshold_value[1]); -->
+                                        <!-- console.log(t7data[t7].DBP); -->
+                                        warnings++;
+                                        var n = {"id":t7data[t7].id,"Time":t7data[t7].Time,"Name":"DBP","Value":t7data[t7].DBP};
+                                        warnings_time.push(n);
+                                        flagv=1;
+                                    }
+                                }
+                                if(threshold_value[2]!="NULL" && flagv==0 ){
+                                    if(t7data[t7].Heartrate>threshold_value[2]){
+                                        <!-- console.log(threshold_value[2]); -->
+                                        <!-- console.log(t7data[t7].Heartrate); -->
+                                        warnings++;
+                                        var n = {"id":t7data[t7].id,"Time":t7data[t7].Time,"Name":"Heartrate","Value":t7data[t7].Heartrate};
+                                        warnings_time.push(n);
+                                        flagv=1;
+                                    }
+                                }
+                            }
+                            <!-- console.log("warnings:"+warnings); -->
+                            <!-- console.log(warnings_time); -->
+                            %>
+                            <% if(JSON.stringify(warnings_time)!="[]") {%>
+                            <% warning_icon++ %>
+                            <div class="card">
+                                <div class="card-header" id="type<%= x %>">
+                                    <h2 class="mb-0">
+                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#type<%= x %>_c" aria-expanded="false" aria-controls="type<%= x %>_c">
+                                            <img src="/image/bloodpressure.png" alt="font" width="40px" height="40px" />
+                                            <% if(language==0) {%>
+                                                告警值超標共/<%= warnings %> 次
+                                            <% }else if(language==1){%>
+                                                告警值超标共/<%= warnings %> 次
+                                            <% }else if(language==2){%>
+                                                The alarm value exceeded the standard /<%= warnings %> times.
+                                            <% } %>
+                                        </button>
+                                    </h2>
+                                </div>
+                                <div id="type<%= x %>_c" class="collapse" aria-labelledby="type<%= x %>" data-parent="#accordionExample">
+                                    <div class="card-body">
+                                        <% for(t7time=0;t7time<warnings_time.length;t7time++) {%>
+                                            <span id="type7-<%= warnings_time[t7time].id %>"><%= warnings_time[t7time].Time %><br>
+                                                <%= warnings_time[t7time].Name %>：<%= warnings_time[t7time].Value %></span>&nbsp;&nbsp;&nbsp;<button onclick="resolve('<%= mac[y].Mac %>','<%= warnings_time[t7time].id %>')">
+                                                    <% if(language==0) {%>
+                                                        排除
+                                                    <% }else if(language==1){%>
+                                                        排除
+                                                    <% }else if(language==2){%>
+                                                        Exclude
+                                                    <% } %>
+                                                </button>
+                                                <hr style="border: 1px solid black">
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                            
+                        <% break;
+                        case 8:
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                        break;
+                        case 9:
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                        break;
+                        case 10:
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                        break;
+                        case 11:
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                        break;
+                        case 12:
+                            <!-- console.log(x); -->
+                            <!-- console.log(checkdata[y]); -->
+                        break;
+                    } %>
+                <% } %>
+                <% } %>
+            <% } %>
+        <% } %>
+        <% if(warning_icon > 0){%>
+            <script>
+                var warning_dialog=document.getElementById("warning_icon");
+                warning_dialog.style.visibility='visible';
+            </script>
+        <% } %>
+        </div>
+        <script>
+            function resolve(mac,id){
+                $.post("/cancel/warning",{mac,id},function(data){
+                    if(data=="排除完成"){
+                        location.reload();
+                    }else{
+                        alert("排除失敗");
+                    }
+                })
+            }
+        </script>
+    </div>
+    <% } %>
+</div>

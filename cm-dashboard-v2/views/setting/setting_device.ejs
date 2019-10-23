@@ -1,0 +1,1054 @@
+<div id="main" style="height:850px;overflow-y:scroll">
+    
+    <button type="button" class="btn btn-primary" style="float: right;margin-top: 10px;margin-right: 10px"
+        data-toggle="modal" data-target="#createdevice">
+        <% if (language==0){%>
+            新增
+        <% }else if (language==1){%>
+            新增
+        <% }else if (language==2){%>
+            New
+        <% }%>
+        <%= type %></button>
+    <!-- Modal-create -->
+    <div class="modal fade" id="createdevice" tabindex="-1" role="dialog" aria-labelledby="createLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createLabel">
+                        <% if (language==0){%>
+                            新增
+                        <% }else if (language==1){%>
+                            新增
+                        <% }else if (language==2){%>
+                            New
+                        <% }%>
+                        <%= type %>
+                        <% if (language==0){%>
+                            設備
+                        <% }else if (language==1){%>
+                            设备
+                        <% }else if (language==2){%>
+                            device
+                        <% }%>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form style="text-align: left" action="javascript:createvalue_device('device','<%= device_id %>','<%= language %>')">
+                        <label for="mac" class="col-form-label">
+                                <% if (language==0){%>
+                                    識別碼：
+                                <% }else if (language==1){%>
+                                    识别码：
+                                <% }else if (language==2){%>
+                                    Identifier:
+                                <% }%> 
+                            </label>
+                        <input type="text" class="form-control" id="mac" required>
+                        <label for="name" class="col-form-label">
+                                <% if (language==0){%>
+                                    名稱:
+                                <% }else if (language==1){%>
+                                    名称:
+                                <% }else if (language==2){%>
+                                    name:
+                                <% }%> 
+                            </label>
+                        <input type="text" class="form-control" id="name" required>
+                        <label for="description" class="col-form-label">
+                                <% if (language==0){%>
+                                    描述:
+                                <% }else if (language==1){%>
+                                    描述:
+                                <% }else if (language==2){%>
+                                    description:
+                                <% }%> 
+                            </label>
+                        <input type="text" class="form-control" id="description">
+
+                        <label for="floor" class="col-form-label">
+                                <% if (language==0){%>
+                                    樓層:
+                                <% }else if (language==1){%>
+                                    楼层:
+                                <% }else if (language==2){%>
+                                    floor:
+                                <% }%> 
+                            </label>
+                        <select class="form-control" id="floor" onchange="giveSelection(this.value)">
+                            <option value="">
+                                    <% if (language==0){%>
+                                        暫無
+                                    <% }else if (language==1){%>
+                                        暂无
+                                    <% }else if (language==2){%>
+                                        No data
+                                    <% }%> 
+                                </option>
+                            <% for(f=0;f<floor.length;f++) {%>
+                            <option value='<%= floor[f].Number %>'><%= floor[f].Number %></option>
+                            <% } %>
+                        </select>
+
+                        <label for="room" class="col-form-label">
+                                <% if (language==0){%>
+                                    房號:
+                                <% }else if (language==1){%>
+                                    房号:
+                                <% }else if (language==2){%>
+                                    Room No:
+                                <% }%> 
+                            </label>
+                        <select id="room" class="form-control">
+                            <% if(room[0].Number==null){ %>
+                            <option value="">
+                                    <% if (language==0){%>
+                                        暫無
+                                    <% }else if (language==1){%>
+                                        暂无
+                                    <% }else if (language==2){%>
+                                        No data
+                                    <% }%> 
+                            </option>
+                            <% }else{ %>
+                            <option data-option="" value="">
+                                    <% if (language==0){%>
+                                        暫無
+                                    <% }else if (language==1){%>
+                                        暂无
+                                    <% }else if (language==2){%>
+                                        No data
+                                    <% }%> </option>
+                            <% for(r=0;r<room.length;r++) {%>
+                            <option data-option='<%= room[r].FloorNumber %>' value='<%= room[r].Number %>'><%= room[r].Number %></option>
+                            <% } %>
+                            <% } %>
+                        </select>
+
+                        <script>
+                            var sele1 = document.querySelector('#floor');
+                            var sele2 = document.querySelector('#room');
+                            var optionse2 = sele2.querySelectorAll('option');
+                            function giveSelection(selValue) {
+                            sele2.innerHTML =　'';
+                                for(var i = 0; i < optionse2.length; i++) {
+                                    if(optionse2[i].dataset.option === selValue) {
+                                    sele2.appendChild(optionse2[i]);
+                                    }
+                                }
+                            }
+                            giveSelection(sele1.value);
+                        </script>
+
+                        <label for="user" class="col-form-label">
+                                <% if (language==0){%>
+                                    使用者:
+                                <% }else if (language==1){%>
+                                    使用者:
+                                <% }else if (language==2){%>
+                                    user:
+                                <% }%> 
+                            </label>
+                        <select class="form-control" id="user">
+                            <option value="">
+                                    <% if (language==0){%>
+                                        暫無
+                                    <% }else if (language==1){%>
+                                        暂无
+                                    <% }else if (language==2){%>
+                                        No data
+                                    <% }%>     
+                            </option>
+                            <% for(u=0;u<user.length;u++) {%>
+                            <option value='<%= user[u].Username %>'><%= user[u].Username %></option>
+                            <% } %>
+                        </select>
+                        <label for="service" class="col-form-label">
+                                <% if (language==0){%>
+                                    服務UUID:
+                                <% }else if (language==1){%>
+                                    服务UUID:
+                                <% }else if (language==2){%>
+                                    Service UUID:
+                                <% }%>  
+                            </label>
+                        <input type="text" class="form-control" id="service" required readonly value="暂不支援">
+                        <label for="receive" class="col-form-label">
+                                <% if (language==0){%>
+                                    接收UUID:
+                                <% }else if (language==1){%>
+                                    接收UUID:
+                                <% }else if (language==2){%>
+                                    Receive UUID:
+                                <% }%>  
+                            </label>
+                        <input type="text" class="form-control" id="receive" required readonly value="暂不支援">
+                        <label for="send" class="col-form-label">
+                                <% if (language==0){%>
+                                    發送UUID:
+                                <% }else if (language==1){%>
+                                    发送UUID:
+                                <% }else if (language==2){%>
+                                    Send UUID:
+                                <% }%> 
+                            </label>
+                        <input type="text" class="form-control" id="send" required readonly value="暂不支援">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    <% if (language==0){%>
+                                        取消
+                                        <% }else if (language==1){%>
+                                            取消
+                                        <% }else if (language==2){%>
+                                            cancel
+                                        <% }%>
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                    <% if (language==0){%>
+                                        確認
+                                        <% }else if (language==1){%>
+                                            确认
+                                        <% }else if (language==2){%>
+                                            confirm
+                                        <% }%>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <% if(device[0].id==null){ %>
+
+        <% if (language==0){%>
+            暫無資料請先點擊右方按鈕新增資料
+            <% }else if (language==1){%>
+                暂无资料请先点击右方按钮新增资料
+            <% }else if (language==2){%>
+                No information, please click the button on the right to add information.
+            <% }%>
+    
+
+    <% }else{ %>
+
+    <table id="example">
+        <thead>
+            <tr>
+                <th>
+                        <% if (language==0){%>
+                            識別碼：
+                        <% }else if (language==1){%>
+                            识别码：
+                        <% }else if (language==2){%>
+                            Identifier:
+                        <% }%> 
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            名稱:
+                        <% }else if (language==1){%>
+                            名称:
+                        <% }else if (language==2){%>
+                            name:
+                        <% }%> 
+                </th>
+                <th>
+                    <% if (language==0){%>
+                    描述:
+                    <% }else if (language==1){%>
+                        描述:
+                    <% }else if (language==2){%>
+                        description:
+                    <% }%> 
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            樓層:
+                        <% }else if (language==1){%>
+                            楼层:
+                        <% }else if (language==2){%>
+                            floor:
+                        <% }%> 
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            房號:
+                        <% }else if (language==1){%>
+                            房号:
+                        <% }else if (language==2){%>
+                            Room No:
+                        <% }%> 
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            使用者:
+                        <% }else if (language==1){%>
+                            使用者:
+                        <% }else if (language==2){%>
+                            user:
+                        <% }%> 
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            服務UUID:
+                        <% }else if (language==1){%>
+                            服务UUID:
+                        <% }else if (language==2){%>
+                            Service UUID:
+                        <% }%>  
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            接收UUID:
+                        <% }else if (language==1){%>
+                            接收UUID:
+                        <% }else if (language==2){%>
+                            Receive UUID:
+                        <% }%> 
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            發送UUID:
+                        <% }else if (language==1){%>
+                            发送UUID:
+                        <% }else if (language==2){%>
+                            Send UUID:
+                        <% }%> 
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(x=0;x<device.length;x++) {%>
+            <tr>
+                <% if(device[x].Mac == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%> 
+                </td>
+                <% }else{ %>
+                <td><%= device[x].Mac %></td>
+                <% } %>
+
+                <% if(device[x].Name == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%> 
+                </td>
+                <% }else{ %>
+                <td><%= device[x].Name %></td>
+                <% } %>
+
+                <% if(device[x].Description == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%> 
+                </td>
+                <% }else{ %>
+                <td><%= device[x].Description %></td>
+                <% } %>
+
+                <% if(device[x].FloorNumber == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%> 
+                </td>
+                <% }else{ %>
+                <td><%= device[x].FloorNumber %></td>
+                <% } %>
+
+                <% if(device[x].RoomNumber == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%> 
+                </td>
+                <% }else{ %>
+                <td><%= device[x].RoomNumber %></td>
+                <% } %>
+
+                <% if(device[x].Username == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%> 
+                </td>
+                <% }else{ %>
+                <td><%= device[x].Username %></td>
+                <% } %>
+
+                <% if(device[x].ServiceUUID == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%> 
+                </td>
+                <% }else{ %>
+                <td><%= device[x].ServiceUUID %></td>
+                <% } %>
+
+                <% if(device[x].ReceiveUUID == null) {%>
+                <td>
+                    <% if (language==0){%>
+                    暫無
+                    <% }else if (language==1){%>
+                        暂无
+                    <% }else if (language==2){%>
+                        No data
+                    <% }%> 
+                </td>
+                <% }else{ %>
+                <td><%= device[x].ReceiveUUID %></td>
+                <% } %>
+
+                <% if(device[x].SendUUID == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%> 
+                </td>
+                <% }else{ %>
+                <td><%= device[x].SendUUID %></td>
+                <% } %>
+
+                <td><button type="button" class="btn btn-info" data-toggle="modal"
+                        data-target="#modal-<%= device[x].Mac %>-mod">
+                        <% if (language==0){%>
+                            修改
+                        <% }else if (language==1){%>
+                            修改
+                        <% }else if (language==2){%>
+                            modify
+                        <% }%> 
+                        </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal-<%= device[x].Mac %>-mod" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= device[x].Mac %>-Label-mod" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= device[x].Mac %>-Label-mod">
+                                            <% if (language==0){%>
+                                                修改
+                                            <% }else if (language==1){%>
+                                                修改
+                                            <% }else if (language==2){%>
+                                                modify
+                                            <% }%> <span
+                                            style="font-size: 25px;font-style:italic"><%= device[x].Name %></span>　
+                                            <% if (language==0){%>
+                                                資料
+                                            <% }else if (language==1){%>
+                                                资料
+                                            <% }else if (language==2){%>
+                                                data
+                                            <% }%> 
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form style="text-align: left">
+                                        <label for="mac" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    識別碼：
+                                                <% }else if (language==1){%>
+                                                    识别码：
+                                                <% }else if (language==2){%>
+                                                    Identifier:
+                                                <% }%> 
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= device[x].Mac %>'
+                                            id="mac_modify<%= device[x].Mac %>" readonly>
+                                        <label for="name" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    名稱:
+                                                <% }else if (language==1){%>
+                                                    名称:
+                                                <% }else if (language==2){%>
+                                                    name:
+                                                <% }%> 
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= device[x].Name %>'
+                                            id="name_modify<%= device[x].Mac %>">
+                                        <label for="description" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    描述:
+                                                    <% }else if (language==1){%>
+                                                        描述:
+                                                    <% }else if (language==2){%>
+                                                        description:
+                                                    <% }%> 
+                                        </label>
+                                        <% if(device[x].Description == null) {%>
+                                            <% if (language==0){%>
+                                                <input type="text" class="form-control" value="暫無"
+                                                    id="description_modify<%= device[x].Mac %>">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" value="暂无"
+                                                    id="description_modify<%= device[x].Mac %>">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" value="No data"
+                                                    id="description_modify<%= device[x].Mac %>">
+                                            <% }%>
+                                        <% }else{ %>
+                                        <input type="text" class="form-control" value='<%= device[x].Description %>'
+                                            id="description_modify<%= device[x].Mac %>">
+                                        <% } %>
+
+                                        <label for="floor" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    樓層:
+                                                <% }else if (language==1){%>
+                                                    楼层:
+                                                <% }else if (language==2){%>
+                                                    floor:
+                                                <% }%> 
+                                        </label>
+                                        <select id="floor_modify<%= device[x].Mac %>" class="form-control" onchange="giveSelection1('<%= device[x].Mac %>',this.value)">
+                                            <% if(device[x].FloorNumber == null) {%>
+                                            <option value='' selected="selected">
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%> 
+                                            </option>
+                                            <% for(fg=0;fg<floor.length;fg++) {%>
+                                            <option value='<%= floor[fg].Number %>'><%= floor[fg].Number %></option>
+                                            <% } %>
+                                            <% }else{ %>
+                                            <option value=''>
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%> 
+                                            </option>
+                                            <% for( fgf=0;fgf<floor.length;fgf++) {%>
+                                            <% if( device[x].FloorNumber == floor[fgf].Number ) {%>
+                                            <option value='<%= floor[fgf].Number %>' selected="selected">
+                                                <%= floor[fgf].Number %></option>
+                                            <% }else{ %>
+                                            <option value='<%= floor[fgf].Number %>'><%= floor[fgf].Number %></option>
+                                            <% } %>
+                                            <% } %>
+                                            <% } %>
+                                        </select>
+
+                                        <label for="room" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    房號:
+                                                <% }else if (language==1){%>
+                                                    房号:
+                                                <% }else if (language==2){%>
+                                                    Room No:
+                                                <% }%> 
+                                        </label>
+                                        <select id="room_modify<%= device[x].Mac %>" class="form-control">
+                                            <% if(device[x].RoomNumber == null) {%>
+                                            <option value='' selected="selected">
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%> 
+                                            </option>
+                                            <% for(rd=0;rd<room.length;rd++) {%>
+                                            <option value='<%= room[rd].Number %>'><%= room[rd].Number %></option>
+                                            <% } %>
+                                            <% }else{ %>
+                                            <option value=''>
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%> 
+                                            </option>
+                                            <% for( rdr=0;rdr<room.length;rdr++) {%>
+                                            <% if( device[x].RoomNumber == room[rdr].Number ) {%>
+                                            <option value='<%= room[rdr].Number %>' selected="selected">
+                                                <%= room[rdr].Number %></option>
+                                            <% }else{ %>
+                                            <option value='<%= room[rdr].Number %>'><%= room[rdr].Number %></option>
+                                            <% } %>
+                                            <% } %>
+                                            <% } %>
+                                        </select>
+
+                                        <script>
+                                            var sel11;
+                                            var sel22;
+                                            var options22;
+                                            function giveSelection1(id,selValue) {
+                                                sel11 = document.querySelector('#floor_modify'+id);
+                                                sel22 = document.querySelector('#room_modify'+id);
+                                                options22 = sel22.querySelectorAll('option'); 
+                                                sel22.innerHTML = '';
+                                                for(var i = 0; i < optionse2.length; i++) {
+                                                    if(optionse2[i].dataset.option === selValue) {
+                                                        sel22.appendChild(optionse2[i]);
+                                                    }
+                                                }
+                                            }
+                                        </script>
+
+                                        <label for="user" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    使用者:
+                                                <% }else if (language==1){%>
+                                                    使用者:
+                                                <% }else if (language==2){%>
+                                                    user:
+                                                <% }%> 
+                                        </label>
+                                        <select id="user_modify<%= device[x].Mac %>" class="form-control">
+                                            <% if(device[x].Username == null) {%>
+                                            <option value='' selected="selected">
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%> 
+                                            </option>
+                                            <% for(ud=0;ud<user.length;ud++) {%>
+                                            <option value='<%= user[ud].Username %>'><%= user[ud].Username %></option>
+                                            <% } %>
+                                            <% }else{ %>
+                                            <option value=''>
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%> 
+                                            </option>
+                                            <% for( udu=0;udu<user.length;udu++) {%>
+                                            <% if( device[x].Username == user[udu].Username ) {%>
+                                            <option value='<%= user[udu].Username %>' selected="selected">
+                                                <%= user[udu].Username %></option>
+                                            <% }else{ %>
+                                            <option value='<%= user[udu].Username %>'><%= user[udu].Username %></option>
+                                            <% } %>
+                                            <% } %>
+                                            <% } %>
+                                        </select>
+                                         
+
+                                        <label for="service" class="col-form-label">
+                                        <% if (language==0){%>
+                                            服務UUID:
+                                        <% }else if (language==1){%>
+                                            服务UUID:
+                                        <% }else if (language==2){%>
+                                            Service UUID:
+                                        <% }%> </label>
+                                        <input type="text" class="form-control" value='<%= device[x].ServiceUUID %>'
+                                            id="service_modify<%= device[x].Mac %>" readonly>
+                                        <label for="receive" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    接收UUID:
+                                                <% }else if (language==1){%>
+                                                    接收UUID:
+                                                <% }else if (language==2){%>
+                                                    Receive UUID:
+                                                <% }%>     
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= device[x].ReceiveUUID %>'
+                                            id="receive_modify<%= device[x].Mac %>" readonly>
+                                        <label for="send" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    發送UUID:
+                                                <% }else if (language==1){%>
+                                                    发送UUID:
+                                                <% }else if (language==2){%>
+                                                    Send UUID:
+                                                <% }%> 
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= device[x].SendUUID %>'
+                                            id="send_modify<%= device[x].Mac %>" readonly>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if (language==0){%>
+                                                取消
+                                                <% }else if (language==1){%>
+                                                    取消
+                                                <% }else if (language==2){%>
+                                                    cancel
+                                                <% }%></button>
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                        onclick="modifyvalue_device('device','<%= device[x].Mac %>','<%= device[x].Devicetype %>','<%= language %>')">
+                                        <% if (language==0){%>
+                                            確認
+                                            <% }else if (language==1){%>
+                                                确认
+                                            <% }else if (language==2){%>
+                                                confirm
+                                            <% }%>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td><button type="button" class="btn btn-secondary" data-toggle="modal"
+                        data-target="#modal-<%= device[x].Mac %>-del">
+                        <% if (language==0){%>
+                            刪除
+                        <% }else if (language==1){%>
+                            删除
+                        <% }else if (language==2){%>
+                            Delete
+                        <% }%>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal-<%= device[x].Mac %>-del" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= device[x].Mac %>-Label-del" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= device[x].Mac %>-Label-del">
+                                            <% if (language==0){%>
+                                                刪除
+                                            <% }else if (language==1){%>
+                                                删除
+                                            <% }else if (language==2){%>
+                                                Delete
+                                            <% }%>
+                                        <span
+                                            style="font-size: 25px;font-style:italic"><%= device[x].Name %></span>
+                                            <% if (language==0){%>
+                                                資料
+                                            <% }else if (language==1){%>
+                                                资料
+                                            <% }else if (language==2){%>
+                                                data
+                                            <% }%> 
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form style="text-align: left">
+                                        <label for="mac" class="col-form-label">
+                                            <% if (language==0){%>
+                                                識別碼：
+                                            <% }else if (language==1){%>
+                                                识别码：
+                                            <% }else if (language==2){%>
+                                                Identifier:
+                                            <% }%>  </label>
+                                        <input type="text" class="form-control" value='<%= device[x].Mac %>'
+                                            id="mac_delete<%= device[x].Mac %>" readonly>
+
+                                        <label for="name" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    名稱:
+                                                <% }else if (language==1){%>
+                                                    名称:
+                                                <% }else if (language==2){%>
+                                                    name:
+                                                <% }%> 
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= device[x].Name %>'
+                                            id="name_delete<%= device[x].Mac %>" readonly>
+
+                                        <label for="description" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    描述:
+                                                    <% }else if (language==1){%>
+                                                        描述:
+                                                    <% }else if (language==2){%>
+                                                        description:
+                                                    <% }%> 
+                                        </label>
+                                        <% if(device[x].Description == null) {%>
+                                            <% if (language==0){%>
+                                                <input type="text" class="form-control" readonly value="暫無">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" readonly value="暂无">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" readonly value="No data">
+                                            <% }%> 
+                                        
+                                        <% }else{ %>
+                                        <input type="text" class="form-control" value='<%= device[x].Description %>'
+                                            id="description_delete<%= device[x].Mac %>" readonly>
+                                        <% } %>
+
+                                        <label for="room" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    房號:
+                                                <% }else if (language==1){%>
+                                                    房号:
+                                                <% }else if (language==2){%>
+                                                    Room No:
+                                                <% }%> 
+                                        </label>
+                                        <% if(device[x].RoomNumber == null) {%>
+                                            <% if (language==0){%>
+                                                <input type="text" class="form-control" readonly value="暫無">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" readonly value="暂无">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" readonly value="No data">
+                                            <% }%>
+                                        <% }else{ %>
+                                        <% for(dr=0;dr<room.length;dr++) {%>
+                                        <% if(device[x].RoomNumber == room[dr].Number) {%>
+                                        <input type="number" class="form-control" value='<%= room[dr].Number%>'
+                                            readonly>
+                                        <% } %>
+                                        <% } %>
+                                        <% } %>
+
+                                        <label for="user" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    使用者:
+                                                <% }else if (language==1){%>
+                                                    使用者:
+                                                <% }else if (language==2){%>
+                                                    user:
+                                                <% }%> 
+                                        </label>
+                                        <% if(device[x].Username == null) {%>
+                                        <% if (language==0){%>
+                                                <input type="text" class="form-control" readonly value="暫無">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" readonly value="暂无">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" readonly value="No data">
+                                            <% }%>
+                                        <% }else{ %>
+                                        <% for(du=0;du<user.length;du++) {%>
+                                        <% if(device[x].Username == user[du].Username) {%>
+                                        <input type="text" class="form-control" value='<%= user[du].Username %>'
+                                            readonly>
+                                        <% } %>
+                                        <% } %>
+                                        <% } %>
+                                        
+                                        
+                                        <label for="service" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    服務UUID:
+                                                <% }else if (language==1){%>
+                                                    服务UUID:
+                                                <% }else if (language==2){%>
+                                                    Service UUID:
+                                                <% }%>  
+
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= device[x].ServiceUUID %>'
+                                            id="service_delete<%= device[x].Mac %>" readonly>
+
+                                        <label for="receive" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    接收UUID:
+                                                <% }else if (language==1){%>
+                                                    接收UUID:
+                                                <% }else if (language==2){%>
+                                                    Receive UUID:
+                                                <% }%> 
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= device[x].ReceiveUUID %>'
+                                            id="receive_delete<%= device[x].Mac %>" readonly>
+                                        <label for="send" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    發送UUID:
+                                                <% }else if (language==1){%>
+                                                    发送UUID:
+                                                <% }else if (language==2){%>
+                                                    Send UUID:
+                                                <% }%> 
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= device[x].SendUUID %>'
+                                            id="send_delete<%= device[x].Mac %>" readonly>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if (language==0){%>
+                                                取消
+                                                <% }else if (language==1){%>
+                                                    取消
+                                                <% }else if (language==2){%>
+                                                    cancel
+                                                <% }%>
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                        onclick="deletevalue_device('device','<%= device[x].Mac %>','<%= device[x].Devicetype %>','<%= language %>')">
+                                        <% if (language==0){%>
+                                            確認
+                                            <% }else if (language==1){%>
+                                                确认
+                                            <% }else if (language==2){%>
+                                                confirm
+                                            <% }%>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script>
+        if ('<%= language%>'==0){
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    language: {
+                        search: "搜尋：",
+                        sProcessing: "處理中...",
+                        sLengthMenu: "顯示 _MENU_ 項结果",
+                        sZeroRecords: "没有匹配结果",
+                        sInfo: "顯示第 _START_ 至 _END_ 項结果，共 _TOTAL_ 項",
+                        sInfoEmpty: "顯示第 0 至 0 項结果，共 0 項",
+                        sInfoFiltered: "(由 _MAX_ 項结果過濾)",
+                        sInfoPostFix: "",
+                        sSearch: "搜索:",
+                        sEmptyTable: "表中數據為空",
+                        sLoadingRecords: "載入中...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "首頁",
+                            sPrevious: "上頁",
+                            sNext: "下頁",
+                            sLast: "末頁"
+                        },
+                        oAria: {
+                            "sSortAscending": ": 以升排列",
+                            "sSortDescending": ": 以降排列"
+                        }
+                    }
+                });
+            });
+        }
+        else if('<%= language%>'==1){
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    language: {
+                        search: "搜尋：",
+                        sProcessing: "处理中...",
+                        sLengthMenu: "显示 _MENU_ 项结果",
+                        sZeroRecords: "没有匹配结果",
+                        sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                        sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+                        sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+                        sInfoPostFix: "",
+                        sSearch: "搜索:",
+                        sEmptyTable: "表中数据为空",
+                        sLoadingRecords: "载入中...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "首页",
+                            sPrevious: "上页",
+                            sNext: "下页",
+                            sLast: "末页"
+                        },
+                        oAria: {
+                            "sSortAscending": ": 以升排列",
+                            "sSortDescending": ": 以降排列"
+                        }
+                    }
+                });
+            });
+        }
+        else if('<%= language%>'==2){
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    language: {
+                        search: "Search：",
+                        sProcessing: "Processing...",
+                        sLengthMenu: "Display _MENU_ results",
+                        sZeroRecords: "No matching results",
+                        sInfo: "Showing _START_ to _END_ results， _TOTAL_ items",
+                        sInfoEmpty: "Showing 0 to 0 results， 0 items",
+                        sInfoFiltered: "(Filtered by _MAX_ result)",
+                        sInfoPostFix: "",
+                        sSearch: "Search：",
+                        sEmptyTable: "The data in the table is empty",
+                        sLoadingRecords: "Processing...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "top page",
+                            sPrevious: "previous page",
+                            sNext: "next page",
+                            sLast: "last page"
+                        },
+                        oAria: {
+                            "sSortAscending": ": In ascending",
+                            "sSortDescending": ": In descending"
+                        }
+                    }
+                });
+            });
+        }
+        
+    </script>
+
+    <% } %>
+</div>

@@ -1,0 +1,947 @@
+<!-- 判斷點擊事件 -->
+<script type="text/javascript">
+
+	// var headorg = document.getElementById("head").value;
+	// var bedorg = document.getElementById("bed").value;
+	// var footorg = document.getElementById("foot").value;
+  
+	var headorg = 0;
+	var bedorg = 0;
+	var footorg = 0;
+  
+	function get_head_rangevalue() {
+	  var hr = document.getElementById("head").value;
+	  if (hr >= 66) {
+		hr = 66;
+	  }
+	  if (hr < 0) {
+		hr = 0;
+	  }
+	  document.getElementById("headv").value = hr;
+	}
+  
+	function get_bed_rangevalue() {
+	  var br = document.getElementById("bed").value;
+	  if (br >= 35) {
+		br = 35;
+	  }
+	  if (br < 0) {
+		br = 0;
+	  }
+	  document.getElementById("bedv").value = br;
+	}
+  
+	function get_foot_rangevalue() {
+	  var fr = document.getElementById("foot").value;
+	  if (fr >= 28) {
+		fr = 28;
+	  }
+	  if (fr < 0) {
+		fr = 0;
+	  }
+	  document.getElementById("footv").value = fr;
+	}
+  
+	function get_head_value() {
+	  var hn = document.getElementById("headv").value;
+	  if (hn >= 66) {
+		hn = 66;
+	  }
+	  if (hn < 0) {
+		hn = 0;
+	  }
+	  document.getElementById("head").value = hn;
+	}
+  
+	function get_bed_value() {
+	  var bn = document.getElementById("bedv").value;
+	  if (bn >= 35) {
+		bn = 35;
+	  }
+	  if (bn < 0) {
+		bn = 0;
+	  }
+	  document.getElementById("bed").value = bn;
+	}
+  
+	function get_foot_value() {
+	  var fn = document.getElementById("footv").value;
+	  if (fn >= 35) {
+		fn = 35;
+	  }
+	  if (fn < 0) {
+		fn = 0;
+	  }
+	  document.getElementById("foot").value = fn;
+	}
+  
+	function getflooroom(flooroom) {
+	  $("#main").load("/layer/layer_room", { "flooroom": flooroom }, function () {
+		$("#floor-room").html(flooroom);
+	  });
+	}
+  
+	function getdevice(devicetype, device_name, mac) {
+	  $("#device_detail").load("/layer/layer_device", { "devicetype": devicetype, "mac": mac }, function () {
+		$("#device_name").html(device_name);
+		// $("#device_number").html(device_number);
+	  });
+	}
+  
+	function getpatientdata(userfloor, userroom, username,language) {
+	  $("#load").css("display","block");//loading_on
+	  $("#main").load("/layer/main_next", { "main_floor": userfloor, "main_room": userroom, "main_name": username, "language":language }, function () {
+		$("#main").css("overflow-y", "unset");
+  
+		$("#navbar").load("/layer/navbar_next", { "navbar_floor": userfloor, "navbar_room": userroom, "navbar_name": username, "language":language }, function () {
+		  $("#patient_name").html(username);
+		  $("#patient_floor").html(userfloor);
+		  $("#patient_room").html(userroom);
+		  console.log(username+"/"+userfloor+"/"+userroom+"/"+language);
+		  $("#load").css("display","none");//loading_off
+		});
+  
+	  });
+	}
+  
+	function getdevicedetaildata(type, mac,language) {
+	  $("#load").css("display","block");//loading_on
+	  switch (type){
+		case '2':
+		  $("#bottom").load("/layer/type/bed",{"mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '3':
+		  $("#bottom").load("/layer/type/sleeptape",{"mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '4':
+		  $("#bottom").load("/layer/type/light",{"mac": mac ,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '5':
+		  $("#bottom").load("/layer/type/humidifier",{"mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '6':
+		  $("#bottom").load("/layer/type/airquality",{"mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '7':
+		  $("#bottom").load("/layer/type/bloodpressure",{"mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '8':
+		  $("#bottom").load("/layer/type/fat",{"mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '9':
+		  $("#bottom").load("/layer/type/electrictable",{"mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '10':
+		  $("#bottom").load("/layer/type/electricsofa",{ "mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '11':
+		  $("#bottom").load("/layer/type/bloodsugar",{"mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		case '12':
+		  $("#bottom").load("/layer/type/temperature",{"mac":mac,"language":language},function(){
+			$("#load").css("display","none");//loading_off
+		  });
+		  break;
+		default:
+		  break;
+	  }
+	}
+  
+	function bed(action, mac, gatewayMac, connectdevice, record_head, record_foot) {
+  
+	  if (action == "ReturnRecord1" || action == "ReturnRecord2") {
+		document.getElementById("head").value = record_head;
+		document.getElementById("headv").value = record_head;
+		document.getElementById("foot").value = record_foot;
+		document.getElementById("footv").value = record_foot;
+	  }
+  
+	  var headvalue = document.getElementById("headv").value;
+	  var bedvalue = document.getElementById("bedv").value;
+	  var footvalue = document.getElementById("footv").value;
+  
+  
+	  $.post("/control/device", { action: action, mac: mac, gatewayMac: gatewayMac, connectdevice: connectdevice, headvalue: headvalue, footvalue: footvalue, bedvalue: bedvalue, diff: '1' }, function (data) {
+		switch (data) {
+		  case "新增背部上升角度成功":
+			headvalue++;
+			if (headvalue >= 66)
+			  headvalue = 66;
+  
+			document.getElementById("head").value = headvalue;
+			document.getElementById("headv").value = headvalue;
+			break;
+		  case "新增背部下降角度成功":
+			headvalue--;
+			if (headvalue < 0)
+			  headvalue = 0;
+			document.getElementById("head").value = headvalue;
+			document.getElementById("headv").value = headvalue;
+			break;
+		  case "新增腿部上升角度成功":
+			footvalue++;
+			if (footvalue >= 28)
+			  footvalue = 28;
+			document.getElementById("foot").value = footvalue;
+			document.getElementById("footv").value = footvalue;
+			break;
+		  case "新增腿部下降角度成功":
+			footvalue--;
+			if (footvalue < 0)
+			  footvalue = 0;
+			document.getElementById("foot").value = footvalue;
+			document.getElementById("footv").value = footvalue;
+			break;
+		  case "新增同時上升角度成功":
+			headvalue++;
+			if (headvalue >= 66)
+			  headvalue = 66;
+			document.getElementById("head").value = headvalue;
+			document.getElementById("headv").value = headvalue;
+			footvalue++;
+			if (footvalue >= 28)
+			  footvalue = 28;
+			document.getElementById("foot").value = footvalue;
+			document.getElementById("footv").value = footvalue;
+			break;
+		  case "新增同時下降角度成功":
+			headvalue--;
+			if (headvalue < 0)
+			  headvalue = 0;
+			document.getElementById("head").value = headvalue;
+			document.getElementById("headv").value = headvalue;
+			footvalue--;
+			if (footvalue < 0)
+			  footvalue = 0;
+			document.getElementById("foot").value = footvalue;
+			document.getElementById("footv").value = footvalue;
+			break;
+		  case "新增整床上升成功":
+			bedvalue++;
+			if (bedvalue >= 35)
+			  bedvalue = 35;
+			document.getElementById("bed").value = bedvalue;
+			document.getElementById("bedv").value = bedvalue;
+			break;
+		  case "新增整床下降成功":
+			bedvalue--;
+			if (bedvalue < 0)
+			  bedvalue = 0;
+			document.getElementById("bed").value = bedvalue;
+			document.getElementById("bedv").value = bedvalue;
+			break;
+		  case "向後傾斜成功":
+			break;
+		  case "向前傾斜成功":
+			break;
+		  default:
+			break;
+		}
+	  });
+	}
+  
+	function getgroup(type, groupid) {
+	  $("#load").css("display","block");//loading_on
+	  $("#navbar").load("/layer/navbar_group", { "type": type, "groupid": groupid }, function (data) {
+		//console.log(data);  
+		//if(data=='error'){
+				//alert(data);
+				//$("#load").css("display","none");//loading_off
+		//}else{
+				// $("#patient_name").html(username);
+				// $("#patient_floor").html(userfloor);
+				// $("#patient_room").html(userroom);
+				switch (type) {
+				case '2':
+					$("#main").load("/layer/group/bed", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '3':
+					$("#main").load("/layer/group/sleeptape", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '4':
+					$("#main").load("/layer/group/light", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '5':
+					$("#main").load("/layer/group/humidifier", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '6':
+					$("#main").load("/layer/group/airquality", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '7':
+					$("#main").load("/layer/group/bloodpressure", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '8':
+					$("#main").load("/layer/group/fat", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '9':
+					$("#main").load("/layer/group/electrictable", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '10':
+					$("#main").load("/layer/group/electricsofa", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '11':
+					$("#main").load("/layer/group/bloodsugar", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				case '12':
+					$("#main").load("/layer/group/temperature", { "type": type, "groupid": groupid }, function () {
+					$("#main").css("overflow-y", "unset");
+					$("#load").css("display","none");//loading_off
+					});
+					break;
+				default:
+					break;
+				}
+		//};
+	  });
+	}
+  
+	function group_dochange(teamid, action, muti_mac, muti_gatewayMac, muti_connectdevice, muti_head, muti_foot, muti_bed) {
+  
+	  var headvalue = parseInt(document.getElementById("headv").value, 10);
+	  var bedvalue = parseInt(document.getElementById("bedv").value, 10);
+	  var footvalue = parseInt(document.getElementById("footv").value, 10);
+  
+	  var muti_action = new Array();
+	  var actionorg = action;
+  
+	  for (var i = 0; i < JSON.parse(muti_mac).length; i++) {
+		var times = 0;
+		var diff = 0;
+  
+		headorg = parseInt(JSON.parse(muti_head)[i], 10);
+		footorg = parseInt(JSON.parse(muti_foot)[i], 10);
+		bedorg = parseInt(JSON.parse(muti_bed)[i], 10);
+		if ("head" == actionorg) {
+		  if (headvalue > headorg) {
+			times = parseInt(Head_angelTotimes(headvalue), 10) - parseInt(Head_angelTotimes(headorg), 10);
+			diff = headvalue - headorg;
+			action = "headup";
+		  } else {
+			times = parseInt(Head_angelTotimes(headorg), 10) - parseInt(Head_angelTotimes(headvalue), 10);
+			diff = headorg - headvalue;
+			action = "headdown";
+		  }
+		} else if ("bed" == actionorg) {
+		  if (bedvalue > bedorg) {
+			times = bedvalue - bedorg;
+			action = "bedup";
+		  } else {
+			times = bedorg - bedvalue;
+			action = "beddown";
+		  }
+		} else if ("foot" == actionorg) {
+		  if (footvalue > footorg) {
+			times = parseInt(Foot_angelTotimes(footvalue), 10) - parseInt(Foot_angelTotimes(footorg), 10);
+			diff = footvalue - footorg;
+			action = "footup";
+		  } else {
+			times = parseInt(Foot_angelTotimes(footorg), 10) - parseInt(Foot_angelTotimes(footvalue), 10);
+			diff = footorg - footvalue;
+			action = "footdown";
+		  }
+		}
+		console.log("action:" + action + "  times:" + times);
+		(function (i) {
+		  setTimeout(function () {
+			$("#load").css("display","block");//loading_on
+			$.post("/control/device", { action: action, mac: JSON.parse(muti_mac)[i], gatewayMac: JSON.parse(muti_gatewayMac)[i], connectdevice: JSON.parse(muti_connectdevice)[i], headvalue: headorg, footvalue: footorg, bedvalue: bedorg, times: times, diff: diff }, function (data) {
+			  console.log(data);
+			  if (i == JSON.parse(muti_mac).length - 1) {
+				console.log("cc");
+				$("#main").load("/layer/group/bed", { "type": '1', "groupid": teamid }, function () {
+				  $("#main").css("overflow-y", "unset");
+				  $("#load").css("display","none");//loading_off
+				});
+			  }
+			});
+		  }, (i + 1) * 500);
+		}(i))
+	  }
+	}
+  
+	function dochange(action, mac, gatewayMac, head, foot, bed) {
+  
+	  var headvalue = parseInt(document.getElementById("headv").value, 10);
+	  var bedvalue = parseInt(document.getElementById("bedv").value, 10);
+	  var footvalue = parseInt(document.getElementById("footv").value, 10);
+  
+	  headorg = parseInt(head, 10);
+	  footorg = parseInt(foot, 10);
+	  bedorg = parseInt(bed, 10);
+  
+	  console.log(footorg + "," + footvalue);
+  
+	  var times = 0;
+	  var diff = 0;
+	  if ("head" == action) {
+		if (headvalue > headorg) {
+		  times = parseInt(Head_angelTotimes(headvalue), 10) - parseInt(Head_angelTotimes(headorg), 10);
+		  diff = headvalue - headorg;
+		  action = "headup";
+		} else {
+		  times = parseInt(Head_angelTotimes(headorg), 10) - parseInt(Head_angelTotimes(headvalue), 10);
+		  diff = headorg - headvalue;
+		  action = "headdown";
+		}
+	  } else if ("bed" == action) {
+		if (bedvalue > bedorg) {
+		  times = bedvalue - bedorg;
+		  action = "bedup";
+		} else {
+		  times = bedorg - bedvalue;
+		  action = "beddown";
+		}
+	  } else if ("foot" == action) {
+		if (footvalue > footorg) {
+		  times = parseInt(Foot_angelTotimes(footvalue), 10) - parseInt(Foot_angelTotimes(footorg), 10);
+		  diff = footvalue - footorg;
+		  action = "footup";
+		} else {
+		  times = parseInt(Foot_angelTotimes(footorg), 10) - parseInt(Foot_angelTotimes(footvalue), 10);
+		  diff = footorg - footvalue;
+		  action = "footdown";
+		}
+	  } else {
+  
+	  }
+  
+	  console.log("action:" + action + "  times:" + times);
+	  $("#load").css("display","block");//loading_on
+	  $.post("/control/device", { action: action, mac: mac, gatewayMac: gatewayMac, connectdevice: connectdevice, headvalue: headorg, footvalue: footorg, bedvalue: bedorg, times: times, diff: diff }, function (data) {
+		switch (data) {
+		  case "新增背部上升角度成功":
+			document.getElementById("head").value = headvalue;
+			document.getElementById("headv").value = headvalue;
+			getdevicedetaildata('1', mac);
+			$("#load").css("display","none");//loading_off
+			break;
+		  case "新增背部下降角度成功":
+			document.getElementById("head").value = headvalue;
+			document.getElementById("headv").value = headvalue;
+			getdevicedetaildata('1', mac);
+			$("#load").css("display","none");//loading_off
+			break;
+		  case "新增腿部上升角度成功":
+			document.getElementById("foot").value = footvalue;
+			document.getElementById("footv").value = footvalue;
+			getdevicedetaildata('1', mac);
+			$("#load").css("display","none");//loading_off
+			break;
+		  case "新增腿部下降角度成功":
+			document.getElementById("foot").value = footvalue;
+			document.getElementById("footv").value = footvalue;
+			getdevicedetaildata('1', mac);
+			$("#load").css("display","none");//loading_off
+			break;
+		  case "新增整床上升成功":
+			document.getElementById("bed").value = bedvalue;
+			document.getElementById("bedv").value = bedvalue;
+			getdevicedetaildata('1', mac);
+			$("#load").css("display","none");//loading_off
+			break;
+		  case "新增整床下降成功":
+			document.getElementById("bed").value = bedvalue;
+			document.getElementById("bedv").value = bedvalue;
+			getdevicedetaildata('1', mac);
+			$("#load").css("display","none");//loading_off
+			break;
+		  case "向後傾斜成功":
+			break;
+		  case "向前傾斜成功":
+			break;
+		  default:
+			break;
+		}
+	  });
+	}
+  
+	function Head_angelTotimes(angel) {
+	  //console.log(angel);
+	  var times = 0;
+	  switch (angel) {
+		case 0:
+		  times = 0;
+		  break;
+		case 1:
+		  times = 1;
+		  break;
+		case 2:
+		case 3:
+		  times = 2;
+		  break;
+		case 4:
+		  times = 3;
+		  break;
+		case 5:
+		  times = 4;
+		  break;
+		case 6:
+		case 7:
+		  times = 5;
+		  break;
+		case 8:
+		  times = 6;
+		  break;
+		case 9:
+		case 10:
+		  times = 7;
+		  break;
+		case 11:
+		  times = 8;
+		  break;
+		case 12:
+		  times = 9;
+		  break;
+		case 13:
+		case 14:
+		  times = 10;
+		  break;
+		case 15:
+		  times = 11;
+		  break;
+		case 16:
+		case 17:
+		  times = 12;
+		  break;
+		case 18:
+		  times = 13;
+		  break;
+		case 19:
+		case 20:
+		  times = 14;
+		  break;
+		case 21:
+		  times = 15;
+		  break;
+		case 22:
+		  times = 16;
+		  break;
+		case 23:
+		case 24:
+		  times = 17;
+		  break;
+		case 25:
+		  times = 18;
+		  break;
+		case 26:
+		case 27:
+		  times = 19;
+		  break;
+		case 28:
+		  times = 20;
+		  break;
+		case 29:
+		case 30:
+		  times = 21;
+		  break;
+		case 31:
+		  times = 22;
+		  break;
+		case 32:
+		case 33:
+		  times = 23;
+		  break;
+		case 34:
+		  times = 24;
+		  break;
+		case 35:
+		  times = 25;
+		  break;
+		case 36:
+		case 37:
+		  times = 26;
+		  break;
+		case 38:
+		  times = 27;
+		  break;
+		case 39, 40:
+		  times = 28;
+		  break;
+		case 41:
+		  times = 29;
+		  break;
+		case 42:
+		case 43:
+		  times = 30;
+		  break;
+		case 44:
+		case 45:
+		  times = 31;
+		  break;
+		case 46:
+		  times = 32;
+		  break;
+		case 47:
+		  times = 33;
+		  break;
+		case 48:
+		case 49:
+		  times = 34;
+		  break;
+		case 50:
+		  times = 35;
+		  break;
+		case 51:
+		case 52:
+		  times = 36;
+		  break;
+		case 53:
+		  times = 37;
+		  break;
+		case 54:
+		  times = 38;
+		  break;
+		case 55:
+		case 56:
+		  times = 39;
+		  break;
+		case 57:
+		  times = 40;
+		  break;
+		case 58:
+		case 59:
+		  times = 41;
+		  break;
+		case 60:
+		  times = 42;
+		  break;
+		case 61:
+		  times = 43;
+		  break;
+		case 62:
+		case 63:
+		  times = 44;
+		  break;
+		case 64:
+		  times = 45;
+		  break;
+		case 65:
+		case 66:
+		  times = 46;
+		  break;
+		default:
+		  break;
+	  }
+	  //console.log(times);
+	  return times;
+	}
+	function Foot_angelTotimes(angel) {
+	  //console.log(angel);
+	  var times = 0;
+	  switch (angel) {
+		case 0:
+		  times = 0;
+		  break;
+		case 1:
+		  times = 1;
+		  break;
+		case 2:
+		  times = 2;
+		  break;
+		case 3:
+		  times = 3;
+		  break;
+		case 4:
+		  times = 5;
+		  break;
+		case 5:
+		  times = 6;
+		  break;
+		case 6:
+		  times = 7;
+		  break;
+		case 7:
+		  times = 8;
+		  break;
+		case 8:
+		  times = 10;
+		  break;
+		case 9:
+		  times = 11;
+		  break;
+		case 10:
+		  times = 12;
+		  break;
+		case 11:
+		  times = 13;
+		  break;
+		case 12:
+		  times = 14;
+		  break;
+		case 13:
+		  times = 16;
+		  break;
+		case 14:
+		  times = 17;
+		  break;
+		case 15:
+		  times = 18;
+		  break;
+		case 16:
+		  times = 20;
+		  break;
+		case 17:
+		  times = 21;
+		  break;
+		case 18:
+		  times = 22;
+		  break;
+		case 19:
+		  times = 23;
+		  break;
+		case 20:
+		  times = 24;
+		  break;
+		case 21:
+		  times = 25;
+		  break;
+		case 22:
+		  times = 27;
+		  break;
+		case 23:
+		  times = 28;
+		  break;
+		case 24:
+		  times = 29;
+		  break;
+		case 25:
+		  times = 30;
+		  break;
+		case 26:
+		  times = 32;
+		  break;
+		case 27:
+		case 28:
+		  times = 33;
+		  break;
+		default:
+		  break;
+	  }
+	  //console.log(times);
+	  return times;
+	}
+  /*function Head_angelToshow(angel) {
+		console.log(angel);
+		  var value=0;
+		  switch(angel){
+			case 0:
+			  value=0;
+			  break;
+			case 1:
+			  value=1;
+			  break;
+			case 2:
+			  value=2;
+			  break;
+			case 3:
+			case 4:
+			  value=4;
+			  break;
+			case 5:
+			  value=5;
+			  break;
+			case 6:
+			case 7:
+			  value=7;
+			  break;
+			case 8:
+			  value=8;
+			  break;
+			case 9:
+			case 10:
+			  value=10;
+			  break;
+			case 11:
+			  value=11;
+			  break;
+			case 12:
+			  value=12;
+			  break;
+			case 13:
+			case 14:
+			  value=14;
+			  break;
+			case 15:
+			  value=15;
+			  break;
+			case 16:
+			case 17:
+			  value=17;
+			  break;
+			case 18:
+			  value=18;
+			  break;
+			case 19:
+			case 20:
+			  value=20;
+			  break;
+			case 21:
+			  value=21;
+			  break;
+			case 22:
+			  value=22;
+			  break;
+			case 23:
+			case 24:
+			  value=24;
+			  break;
+			case 25:
+			  value=25;
+			  break;
+			case 26:
+			case 27:
+			  value=27;
+			  break;
+			case 28:
+			  value=28;
+			  break;
+			case 29:
+			case 30:
+			  value=30;
+			  break;
+			case 31:
+			  value=31;
+			  break;
+			case 32:
+			case 33:
+			  value=33;
+			  break;
+			case 34:
+			  value=34;
+			  break;
+			case 35:
+			  value=35;
+			  break;
+			case 36:
+			case 37:
+			  value=37;
+			  break;
+			case 38:
+			  value=38;
+			  break;
+			case 39,40:
+			  value=40;
+			  break;
+			case 41:
+			  value=41;
+			  break;
+			case 42:
+			case 42,43:
+			  value=43;
+			  break;
+			case 44:
+			  value=45;
+			  break;
+			case 45:
+			case 46:
+			  value=46;
+			  break;
+			case 47:
+			  value=47;
+			  break;
+			case 48:
+			case 49:
+			  value=49;
+			  break;
+			case 50:
+			  value=50;
+			  break;
+			case 51:
+			  value=51;
+			  break;
+			case 52:
+			case 53:
+			  value=53;
+			  break;
+			case 54:
+			  value=54;
+			  break;
+			case 55:
+			case 56:
+			  value=56;
+			  break;
+			case 57:
+			  value=57;
+			  break;
+			case 58:
+			case 59:
+			  value=59;
+			  break;
+			case 60:
+			  value=60;
+			  break;
+			case 61:
+			  value=61;
+			  break;
+			case 62:
+			case 63:
+			  value=63;
+			  break;
+			case 64:
+			  value=64;
+			  break;
+			case 65:
+			case 66:
+			  value=66;
+			  break;
+			default:
+			  break;
+		  }
+		  console.log(value);
+		  return value;
+		}*/
+  
+  </script>
+  </body>
+  
+  </html>

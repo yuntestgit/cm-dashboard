@@ -1,0 +1,48 @@
+<% include header.ejs %>
+
+<body>
+
+  <div id="load" class="loading" style="display:none;z-index:9999;">
+    <!-- <div>
+      <div class="c1"></div>
+      <div class="c2"></div>
+      <div class="c3"></div>
+      <div class="c4"></div>
+    </div>
+    <span>等待中...</span> -->
+    <div class="spinner-border text-warning" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+  <!-- 上方行 -->
+  <div class="container-fluid layer">
+    <div class="row layer_rom">
+      <div class="col-xl-2 col-md-2" style="background-color:white">
+        <h1 style="font-size: 20px;text-align: center;" class="layer_top"><a>LOGO 星聯宏和</a></h1>
+      </div>
+      <div class="col-xl-7 col-md-7" style="background-color: #754F44">
+        <h1 style="font-size: 20px;" class="layer_top"><a style="color: white">照護資訊管理系統</a></h1>
+      </div>
+      <div class="col-xl-2 col-md-2" style="background-color: #fff1b9">
+        <h1 style="font-size: 15px;text-align: center;margin-top: 15px" class="layer_top">系統管理者　　歡迎回來！</h1>
+      </div>
+      <div class="col-xl-1 col-md-1" style="background-color: #fff1b9">
+          <a href="/user/logout" style="float: right"><button class="top_btn">登出</button></a>
+      </div>
+    </div> 
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- 側邊列 -->
+      <% include navbar.ejs %>
+      <!-- 主畫面 -->
+      <main role="main" class="col-md-10" style="background-color: #FBFFB9;margin-left:auto!important;height: 800px">
+        <% include main.ejs %>
+      </main>
+
+    </div>
+  </div>
+
+<% include footer.ejs %>

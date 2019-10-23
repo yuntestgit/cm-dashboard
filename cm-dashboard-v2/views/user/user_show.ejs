@@ -1,0 +1,33 @@
+  <% include header.ejs %>
+
+  <body>
+
+    <!-- 上方行 -->
+    <div style="position:sticky;top:0;z-index:9999;background-color: black;color:white;">
+      <div class="row" style="height:50px;">
+        <div class="col-md-2">
+          <h1 style="font-size: 20px;text-align: center;margin-top: 15px">LOGO 星聯宏和</h1>
+        </div>
+        <div class="col-md-8"  style="background-color: dimgray">
+          <h1 style="font-size: 20px;margin-top: 15px">照護資訊管理系統</h1>
+        </div>
+        <div class="col-md-2" style="background-color:slategrey">
+            <span style="margin-top: 15px"><%= user[0].Username %> 使用者 你好 <span><button style="margin-top: 15px;margin-left: auto;margin-right: auto">登出</button>
+        </div>
+      </div> 
+    </div>
+
+    <div class="container-fluid">
+      <div class="row">
+        <!-- 側邊列 -->
+        <% include navbar.ejs %>
+        <!-- 主畫面 -->
+        <main role="main" class="col-md-10" style="background-color:beige;margin-left:auto!important">
+          <% include main.ejs%>
+          <!-- <h2>----footer----</h2> -->
+        </main>
+
+      </div>
+    </div>
+
+  <% include footer.ejs %>

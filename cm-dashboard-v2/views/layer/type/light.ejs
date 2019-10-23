@@ -1,0 +1,218 @@
+<% console.log(mac) %>
+<% console.log(data) %>
+<% console.log(threshold) %>
+<table style="width:100%;height:100%;background-color: white">
+    <tr style="height: 50%">
+        <td style="width: 25%;text-align: center">
+            <span style="font-size: 25px">場域佈置圖</span>
+        </td>
+        <td style="width: 25%" colspan="3">
+            <table style="width:100%">
+                <tr style="height: 70px;text-align: center">
+                    <td>
+                        <button type="button" class="btn btn-primary" style="float:left">亮度上升</button>
+                        <input type="range" min="0" max="100" style="width: 50%;">
+                        　目前亮度：<input type="number" min="0" max="100" style="widows: 5%">
+                        <button type="button" class="btn btn-primary" style="float:right">亮度下降</button>
+                    </td>
+                </tr>
+                <tr style="height: 70px;text-align: center">
+                    <td>
+                        <button type="button" class="btn btn-primary" style="float:left">色溫飽和</button>
+                        <input type="range" min="0" max="100" style="width: 50%;">
+                        　目前色溫：<input type="number" min="0" max="100" style="widows: 5%">
+                        <button type="button" class="btn btn-primary" style="float:right">色溫減低</button>
+                    </td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <form action="#">
+                            <input type="checkbox" name="light1">燈泡-1<br>
+                            <input type="checkbox" name="light2">燈泡-2<br>
+                            <input type="checkbox" name="light3">燈泡-3<br>
+                            <input type="checkbox" name="light4">燈泡-4<br>
+                            <input type="submit" value="Submit">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="container" style="width:100%">FusionCharts will render here</div>
+            <script type="text/javascript">
+                
+                var temp_array = new Array();
+                var database_data = JSON.parse('<%- JSON.stringify(data) %>');
+                
+                for (var i = 0; i < database_data.length; i++) {
+                    var x = new Array();
+                    x[0] = parseInt(database_data[i].Light, 10);
+                    x[1] = parseInt(database_data[i].Colorvalue, 10);
+                    x[2] = parseInt(database_data[i].Wat, 10);
+                    x[3] = database_data[i].Time.split(' ')[0] + ' ' + database_data[i].Time.split(' ')[1];
+                    temp_array[i] = x;
+                }
+                var ss = [{
+                    "name": "亮度",
+                    "type": "number"
+                }, {
+                    "name": "色溫",
+                    "type": "number"
+                }, {
+                    "name": "電量",
+                    "type": "number"
+                }, {
+                    "name": "Time",
+                    "type": "date",
+                    "format": "%Y-%m-%d %H:%M:%S"
+                }]
+                // console.log(temp_array);
+                var fusionDataStore = new FusionCharts.DataStore();
+                var fusionTable = fusionDataStore.createDataTable(temp_array, ss);
+                if('<%- threshold[0].Threshold %>'){
+                    var database_threshold =JSON.parse('<%- threshold[0].Threshold %>');
+                        new FusionCharts({
+                        type: 'timeseries',
+                        renderAt: 'container',
+                        width: "90%",
+                        height: 650,
+                        dataSource: {
+                            data: fusionTable,
+                            "yAxis": [{
+                                "plot": {
+                                    "value": "亮度",//對應schema的欄位
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                        "border": 30,
+                                    },
+                                    "lineThickness": "20"
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[0]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "色溫",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "150",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[1]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "電量",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "150",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[2]
+                                }],
+                            }],
+                            xAxis: {
+                                initialinterval: {
+                                    from: "07-Sep-19",
+                                    to: "07-Sep-19"
+                                }
+                            },
+                            chart: {
+                                exportEnabled: "1", //Enable Export Feature
+                            }
+                        }
+                    }).render()
+                }
+                else{
+                    new FusionCharts({
+                        type: 'timeseries',
+                        renderAt: 'container',
+                        width: "90%",
+                        height: 650,
+                        dataSource: {
+                            data: fusionTable,
+                            "yAxis": [{
+                                "plot": {
+                                    "value": "亮度",//對應schema的欄位
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                        "border": 30,
+                                    },
+                                    "lineThickness": "20"
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }, {
+                                "plot": {
+                                    "value": "色溫",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "150",
+                            }, {
+                                "plot": {
+                                    "value": "電量",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "150",
+                            }],
+                            xAxis: {
+                                initialinterval: {
+                                    from: "07-Sep-19",
+                                    to: "07-Sep-19"
+                                }
+                            },
+                            chart: {
+                                exportEnabled: "1", //Enable Export Feature
+                            }
+                        }
+                    }).render()
+                }
+                        
+            </script>
+        </td>
+        <td style="width:50%">
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,525 @@
+<div id="main" style="height:850px;overflow-y:scroll">
+
+    <button type="button" class="btn btn-primary" style="float: right;margin-top: 10px;margin-right: 10px"
+        data-toggle="modal" data-target="#createuser">
+        <% if (language==0){%>
+            新增帳號
+            <% }else if (language==1){%>
+                新增帐号
+            <% }else if (language==2){%>
+                Add account
+            <% }%>
+        </button>
+    <!-- Modal-create -->
+    <div class="modal fade" id="createuser" tabindex="-1" role="dialog" aria-labelledby="createLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createLabel">
+                            <% if (language==0){%>
+                                新增帳號
+                                <% }else if (language==1){%>
+                                    新增帐号
+                                <% }else if (language==2){%>
+                                    Add account
+                                <% }%>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form style="text-align: left" action="javascript:createvalue_user('user','<%= language%>')">
+                        <label for="account" class="col-form-label">
+                                <% if (language==0){%>
+                                    帳號：
+                                    <% }else if (language==1){%>
+                                        帐号：
+                                    <% }else if (language==2){%>
+                                        account：
+                                    <% }%>
+                            </label>
+                        <input type="text" class="form-control" id="account" required>
+                        <label for="password" class="col-form-label">
+                                <% if (language==0){%>
+                                    密碼:
+                                    <% }else if (language==1){%>
+                                        密码：
+                                    <% }else if (language==2){%>
+                                        password：
+                                    <% }%>
+                            </label>
+                        <input type="password" class="form-control" id="password" required>
+                        <label for="username" class="col-form-label">
+                                <% if (language==0){%>
+                                    姓名：
+                                <% }else if (language==1){%>
+                                    姓名：
+                                <% }else if (language==2){%>
+                                    Name：
+                                <% }%>
+                        </label>
+                        <input type="text" class="form-control" id="username" required>
+                        <label for="email" class="col-form-label">
+                                <% if (language==0){%>
+                                    電子信箱：
+                                <% }else if (language==1){%>
+                                    电子信箱：
+                                <% }else if (language==2){%>
+                                    email：
+                                <% }%>
+                        </label>
+                        <input type="email" class="form-control" id="email" required>
+                        <label for="phone" class="col-form-label">
+                                <% if (language==0){%>
+                                    聯絡電話：
+                                <% }else if (language==1){%>
+                                    联络电话：
+                                <% }else if (language==2){%>
+                                    Contact number：
+                                <% }%>
+                        </label>
+                        <input type="phone" class="form-control" id="phone" required>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    <% if (language==0){%>
+                                        取消
+                                    <% }else if (language==1){%>
+                                        取消
+                                    <% }else if (language==2){%>
+                                        cancel
+                                    <% }%>
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                
+                                    <% if (language==0){%>
+                                        確認
+                                    <% }else if (language==1){%>
+                                        确认
+                                    <% }else if (language==2){%>
+                                        confirm
+                                    <% }%>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table id="manaagetable">
+        <thead>
+            <tr>
+                <th>
+                        <% if (language==0){%>
+                            帳號：
+                        <% }else if (language==1){%>
+                            帐号：
+                        <% }else if (language==2){%>
+                            account：
+                        <% }%>
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            密碼:
+                        <% }else if (language==1){%>
+                            密码：
+                        <% }else if (language==2){%>
+                            password：
+                        <% }%>
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            姓名：
+                        <% }else if (language==1){%>
+                            姓名：
+                        <% }else if (language==2){%>
+                            Name：
+                        <% }%>
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            電子信箱：
+                        <% }else if (language==1){%>
+                            电子信箱：
+                        <% }else if (language==2){%>
+                            email：
+                        <% }%>
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            聯絡電話：
+                        <% }else if (language==1){%>
+                            联络电话：
+                        <% }else if (language==2){%>
+                            Contact number：
+                        <% }%>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(x=0;x<user.length;x++) {%>
+            <tr>
+                <td><%= user[x].Account %></td>
+                <td>*******</td>
+                <td><%= user[x].Username %></td>
+                <td><%= user[x].Email %></td>
+                <td><%= user[x].Phone %></td>
+                <td><button type="button" class="btn btn-info" data-toggle="modal"
+                        data-target="#modal-<%= user[x].Account %>-mod">
+                        <% if (language==0){%>
+                            修改
+                        <% }else if (language==1){%>
+                            修改
+                        <% }else if (language==2){%>
+                            modify
+                        <% }%>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal-<%= user[x].Account %>-mod" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= user[x].Account %>-Label-mod" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= user[x].Account %>-Label-mod">
+                                            <% if (language==0){%>
+                                                修改
+                                            <% }else if (language==1){%>
+                                                修改
+                                            <% }else if (language==2){%>
+                                                modify
+                                            <% }%>
+                                        　<span
+                                            style="font-size: 25px;font-style:italic"><%= user[x].Account %></span>　
+                                            <% if (language==0){%>
+                                                資料
+                                            <% }else if (language==1){%>
+                                                资料
+                                            <% }else if (language==2){%>
+                                                data
+                                            <% }%>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form style="text-align: left">
+                                        <label for="account_modify<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                帳號：
+                                            <% }else if (language==1){%>
+                                                帐号：
+                                            <% }else if (language==2){%>
+                                                account：
+                                            <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value="<%= user[x].Account %>"
+                                            id="account_modify<%= user[x].Account %>" readonly>
+                                        <label for="password_modify<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                密碼:
+                                            <% }else if (language==1){%>
+                                                密码：
+                                            <% }else if (language==2){%>
+                                                password：
+                                            <% }%>
+                                        </label>
+                                        <input type="password" class="form-control" value="<%= user[x].Password %>"
+                                            id="password_modify<%= user[x].Account %>">
+                                        <label for="username_modify<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                姓名：
+                                            <% }else if (language==1){%>
+                                                姓名：
+                                            <% }else if (language==2){%>
+                                                Name：
+                                            <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value="<%= user[x].Username %>"
+                                            id="username_modify<%= user[x].Account %>">
+                                        <label for="email_modify<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                電子信箱：
+                                            <% }else if (language==1){%>
+                                                电子信箱：
+                                            <% }else if (language==2){%>
+                                                email：
+                                            <% }%>
+                                        </label>
+                                        <input type="email" class="form-control" value="<%= user[x].Email %>"
+                                            id="email_modify<%= user[x].Account %>">
+                                        <label for="phone_modify<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                聯絡電話：
+                                            <% }else if (language==1){%>
+                                                联络电话：
+                                            <% }else if (language==2){%>
+                                                Contact number：
+                                            <% }%>
+                                        </label>
+                                        <input type="phone" class="form-control" value="<%= user[x].Phone %>"
+                                            id="phone_modify<%= user[x].Account %>">
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if (language==0){%>
+                                                取消
+                                            <% }else if (language==1){%>
+                                                取消
+                                            <% }else if (language==2){%>
+                                                cancel
+                                            <% }%>
+                                    </button>
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="modifyvalue_user('user','<%= user[x].Account %>','<%= language%>')"
+                                        data-dismiss="modal">
+                                        <% if (language==0){%>
+                                            確認
+                                            <% }else if (language==1){%>
+                                                确认
+                                            <% }else if (language==2){%>
+                                                confirm
+                                            <% }%>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td><button type="button" class="btn btn-secondary" data-toggle="modal"
+                        data-target="#modal-<%= user[x].Account %>-del">
+                        <% if (language==0){%>
+                            刪除
+                        <% }else if (language==1){%>
+                            删除
+                        <% }else if (language==2){%>
+                            Delete
+                        <% }%>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal-<%= user[x].Account %>-del" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= user[x].Account %>-Label-del" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= user[x].Account %>-Label-del">
+                                            <% if (language==0){%>
+                                                刪除
+                                            <% }else if (language==1){%>
+                                                删除
+                                            <% }else if (language==2){%>
+                                                Delete
+                                            <% }%>
+                                            <span
+                                            style="font-size: 25px;font-style:italic"><%= user[x].Account %></span>　
+                                            <% if (language==0){%>
+                                                資料
+                                            <% }else if (language==1){%>
+                                                资料
+                                            <% }else if (language==2){%>
+                                                data
+                                            <% }%>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form style="text-align: left">
+                                        <label for="account_delete<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                帳號：
+                                            <% }else if (language==1){%>
+                                                帐号：
+                                            <% }else if (language==2){%>
+                                                account：
+                                            <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value="<%= user[x].Account %>"
+                                            id="account_delete<%= user[x].Account %>" readonly>
+                                        <label for="password_delete<%= user[x].Account %>"
+                                            class="col-form-label"><% if (language==0){%>
+                                                密碼:
+                                            <% }else if (language==1){%>
+                                                密码：
+                                            <% }else if (language==2){%>
+                                                password：
+                                            <% }%>
+                                        </label>
+                                        <input type="password" class="form-control" value="<%= user[x].Password %>"
+                                            id="password_delete<%= user[x].Account %>" readonly>
+                                        <label for="username_delete<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                姓名：
+                                            <% }else if (language==1){%>
+                                                姓名：
+                                            <% }else if (language==2){%>
+                                                Name：
+                                            <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value="<%= user[x].Username %>"
+                                            id="username_delete<%= user[x].Account %>" readonly>
+                                        <label for="email_delete<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                電子信箱：
+                                            <% }else if (language==1){%>
+                                                电子信箱：
+                                            <% }else if (language==2){%>
+                                                email：
+                                            <% }%>
+                                        </label>
+                                        <input type="email" class="form-control" value="<%= user[x].Email %>"
+                                            id="email_delete<%= user[x].Account %>" readonly>
+                                        <label for="phone_delete<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                聯絡電話：
+                                            <% }else if (language==1){%>
+                                                联络电话：
+                                            <% }else if (language==2){%>
+                                                Contact number：
+                                            <% }%>
+                                        </label>
+                                        <input type="phone" class="form-control" value="<%= user[x].Phone %>"
+                                            id="phone_delete<%= user[x].Account %>" readonly>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if (language==0){%>
+                                                取消
+                                                <% }else if (language==1){%>
+                                                    取消
+                                                <% }else if (language==2){%>
+                                                    cancel
+                                                <% }%>
+                                    </button>
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="deletevalue_user('user','<%= user[x].Account %>','<%= language%>')"
+                                        data-dismiss="modal">
+                                        <% if (language==0){%>
+                                            確認
+                                            <% }else if (language==1){%>
+                                                确认
+                                            <% }else if (language==2){%>
+                                                confirm
+                                            <% }%>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <script>
+            if ('<%= language%>'==0){
+                $(document).ready(function () {
+                    $('#manaagetable').DataTable({
+                        language: {
+                            search: "搜尋：",
+                            sProcessing: "處理中...",
+                            sLengthMenu: "顯示 _MENU_ 項结果",
+                            sZeroRecords: "没有匹配结果",
+                            sInfo: "顯示第 _START_ 至 _END_ 項结果，共 _TOTAL_ 項",
+                            sInfoEmpty: "顯示第 0 至 0 項结果，共 0 項",
+                            sInfoFiltered: "(由 _MAX_ 項结果過濾)",
+                            sInfoPostFix: "",
+                            sSearch: "搜索:",
+                            sEmptyTable: "表中數據為空",
+                            sLoadingRecords: "載入中...",
+                            sInfoThousands: ",",
+                            oPaginate: {
+                                sFirst: "首頁",
+                                sPrevious: "上頁",
+                                sNext: "下頁",
+                                sLast: "末頁"
+                            },
+                            oAria: {
+                                "sSortAscending": ": 以升排列",
+                                "sSortDescending": ": 以降排列"
+                            }
+                        }
+                    });
+                });
+            }
+            else if('<%= language%>'==1){
+                $(document).ready(function () {
+                    $('#manaagetable').DataTable({
+                        language: {
+                            search: "搜尋：",
+                            sProcessing: "处理中...",
+                            sLengthMenu: "显示 _MENU_ 项结果",
+                            sZeroRecords: "没有匹配结果",
+                            sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                            sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+                            sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+                            sInfoPostFix: "",
+                            sSearch: "搜索:",
+                            sEmptyTable: "表中数据为空",
+                            sLoadingRecords: "载入中...",
+                            sInfoThousands: ",",
+                            oPaginate: {
+                                sFirst: "首页",
+                                sPrevious: "上页",
+                                sNext: "下页",
+                                sLast: "末页"
+                            },
+                            oAria: {
+                                "sSortAscending": ": 以升排列",
+                                "sSortDescending": ": 以降排列"
+                            }
+                        }
+                    });
+                });
+            }
+            else if('<%= language%>'==2){
+                $(document).ready(function () {
+                    $('#manaagetable').DataTable({
+                        language: {
+                            search: "Search：",
+                            sProcessing: "Processing...",
+                            sLengthMenu: "Display _MENU_ results",
+                            sZeroRecords: "No matching results",
+                            sInfo: "Showing _START_ to _END_ results， _TOTAL_ items",
+                            sInfoEmpty: "Showing 0 to 0 results， 0 items",
+                            sInfoFiltered: "(Filtered by _MAX_ result)",
+                            sInfoPostFix: "",
+                            sSearch: "Search：",
+                            sEmptyTable: "The data in the table is empty",
+                            sLoadingRecords: "Processing...",
+                            sInfoThousands: ",",
+                            oPaginate: {
+                                sFirst: "top page",
+                                sPrevious: "previous page",
+                                sNext: "next page",
+                                sLast: "last page"
+                            },
+                            oAria: {
+                                "sSortAscending": ": In ascending",
+                                "sSortDescending": ": In descending"
+                            }
+                        }
+                    });
+                });
+            }
+            
+        </script>
+</div>

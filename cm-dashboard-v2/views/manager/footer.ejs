@@ -1,0 +1,71 @@
+<script src="/js/jQueryRotate.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- 判斷點擊事件 -->
+<script type="text/javascript">
+
+
+  function createvalue_company(){
+    var cpname = document.getElementById("Company").value;
+    var name = document.getElementById("Name").value;
+
+    var flaaaaag=0;
+    for(mac_check=0;mac_check<cpname.length;mac_check++){
+      var gate1=1;//0-1
+      var gate2=1;//A-Z
+      var gate3=1;//a-z
+      var single_str = cpname[mac_check].charCodeAt();
+      if(single_str>=48 && single_str<=57){
+        gate1=0;
+      };
+      if(single_str>=65 && single_str<=90){
+        gate2=0;
+      };
+      if(single_str>=97 && single_str<=122){
+        gate3=0;
+      };
+      if(gate1==1&&gate2==1&&gate3==1){
+        flaaaaag++;
+      }
+    };
+    if(flaaaaag>0){
+      alert("院所識別碼不可輸入符號!!!");
+    }else{
+      $("#load").css("display","block");//loading_on
+      $.post("/create/company/company", {cpname:cpname,name:name},function(data){
+        if (data == "新增成功") {
+          location.reload();
+        } else {
+          $("#load").css("display","none");//loading_off
+          alert("新增失敗")
+        }
+      }, "text");
+    };
+
+    
+  }
+
+  function deletevalue_company(delete_cpname){
+    $("#load").css("display","block");//loading_on
+    $.post("/delete/company/company", {cpname:delete_cpname},function(data){
+      if (data == "刪除成功") {
+        location.reload();
+      } else {
+        $("#load").css("display","none");//loading_off
+        alert("刪除失敗")
+      }
+    }, "text");
+  }
+  
+
+</script>
+</body>
+
+</html>

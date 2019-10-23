@@ -1,0 +1,178 @@
+<div class="col-md-2" style="display: block;background-color: #FDD692" id="navbar">
+  <div class="container-fluid">
+    <hr style="border:1.5px solid;">
+    <div style="text-align: center">
+      <a style="font-size: 18px;" href="javascript:history.go(0)">
+          <% if (language==0){%>
+            功能列
+            <% }else if (language==1){%>
+              功能列
+            <% }else if (language==2){%>
+              Function
+            <% }%></a>
+    </div>
+    <hr style="border:1.5px solid;">
+
+    <div class="accordion" id="accordionTool">
+
+      <div class="card" style="background-color: unset;border: unset">
+        <div class="card-header" id="floorroom_heading" style="background-color: unset;border: unset;padding: 5px 0px">
+          <a class="card-link" data-toggle="collapse" data-target="#floorroom_collapse" aria-expanded="true"
+            aria-controls="floorroom_collapse">
+            <button type="button" class="btn" style="width: 100%;text-align: left;border: 1px solid black">
+                <% if (language==0){%>
+                  樓層管理
+                  <% }else if (language==1){%>
+                    楼层管理
+                  <% }else if (language==2){%>
+                    Floor management
+                  <% }%></button>
+          </a>
+        </div>
+        <div id="floorroom_collapse" class="collapse show" aria-labelledby="floorroom_heading"
+          data-parent="#accordionTool">
+          <% if(floor[0].Number == null) {%>
+            <a style="color:red" href="javascript:history.go(0)">
+                <% if (language==0){%>
+                  樓層暫無資料請先新增
+                  <% }else if (language==1){%>
+                    楼层暂无资料请先新增
+                  <% }else if (language==2){%>
+                    No information on the floor, please add first
+                  <% }%>
+              </a>
+          <% }else{ %>
+            <% for(floor_number=0;floor_number<floor.length;floor_number++) {%>
+            <div class="card-body" style="text-align: right;padding: 0.25rem">
+              <a style="font-size: 16px;color:white;">
+                <button type="button" class="btn" onclick="gofloorroom()"
+                  style="width: 80%;border: 1px solid"><%= floor[floor_number].Number %>
+                  <% if (language==0){%>
+                    樓
+                <% }else if (language==1){%>
+                    楼
+                <% }else if (language==2){%>
+                    floor
+                <% }%>
+                </button>
+              </a>
+            </div>
+            <% } %>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="card" style="background-color: unset;border: unset">
+        <div class="card-header" id="device_heading" style="background-color: unset;border: unset;padding: 5px 0px">
+          <a class="card-link" data-toggle="collapse" data-target="#device_collapse" aria-expanded="true"
+            aria-controls="device_collapse">
+            <button type="button" class="btn" style="width: 100%;text-align: left;border: 1px solid black">
+                <% if (language==0){%>
+                  設備管理
+              <% }else if (language==1){%>
+                  设备管理
+              <% }else if (language==2){%>
+                Equipment management
+              <% }%>
+              </button>
+          </a>
+        </div>
+        <div id="device_collapse" class="collapse" aria-labelledby="device_heading" data-parent="#accordionTool">
+          <% for(device_type=0;device_type<devicetype.length;device_type++) {%>
+          <div class="card-body" style="text-align: right;padding: 0.25rem">
+            <a style="font-size: 16px;color:white;" value="device_<%= devicetype[device_type].id %>"
+              id="device_<%= devicetype[device_type].id %>">
+              <button type="button" class="btn"
+                style="width: 80%;border: 1px solid" onclick="gonext('<%= devicetype[device_type].id %>','<%= devicetype[device_type].Device %>','<%= language%>')"><%= devicetype[device_type].Device %></button>
+            </a>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="card" style="background-color: unset;border: unset">
+        <div class="card-header" id="threshold_heading" style="background-color: unset;border: unset;padding: 5px 0px">
+          <a class="card-link" data-toggle="collapse" data-target="#threshold_collapse" aria-expanded="true"
+            aria-controls="threshold_collapse">
+            <button type="button" class="btn" style="width: 100%;text-align: left;border: 1px solid black">
+              <% if (language==0){%>
+                  告警管理
+              <% }else if (language==1){%>
+                告警管理
+              <% }else if (language==2){%>
+                Alarm management
+              <% }%>
+              </button>
+          </a>
+        </div>
+        <div id="threshold_collapse" class="collapse" aria-labelledby="threshold_heading" data-parent="#accordionTool">
+          <% for(device_type=1;device_type<devicetype.length;device_type++) {%>
+          <div class="card-body" style="text-align: right;padding: 0.25rem">
+            <a style="font-size: 16px;color:white;" value="device_<%= devicetype[device_type].id %>"
+              id="device_<%= devicetype[device_type].id %>">
+              <button type="button" class="btn"
+                style="width: 80%;border: 1px solid" onclick="gothreshold('<%= devicetype[device_type].id %>','<%= devicetype[device_type].Device %>','<%= language%>')"><%= devicetype[device_type].Device %></button>
+            </a>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="card" style="background-color: unset;border: unset">
+        <div class="card-header" id="patient_heading" style="background-color: unset;border: unset;padding: 5px 0px">
+          <a class="card-link" data-toggle="collapse" data-target="#patient_collapse" aria-expanded="true"
+            aria-controls="patient_collapse">
+            <button type="button" class="btn" style="width: 100%;text-align: left;border: 1px solid black"
+              onclick="gopatient('<%= language%>')">
+              <% if (language==0){%>
+                使用者管理
+            <% }else if (language==1){%>
+              使用者管理
+            <% }else if (language==2){%>
+              User management
+            <% }%></button>
+          </a>
+        </div>
+      </div>
+
+      <div class="card" style="background-color: unset;border: unset">
+        <div class="card-header" id="group_heading" style="background-color: unset;border: unset;padding: 5px 0px">
+          <a class="card-link" data-toggle="collapse" data-target="#group_collapse" aria-expanded="true"
+            aria-controls="group_collapse">
+            <button type="button" class="btn" style="width: 100%;text-align: left;border: 1px solid black"
+              onclick="gogroup('<%= language%>')">
+              <% if (language==0){%>
+                群組管理
+            <% }else if (language==1){%>
+              群组管理
+            <% }else if (language==2){%>
+              Group management
+            <% }%>
+              </button>
+          </a>
+        </div>
+      </div>
+
+      <hr style="border: 0.5px solid">
+
+      <div class="card" style="background-color: unset;border: unset">
+        <div class="card-header" id="帳號heading" style="background-color: unset;border: unset;padding: 5px 0px">
+          <a class="card-link" data-toggle="collapse" data-target="#帳號collapse" aria-expanded="true"
+            aria-controls="帳號collapse">
+            <button type="button" class="btn" style="width: 100%;text-align: left;border: 1px solid black"
+              onclick="gomanage('<%= language%>')">
+              <% if (language==0){%>
+                  帳號管理
+              <% }else if (language==1){%>
+                帐号管理
+              <% }else if (language==2){%>
+                Account management
+              <% }%>
+              </button>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

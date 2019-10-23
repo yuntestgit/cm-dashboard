@@ -1,0 +1,91 @@
+<% include header.ejs %>
+
+<body>
+  
+  <div id="load" class="loading" style="display:none;z-index:9999;">
+    <div class="spinner-border text-warning" role="status">
+    </div>
+    <span class="text-warning">讀取中...</span>
+  </div>
+
+  <script>
+    function loading(){
+      $("#load").css("display","block");
+    }
+  </script>
+
+  <!-- 上方行 -->
+  <div class="container-fluid layer">
+    <div class="row layer_rom">
+      <div class="col-xl-2 col-md-2" style="background-color:white">
+        <h1 style="font-size: 20px;text-align: center;" class="layer_top"><a>
+          <% if (language==0){%>
+          LOGO 星聯宏和
+          <% }else if (language==1){%>
+          LOGO 星联宏和
+          <% }else if (language==2){%>
+          LOGO STA
+          <% }%>
+        </a></h1>
+      </div>
+      <div class="col-xl-8 col-md-8" style="background-color: #754F44">
+        <h1 style="font-size: 20px;" class="layer_top"><a style="color: white">
+          <% if (language==0){%>
+            照護資訊管理系統
+            <% }else if (language==1){%>
+            照护资讯管理系统
+            <% }else if (language==2){%>
+              Care information management system
+            <% }%>
+        </a></h1>
+      </div>
+      <div class="col-xl-1 col-md-1" style="background-color: #fff1b9">
+        <h1 style="font-size: 15px;text-align: center" class="layer_top"><%= user[0].Username %><br>
+          <% if (language==0){%>
+            歡迎回來！
+            <% }else if (language==1){%>
+              欢迎回来！
+            <% }else if (language==2){%>
+              Welcome back！
+            <% }%>
+          </h1>
+      </div>
+      <div class="col-xl-1 col-md-1" style="background-color: #fff1b9">
+          <a href="/user/logout" style="float: right"><button class="top_btn" onclick="loading()">
+              <% if (language==0){%>
+                登出
+                <% }else if (language==1){%>
+                  登出
+                <% }else if (language==2){%>
+                  Logout
+                <% }%>
+                </button></a>
+          <form action="/setting/show" method="POST">
+            <input name="account" style="visibility:collapse;width: 0px" value='<%= user[0].Account %>'>
+            <input name="password" style="visibility:collapse;width: 0px" value='<%= user[0].Password %>'>
+            <input style="visibility:collapse;position:fixed" name="language" value="<%= language%>">
+            <% if (language==0){%>
+            	<input type="submit" class="top_btn" value="設置" onclick="loading()">
+            <% }else if (language==1){%>
+            	<input type="submit" class="top_btn" value="设置" onclick="loading()">
+            <% }else if (language==2){%>
+                <input type="submit" class="top_btn" value="Settings" onclick="loading()">             
+            <% }%>
+          </form>
+      </div>
+    </div> 
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- 側邊列 -->
+      <% include navbar.ejs %>
+      <!-- 主畫面 -->
+      <main role="main" class="col-md-10" style="background-color: #FBFFB9;margin-left:auto!important;height: 800px">
+        <% include main.ejs %>
+        <!-- <h2>----footer----</h2> -->
+      </main>
+    </div>
+  </div>
+
+<% include footer.ejs %>

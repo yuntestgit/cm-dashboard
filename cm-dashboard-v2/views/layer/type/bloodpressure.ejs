@@ -1,0 +1,178 @@
+<table style="width:100%;height:100%;background-color: white">
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="container" style="width:100%">FusionCharts will render here</div>
+            <script type="text/javascript">
+                
+                var temp_array = new Array();
+                var database_data = JSON.parse('<%- JSON.stringify(data) %>');
+                
+                for (var i = 0; i < database_data.length; i++) {
+                    var x = new Array();
+                    x[0] = parseInt(database_data[i].SBP, 10);
+                    x[1] = parseInt(database_data[i].DBP, 10);
+                    x[2] = parseInt(database_data[i].Heartrate, 10);
+                    x[3] = database_data[i].Time.split(' ')[0] + ' ' + database_data[i].Time.split(' ')[1];
+                    temp_array[i] = x;
+                }
+                var ss = [{
+                    "name": "收縮壓",
+                    "type": "number"
+                }, {
+                    "name": "舒張壓",
+                    "type": "number"
+                }, {
+                    "name": "心率",
+                    "type": "number"
+                }, {
+                    "name": "Time",
+                    "type": "date",
+                    "format": "%Y-%m-%d %H:%M:%S"
+                }]
+                // console.log(temp_array);
+                var fusionDataStore = new FusionCharts.DataStore();
+                var fusionTable = fusionDataStore.createDataTable(temp_array, ss);
+                if('<%- threshold[0].Threshold %>'){
+                    var database_threshold =JSON.parse('<%- threshold[0].Threshold %>');
+                        new FusionCharts({
+                        type: 'timeseries',
+                        renderAt: 'container',
+                        width: "90%",
+                        height: 650,
+                        dataSource: {
+                            data: fusionTable,
+                            "yAxis": [{
+                                "plot": {
+                                    "value": "收縮壓",//對應schema的欄位
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                        "border": 30,
+                                    },
+                                    "lineThickness": "20"
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[0]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "舒張壓",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[1]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "心率",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[2]
+                                }],
+                            }],
+                            xAxis: {
+                                initialinterval: {
+                                    from: "07-Sep-19",
+                                    to: "07-Sep-19"
+                                }
+                            },
+                            chart: {
+                                exportEnabled: "1", //Enable Export Feature
+                            }
+                        }
+                    }).render()
+                }
+                else{
+                    new FusionCharts({
+                        type: 'timeseries',
+                        renderAt: 'container',
+                        width: "90%",
+                        height: 650,
+                        dataSource: {
+                            data: fusionTable,
+                            "yAxis": [{
+                                "plot": {
+                                    "value": "收縮壓",//對應schema的欄位
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                        "border": 30,
+                                    },
+                                    "lineThickness": "20"
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }, {
+                                "plot": {
+                                    "value": "舒張壓",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }, {
+                                "plot": {
+                                    "value": "心率",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }],
+                            xAxis: {
+                                initialinterval: {
+                                    from: "07-Sep-19",
+                                    to: "07-Sep-19"
+                                }
+                            },
+                            chart: {
+                                exportEnabled: "1", //Enable Export Feature
+                            }
+                        }
+                    }).render()
+                }
+                        
+            </script>
+        </td>
+        <td style="width:50%">
+        </td>
+    </tr>
+</table>

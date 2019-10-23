@@ -1,0 +1,183 @@
+<% console.log(muti_data)%>
+<table style="width:100%;height:100%;text-align: center;background-color: white">
+    <tr style="height: 50%">
+            <td style="width:50%">
+                <div id="SBP_chart" style="width:100%">FusionCharts will render here</div>
+            </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="DBP_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="Heartrate_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <script type="text/javascript">
+        var SBP_array = new Array();
+        var DBP_array = new Array();
+        var Heartrate_array = new Array();
+        var group_data = JSON.parse('<%- JSON.stringify(muti_data) %>');
+        var group_name = JSON.parse('<%- JSON.stringify(muti_name) %>');
+        var count = 0;
+        for (var i = 0; i < group_data.length; i++) {
+            for (var y = 0; y < group_data[i].length; y++) {
+                var x = new Array();
+                var z = new Array();
+                var w = new Array();
+                x[0] = parseInt(group_data[i][y].SBP, 10);
+                z[0] = parseInt(group_data[i][y].DBP, 10);
+                w[0] = parseInt(group_data[i][y].Heartrate, 10);
+                x[1] = z[1] = w[1]= group_name[i][0].Name;
+                x[2] = z[2] = w[2]= group_data[i][y].Time.split(' ')[0] + ' ' + group_data[i][y].Time.split(' ')[1];
+                SBP_array[count] = x;
+                DBP_array[count] = z;
+                Heartrate_array[count] = w;
+                count++;
+            }
+        }
+        var SBP_schema = [{
+            "name": "收縮壓",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        // console.log(head_array);
+        // console.log(foot_array);
+
+        var SBPDataStore = new FusionCharts.DataStore();
+        var SBPTable = SBPDataStore.createDataTable(SBP_array, SBP_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'SBP_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: SBPTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "收縮壓",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                xAxis: {
+                    initialinterval: {
+                        from: "07-Sep-19",
+                        to: "07-Sep-19"
+                    }
+                },
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+
+
+        var DBP_schema = [{
+            "name": "舒張壓",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var DBPDataStore = new FusionCharts.DataStore();
+        var DBPTable = DBPDataStore.createDataTable(DBP_array, DBP_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'DBP_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: DBPTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "舒張壓",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+
+        var Heartrate_schema = [{
+            "name": "心率",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var HeartrateDataStore = new FusionCharts.DataStore();
+        var HeartrateTable = HeartrateDataStore.createDataTable(Heartrate_array, Heartrate_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Heartrate_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: HeartrateTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "心率",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+    </script>
+</table>

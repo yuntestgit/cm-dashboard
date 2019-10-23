@@ -1,0 +1,104 @@
+<div class="col-md-2" style="display: block;background-color: #FDD692" id="navbar">
+  <div class="container-fluid" style="height:100%">
+    <hr style="border:1.5px solid;">
+    <div style="text-align: center">
+      <a style="font-size: 18px;" href="javascript:history.go(0)">
+        <% if (language==0){%>
+            護聯網平台
+        <% }else if (language==1){%>
+            护联网平台
+        <% }else if (language==2){%>
+            NHIoT
+        <% }%>
+        </a>
+    </div>
+    <hr style="border:1.5px solid;">
+
+    <div class="accordion" id="accordionTool" style="height: 100%">
+      <% if(floor[0].Number == null ) {%>
+      <% if (language==0){%>
+        暫無資料<br>請點擊右上方<br>設置新增資料
+      <% }else if (language==1){%>
+        暂无资料<br>请点击右上方<br>设置新增资料
+      <% }else if (language==2){%>
+        No data available<br>Please click on the upper right <br>Set new information
+      <% }%>
+      
+      <% }else{ %>
+      <% for(var nf=0;nf< floor.length;nf++) {%>
+      <div class="card" style="background-color: unset;border: unset">
+        <div class="card-header" id="heading<%= floor[nf].Number %>"
+          style="background-color: unset;border: unset;padding: 5px 0px">
+
+          <a class="card-link" data-toggle="collapse" data-target="#collapse<%= floor[nf].Number %>"
+            aria-expanded="true" aria-controls="collapse<%= floor[nf].Number %>">
+
+            <button type="button" class="btn"
+              style="width: 100%;text-align: left;border: 1px solid"><%= floor[nf].Number %>　
+              <% if (language==0){%>
+                樓
+            <% }else if (language==1){%>
+                楼
+            <% }else if (language==2){%>
+                floor
+            <% }%>
+          </button>
+          </a>
+
+        </div>
+
+        <div id="collapse<%= floor[nf].Number %>" class="collapse" aria-labelledby="heading<%= floor[nf].Number %>"
+          data-parent="#accordionTool">
+          <% for(var nr=0;nr<room.length;nr++) {%>
+          <% if(room[nr].FloorNumber == floor[nf].Number) {%>
+          <div class="card-body" style="text-align: right;padding:3px">
+
+            <div class="accordion" id="accordion<%= floor[nf].Number %>">
+              <div class="card" style="background-color: unset;border: unset">
+                <div class="card-header" id="heading-room<%= room[nr].Number %>"
+                  style="background-color: unset;border: unset;padding-right: 0px;padding-bottom: 3px">
+                  <a class="card-link" data-toggle="collapse" data-target="#collapse-room<%= room[nr].Number %>"
+                    aria-expanded="true" aria-controls="collapse-room<%= room[nr].Number %>">
+                    <button type="button" class="btn"
+                      style="width: 100%;text-align: left;border: 1px solid"><%= room[nr].Number %>
+                      <% if (language==0){%>
+                        房號
+                    <% }else if (language==1){%>
+                        房号
+                    <% }else if (language==2){%>
+                        Room No
+                    <% }%>
+                      </button>
+                  </a>
+                </div>
+
+                <div id="collapse-room<%= room[nr].Number %>" class="collapse"
+                  aria-labelledby="heading-room<%= room[nr].Number %>" data-parent="#accordion<%= floor[nf].Number %>">
+                  <div class="card-body" style="text-align: right;padding-right: 0px;padding-top: 8px;padding-bottom: 0px">
+                    <% for(var wp=0;wp<patient.length;wp++) {%>
+                    <% if(patient[wp].Room == room[nr].Number) {%>
+                    <a onclick="getpatientdata('<%= room[nr].FloorNumber %>','<%= patient[wp].Room %>','<%= patient[wp].Username %>')">
+                      <button type="button" class="btn"style="width: 80%;text-align: left;border: 1px solid;margin-bottom:5px">
+                        <%= patient[wp].Username %>
+                      </button>
+                    </a>
+                    <br>
+                    <% } %>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- </a> -->
+          </div>
+          <% } %>
+          <% } %>
+        </div>
+      </div>
+      <% } %>
+      <% } %>
+    </div>
+
+  </div>
+</div>

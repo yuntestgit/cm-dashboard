@@ -1,0 +1,57 @@
+<table class="table" style="margin-top:20px;border-top:0px;height: 20%;">
+    <thead>
+        <tr>
+            <th style="font-size: 20px"><span id="device_name"></span>　>   <%= devices_username[0].Username%></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div class="row">
+                    <div id="left" class="col-md-6">
+                        <div style="text-align: center">                
+                            <a style="font-size: 20px">頭部角度</a>
+                        </div>
+                        <canvas id="chart_left"></canvas>
+                        <script>
+                            var ctx_left = document.getElementById('chart_left');
+                            var myLineChart_left = new Chart(ctx_left, {
+                                type: 'line',
+                                data: {
+                                    labels: ['1次', '2次', '3次', '4次', '5次', '6次','7次','8次','9次','10次','11次','12次','13次','14次'],
+                                    datasets: [{
+                                        label: '角度',
+                                        data: [0,4,8,10,20,20,30,40,60,66,40,30,20,40],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                option: {}
+                            });
+                        </script>
+                    </div>
+                    <div id="right" class="col-md-6">
+                        <div style="text-align: center">                
+                            <a style="font-size: 20px">腳部角度</a>
+                        </div>
+                        <canvas id="chart_right"></canvas>
+                        <script>
+                            var ctx_right = document.getElementById('chart_right');
+                            var myLineChart_right = new Chart(ctx_right, {
+                                type: 'line',
+                                data: {
+                                    labels: ['1次', '2次', '3次', '4次', '5次', '6次','7次','8次','9次','10次','11次','12次','13次','14次'],
+                                    datasets: [{
+                                        label: '角度',
+                                        data: [0,4,8,10,20,20,28,26,24,20,18,12,10,5],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                option: {}
+                            });
+                        </script>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,630 @@
+<div id="main" style="height:850px;overflow-y:scroll">
+
+    <% if(device[0].id==null){ %>
+
+        <% if (language==0){%>
+            暫無資料請先點擊右方按鈕新增資料
+        <% }else if (language==1){%>
+            暂无资料请先点击右方按钮新增资料
+        <% }else if (language==2){%>
+            No information, please click the button on the right to add information.
+        <% }%>
+
+    <% }else{ %>
+    <div style="margin-top: 10px"></div>
+    <table id="example">
+        <thead>
+            <tr>
+                <th>
+                        <% if (language==0){%>
+                            識別碼
+                        <% }else if (language==1){%>
+                            识别码
+                        <% }else if (language==2){%>
+                            Identifier
+                        <% }%> 
+                    </th>
+                <th>
+                    <% if (language==0){%>
+                        設備名稱
+                    <% }else if (language==1){%>
+                        设备名称
+                    <% }else if (language==2){%>
+                        Device name
+                    <% }%>
+                    </th>
+                <th>
+                        <% if (language==0){%>
+                            脂肪
+                        <% }else if (language==1){%>
+                            脂肪
+                        <% }else if (language==2){%>
+                            fat
+                        <% }%> </th>
+                <th>
+                        <% if (language==0){%>
+                            水分
+                        <% }else if (language==1){%>
+                            水分
+                        <% }else if (language==2){%>
+                            Moisture
+                        <% }%> </th>
+                <th>
+                        <% if (language==0){%>
+                            肌肉
+                        <% }else if (language==1){%>
+                            肌肉
+                        <% }else if (language==2){%>
+                            muscle
+                        <% }%></th>
+                <th>
+                        <% if (language==0){%>
+                            骨質
+                        <% }else if (language==1){%>
+                            骨质
+                        <% }else if (language==2){%>
+                            Bone
+                        <% }%>
+                    </th>
+                <th></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <% for(x=0;x<device.length;x++) {%>
+            <tr>
+                <td><%= device[x].Mac %></td>
+
+                <% if(device[x].Name == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td><%= device[x].Name %></td>
+                <% } %>
+
+                <% if(device[x].Threshold == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <% var w = JSON.parse(device[x].Threshold) %>
+
+                <% if(w[0] == "NULL") {%>
+                    <td>
+                            <% if (language==0){%>
+                                暫無
+                            <% }else if (language==1){%>
+                                暂无
+                            <% }else if (language==2){%>
+                                No data
+                            <% }%>
+                    </td>
+                    <% }else{ %>
+                    <td><%= w[0] %></td>
+                    <% } %>
+
+                    <% if(w[1] == "NULL") {%>
+                    <td>
+                            <% if (language==0){%>
+                                暫無
+                            <% }else if (language==1){%>
+                                暂无
+                            <% }else if (language==2){%>
+                                No data
+                            <% }%>
+                    </td>
+                    <% }else{ %>
+                    <td><%= w[1] %></td>
+                    <% } %>
+
+                    <% if(w[2] == "NULL") {%>
+                    <td>
+                            <% if (language==0){%>
+                                暫無
+                            <% }else if (language==1){%>
+                                暂无
+                            <% }else if (language==2){%>
+                                No data
+                            <% }%>
+                    </td>
+                    <% }else{ %>
+                    <td><%= w[2] %></td>
+                    <% } %>
+
+                    <% if(w[3] == "NULL") {%>
+                    <td>
+                            <% if (language==0){%>
+                                暫無
+                            <% }else if (language==1){%>
+                                暂无
+                            <% }else if (language==2){%>
+                                No data
+                            <% }%>
+                    </td>
+                    <% }else{ %>
+                    <td><%= w[3] %></td>
+                    <% } %>
+
+                <% } %>
+
+                <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal"
+                        data-target="#threshold-<%= device[x].Mac%>">
+                        <% if (language==0){%>
+                            設定
+                        <% }else if (language==1){%>
+                            设定
+                        <% }else if (language==2){%>
+                            set up
+                        <% }%>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="threshold-<%= device[x].Mac%>" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= device[x].Mac%>-Label" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= device[x].Mac %>-Label">
+                                        <span style="font-size: 25px;font-style:italic"><%= device[x].Name %> 
+                                            <% if (language==0){%>
+                                                告警值：
+                                            <% }else if (language==1){%>
+                                                告警值：
+                                            <% }else if (language==2){%>
+                                                Alarm value：
+                                            <% }%> 
+                                        </span>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="javascript:fat_threshold('<%= device[x].Mac %>','<%= language%>')">
+                                        <script>
+                                            var mac = JSON.parse('<%- JSON.stringify(device[x].Mac) %>');
+                                            // console.log(mac);
+                                        </script>
+                                        <% if(device[x].Threshold==null) {%>
+                                        <div>
+                                            <label for="fat-<%= device[x].Mac %>" class="col-form-label">
+                                                    <% if (language==0){%>
+                                                        脂肪：
+                                                    <% }else if (language==1){%>
+                                                        脂肪：
+                                                    <% }else if (language==2){%>
+                                                        fat：
+                                                    <% }%>
+                                            </label>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="fat-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="fat-c-<%= device[x].Mac %>"
+                                                onclick="fat_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                        </div>
+                                        <div>
+                                            <label for="water-<%= device[x].Mac %>" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    水分：
+                                                <% }else if (language==1){%>
+                                                    水分：
+                                                <% }else if (language==2){%>
+                                                    Moisture：
+                                                <% }%>
+                                                </label>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="water-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="water-c-<%= device[x].Mac %>"
+                                                onclick="water_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                        </div>
+                                        <div>
+                                            <label for="muscle-<%= device[x].Mac %>"
+                                                class="col-form-label">
+                                                <% if (language==0){%>
+                                                    肌肉：
+                                                <% }else if (language==1){%>
+                                                    肌肉：
+                                                <% }else if (language==2){%>
+                                                    muscle：
+                                                <% }%>
+                                            </label>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="muscle-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="muscle-c-<%= device[x].Mac %>"
+                                                onclick="muscle_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                        </div>
+                                        <div>
+                                            <label for="bone-<%= device[x].Mac %>" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    骨質：
+                                                <% }else if (language==1){%>
+                                                    骨质：
+                                                <% }else if (language==2){%>
+                                                    Bone：
+                                                <% }%>
+                                            </label>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="bone-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="bone-c-<%= device[x].Mac %>"
+                                                onclick="bone_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                        </div>
+                                        <% }else{ %>
+                                        <% var qq=JSON.parse(device[x].Threshold) %>
+                                        <div>
+                                            <label for="fat-<%= device[x].Mac %>" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    脂肪：
+                                                <% }else if (language==1){%>
+                                                    脂肪：
+                                                <% }else if (language==2){%>
+                                                    fat：
+                                                <% }%> 
+                                            </label>
+                                            <% if(qq[0]=="NULL") {%>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="fat-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="fat-c-<%= device[x].Mac %>"
+                                                onclick="fat_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% }else{ %>
+                                            <input type="number" style="width: 70%" value="<%= qq[0] %>" min="0"
+                                                id="fat-<%= device[x].Mac %>" required>
+                                            <input type="checkbox" id="fat-c-<%= device[x].Mac %>"
+                                                onclick="fat_c('<%= device[x].Mac %>')">
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% } %>
+                                        </div>
+
+                                        <div>
+                                            <label for="water-<%= device[x].Mac %>" class="col-form-label">
+                                                    <% if (language==0){%>
+                                                        水分：
+                                                    <% }else if (language==1){%>
+                                                        水分：
+                                                    <% }else if (language==2){%>
+                                                        Moisture：
+                                                    <% }%>
+                                            </label>
+                                            <% if(qq[1]=="NULL") {%>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="water-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="water-c-<%= device[x].Mac %>"
+                                                onclick="water_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% }else{ %>
+                                            <input type="number" style="width: 70%" value="<%= qq[1] %>" min="0"
+                                                id="water-<%= device[x].Mac %>" required>
+                                            <input type="checkbox" id="water-c-<%= device[x].Mac %>"
+                                                onclick="water_c('<%= device[x].Mac %>')">
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% } %>
+                                        </div>
+
+                                        <div>
+                                            <label for="muscle-<%= device[x].Mac %>"
+                                                class="col-form-label">
+                                                <% if (language==0){%>
+                                                    肌肉：
+                                                <% }else if (language==1){%>
+                                                    肌肉：
+                                                <% }else if (language==2){%>
+                                                    muscle：
+                                                <% }%>
+                                            </label>
+                                            <% if(qq[2]=="NULL") {%>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="muscle-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="muscle-c-<%= device[x].Mac %>"
+                                                onclick="muscle_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% }else{ %>
+                                            <input type="number" style="width: 70%" value="<%= qq[2] %>" min="0"
+                                                id="muscle-<%= device[x].Mac %>" required>
+                                            <input type="checkbox" id="muscle-c-<%= device[x].Mac %>"
+                                                onclick="muscle_c('<%= device[x].Mac %>')">
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% } %>
+                                        </div>
+
+                                        <div>
+                                            <label for="bone-<%= device[x].Mac %>" class="col-form-label">
+                                                    <% if (language==0){%>
+                                                        骨質：
+                                                    <% }else if (language==1){%>
+                                                        骨质：
+                                                    <% }else if (language==2){%>
+                                                        Bone：
+                                                    <% }%>
+                                            </label>
+                                            <% if(qq[3]=="NULL") {%>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="bone-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="bone-c-<%= device[x].Mac %>"
+                                                onclick="bone_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% }else{ %>
+                                            <input type="number" style="width: 70%" value="<%= qq[3] %>" min="0"
+                                                id="bone-<%= device[x].Mac %>" required>
+                                            <input type="checkbox" id="bone-c-<%= device[x].Mac %>"
+                                                onclick="bone_c('<%= device[x].Mac %>')">
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% } %>
+                                            
+                                        </div>
+                                        <% } %>
+
+                                        <script>
+                                            function fat_c(mac) {
+                                                var fc = document.getElementById("fat-c-" + mac).checked;
+                                                if (fc == true) {
+                                                    // document.getElementById("fat-"+mac).setAttribute("readonly",true);
+                                                    // document.getElementById("fat-"+mac).value=0;
+                                                    document.getElementById("fat-" + mac).setAttribute("disabled", true);
+                                                    document.getElementById("fat-" + mac).value = 0;
+                                                } else {
+                                                    // document.getElementById("fat-"+mac).removeAttribute("readonly");
+                                                    document.getElementById("fat-" + mac).removeAttribute("disabled");
+                                                }
+                                            };
+
+                                            function water_c(mac) {
+                                                var bc = document.getElementById("water-c-" + mac).checked;
+                                                if (bc == true) {
+                                                    // document.getElementById("water-"+mac).setAttribute("readonly",true);
+                                                    // document.getElementById("water-"+mac).value=0;
+                                                    document.getElementById("water-" + mac).setAttribute("disabled", true);
+                                                    document.getElementById("water-" + mac).value = 0;
+                                                } else {
+                                                    // document.getElementById("water-"+mac).removeAttribute("readonly");
+                                                    document.getElementById("water-" + mac).removeAttribute("disabled");
+                                                }
+                                            };
+
+                                            function muscle_c(mac) {
+                                                var hc = document.getElementById("muscle-c-" + mac).checked;
+                                                if (hc == true) {
+                                                    // document.getElementById("muscle-"+mac).setAttribute("readonly",true);
+                                                    // document.getElementById("muscle-"+mac).value=0;
+                                                    document.getElementById("muscle-" + mac).setAttribute("disabled", true);
+                                                    document.getElementById("muscle-" + mac).value = 0;
+                                                } else {
+                                                    // document.getElementById("muscle-"+mac).removeAttribute("readonly");
+                                                    document.getElementById("muscle-" + mac).removeAttribute("disabled");
+                                                }
+                                            };
+                                            function bone_c(mac) {
+                                                var tc = document.getElementById("bone-c-" + mac).checked;
+                                                if (tc == true) {
+                                                    // document.getElementById("bone-"+mac).setAttribute("readonly",true);
+                                                    // document.getElementById("bone-"+mac).value=0;
+                                                    document.getElementById("bone-" + mac).setAttribute("disabled", true);
+                                                    document.getElementById("bone-" + mac).value = 0;
+                                                } else {
+                                                    // document.getElementById("bone-"+mac).removeAttribute("readonly");
+                                                    document.getElementById("bone-" + mac).removeAttribute("disabled");
+                                                }
+                                            };
+                                        </script>
+
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">
+                                                    <% if (language==0){%>
+                                                        確認
+                                                    <% }else if (language==1){%>
+                                                        确认
+                                                    <% }else if (language==2){%>
+                                                        confirm
+                                                    <% }%>
+                                            </button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">
+                                                <% if (language==0){%>
+                                                    取消
+                                                <% }else if (language==1){%>
+                                                    取消
+                                                <% }else if (language==2){%>
+                                                    cancel
+                                                <% }%>
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function fat_threshold(mac,language) {
+                            var fat = parseInt(document.getElementById("fat-" + mac).value);
+                            var fc = document.getElementById("fat-c-" + mac).checked;
+                            var water = parseInt(document.getElementById("water-" + mac).value);
+                            var bc = document.getElementById("water-c-" + mac).checked;
+                            var muscle = parseInt(document.getElementById("muscle-" + mac).value);
+                            var hc = document.getElementById("muscle-c-" + mac).checked;
+                            var bone = parseInt(document.getElementById("bone-" + mac).value);
+                            var tc = document.getElementById("bone-c-" + mac).checked;
+                            if (fc == true) {
+                                fat = 'NULL';
+                            }
+                            if (bc == true) {
+                                water = 'NULL';
+                            }
+                            if (hc == true) {
+                                muscle = 'NULL';
+                            }
+                            if (tc == true) {
+                                bone = 'NULL';
+                            }
+                            // console.log(fat + "/" + water + "/" + muscle + "/" + bone);
+                            $.post("/modify/threshold", { type: 'fat', mac: mac, f: fat, w: water, m: muscle, b: bone }, function (data) {
+                                if (data == "修改告警值成功") {
+                                    // location.reload();
+                                    $("#threshold-"+mac).modal('hide');
+                                    setTimeout(function(){
+                                        gothreshold('8','脂肪計',language);
+                                    },200);
+                                } else {
+                                    alert("修改告警值失敗");
+                                }
+                            }, "text");
+                        }
+                    </script>
+
+                </td>
+
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#example').DataTable({
+                language: {
+                    search: "搜尋：",
+                    sProcessing: "处理中...",
+                    sLengthMenu: "显示 _MENU_ 项结果",
+                    sZeroRecords: "没有匹配结果",
+                    sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+                    sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+                    sInfoPostFix: "",
+                    sSearch: "搜索:",
+                    sEmptyTable: "表中数据为空",
+                    sLoadingRecords: "载入中...",
+                    sInfoThousands: ",",
+                    oPaginate: {
+                        sFirst: "首页",
+                        sPrevious: "上页",
+                        sNext: "下页",
+                        sLast: "末页"
+                    },
+                    oAria: {
+                        "sSortAscending": ": 以升排列",
+                        "sSortDescending": ": 以降排列"
+                    }
+                }
+            });
+        });
+    </script>
+
+    <% } %>
+</div>

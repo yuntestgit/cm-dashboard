@@ -1,0 +1,411 @@
+<div id="main" style="height:850px;overflow-y:scroll">
+
+    <button type="button" class="btn btn-primary" style="float: right;margin-top: 10px;margin-right: 10px"
+        data-toggle="modal" data-target="#createteam">
+        <% if (language==0){%>
+            新增群組
+        <% }else if (language==1){%>
+            新增群组
+        <% }else if (language==2){%>
+            Add group
+        <% }%>
+        </button>
+    <!-- Modal-create -->
+    <div class="modal fade" id="createteam" tabindex="-1" role="dialog" aria-labelledby="createLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createLabel">
+                            <% if (language==0){%>
+                                新增群組
+                            <% }else if (language==1){%>
+                                新增群组
+                            <% }else if (language==2){%>
+                                Add group
+                            <% }%>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form style="text-align: left" action="javascript:createvalue_group('<%= language%>')">
+                        <label for="groupname" class="col-form-label">
+                                <% if (language==0){%>
+                                    群組名稱：
+                                <% }else if (language==1){%>
+                                    群组名称：
+                                <% }else if (language==2){%>
+                                    Group name:
+                                <% }%>
+                            </label>
+                        <input type="text" class="form-control" id="groupname" required>
+                        <label for="devicetype" class="col-form-label">
+                                <% if (language==0){%>
+                                    設備種類：
+                                <% }else if (language==1){%>
+                                    设备种类：
+                                <% }else if (language==2){%>
+                                    Equipment type:
+                                <% }%>
+                            </label>
+                        <select class="form-control" id="devicetype" onchange="giveSelection(this.value)" required>
+                            <!-- <option value="">全部顯示</option> -->
+                            <% for(dt=1;dt<devicetype.length;dt++) {%>
+                            <option value='<%= devicetype[dt].id %>'><%= devicetype[dt].Device %></option>
+                            <% } %>
+                        </select>
+
+                        <label for="devicegroup" class="col-form-label">
+                                <% if (language==0){%>
+                                    選擇設備：
+                                <% }else if (language==1){%>
+                                    选择设备：
+                                <% }else if (language==2){%>
+                                    Select device:
+                                <% }%>
+                            </label>
+                        <select class="form-control select2-example" id="devicegroup" multiple='multiple'
+                            style="width:100%" required>
+                            <% for(dv=0;dv<device.length;dv++) {%>
+                            <option data-option='<%= device[dv].Devicetype %>' value='<%= device[dv].Mac %>'>
+                                <%= device[dv].Name %></option>
+                            <% } %>
+                        </select>
+
+                        <script>
+                            var selt = document.querySelector('#devicrtype');
+                            var selg = document.querySelector('#devicegroup');
+                            var optionsg = selg.querySelectorAll('option');
+
+                            $(document).ready(function () {
+                                $('.select2-example').select2();
+                            });
+
+                            function giveSelection(selValue) {
+                                selg.innerHTML = '';
+                                if (selValue == "全部顯示") {
+                                    selg.append(optionsg);
+                                } else {
+                                    for (var i = 0; i < optionsg.length; i++) {
+                                        if (optionsg[i].dataset.option === selValue) {
+                                            selg.appendChild(optionsg[i]);
+                                        }
+                                    }
+                                }
+                            }
+                            // giveSelection(selt.value);
+                        </script>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    <% if (language==0){%>
+                                        取消
+                                    <% }else if (language==1){%>
+                                        取消
+                                    <% }else if (language==2){%>
+                                        cancel
+                                    <% }%>
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                    <% if (language==0){%>
+                                        確認
+                                    <% }else if (language==1){%>
+                                        确认
+                                    <% }else if (language==2){%>
+                                        confirm
+                                    <% }%>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <% if(device[0].id == null ) {%>
+    <span>
+        <% if (language==0){%>
+            暫無資料請先點擊右方按鈕新增資料
+        <% }else if (language==1){%>
+            暂无资料请先点击右方按钮新增资料
+        <% }else if (language==2){%>
+            No information, please click the button on the right to add information.
+        <% }%>
+    </span>
+    <% }else{ %>
+    <% if(team[0].id == null ) {%>
+    <span>
+        <% if (language==0){%>
+            暫無群組
+        <% }else if (language==1){%>
+            暂无群组
+        <% }else if (language==2){%>
+            No group
+        <% }%>
+    </span>
+    <% }else{ %>
+    <% for(x=0;x<team.length;x++) {%>
+    <table class="table" style="margin-top:20px;border-top:0px;border-bottom: 0px;">
+        <thead>
+            <tr>
+                <th>
+                    <% for(u=0;u<devicetype.length;u++) {%>
+                    <% if(team[x].Devicetype == devicetype[u].id) {%>
+                    <span style="font-size: 35px"><%= team[x].Teamname %> (<%= devicetype[u].Device %>)</span>
+                    <% } %>
+                    <% } %>
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#modify-<%= team[x].Teamid %>">
+                        <% if (language==0){%>
+                            修改
+                        <% }else if (language==1){%>
+                            修改
+                        <% }else if (language==2){%>
+                            modify
+                        <% }%>
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-toggle="modal"
+                        data-target="#delete-<%= team[x].Teamid %>">
+                        <% if (language==0){%>
+                            刪除
+                        <% }else if (language==1){%>
+                            删除
+                        <% }else if (language==2){%>
+                            Delete
+                        <% }%>
+                    </button>
+                    <!-- Modal-modify -->
+                    <div class="modal fade" id="modify-<%= team[x].Teamid %>" tabindex="-1" role="dialog"
+                        aria-labelledby="modify-<%= team[x].Teamid %>-Label" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modify-<%= team[x].Teamid %>-Label">
+                                        <%= team[x].Teamname %>　
+                                        <% if (language==0){%>
+                                            群組
+                                        <% }else if (language==1){%>
+                                            群组
+                                        <% }else if (language==2){%>
+                                            Group
+                                        <% }%>
+                                        </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="javascript:modifyvalue_group('<%= team[x].Teamid %>','<%= language%>')">
+                                        <label for="groupname<%= team[x].Teamid %>" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    群組名稱：
+                                                <% }else if (language==1){%>
+                                                    群组名称：
+                                                <% }else if (language==2){%>
+                                                    Group name:
+                                                <% }%>
+                                            </label>
+                                        <input type="text" class="form-control" id="groupname<%= team[x].Teamid %>"
+                                            value="<%= team[x].Teamname %>" required>
+
+                                        <label for="devicetype<%= team[x].Teamid %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                設備種類：
+                                            <% }else if (language==1){%>
+                                                设备种类：
+                                            <% }else if (language==2){%>
+                                                Equipment type:
+                                            <% }%>
+                                        </label>
+                                        <select class="form-control" id="devicetype<%= team[x].Teamid %>"
+                                            onchange="giveModify('<%= team[x].Teamid %>',this.value)" required>
+                                            <% for(du=1;du<devicetype.length;du++) {%>
+                                            <% if(team[x].Devicetype == devicetype[du].id) {%>
+                                            <option value='<%= devicetype[du].id %>' selected="selected">
+                                                <%= devicetype[du].Device %></option>
+                                            <% }else{ %>
+                                            <option value='<%= devicetype[du].id %>'><%= devicetype[du].Device %>
+                                            </option>
+                                            <% } %>
+                                            <% } %>
+                                        </select>
+
+                                        <label for="devicegroup<%= team[x].Teamid %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                設備項目：
+                                            <% }else if (language==1){%>
+                                                设备项目：
+                                            <% }else if (language==2){%>
+                                                Equipment project:
+                                            <% }%>
+                                            </label>
+                                        <% var arc = JSON.parse(team[x].Devicemac); %>
+                                        <select class="form-control select2-example"
+                                            id="devicegroup<%= team[x].Teamid %>" multiple='multiple' style="width:100%"
+                                            required>
+                                            <% for(dq=0;dq<device.length;dq++) {%>
+                                            <% for(t=0;t<arc.length;t++) {%>
+                                            <% if(arc[t] == device[dq].Mac ) {%>
+                                            <option data-option='<%= device[dq].Devicetype %>' selected="selected"
+                                                value='<%= device[dq].Mac %>'><%= device[dq].Name %></option>
+                                            <% } %>
+                                            <% } %>
+                                            <% } %>
+                                        </select>
+
+                                        <script>
+                                            var seltt;
+                                            var selgg;
+                                            var optionsgg = optionsg;
+
+                                            $(document).ready(function () {
+                                                $('.select2-example2').select2();
+                                            });
+
+                                            function giveModify(id, selValue) {
+                                                seltt = document.querySelector('#devicrtype' + id);
+                                                selgg = document.querySelector('#devicegroup' + id);
+                                                // optionsgg = selgg.querySelectorAll('option');
+                                                selgg.innerHTML = '';
+                                                if (selValue == "全部顯示") {
+                                                    selgg.append(optionsgg);
+                                                } else {
+                                                    for (var i = 0; i < optionsgg.length; i++) {
+                                                        if (optionsgg[i].dataset.option === selValue) {
+                                                            selgg.appendChild(optionsgg[i]);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </script>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">
+                                                <% if (language==0){%>
+                                                    取消
+                                                    <% }else if (language==1){%>
+                                                        取消
+                                                    <% }else if (language==2){%>
+                                                        cancel
+                                                    <% }%>
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">
+                                                <% if (language==0){%>
+                                                    確認
+                                                <% }else if (language==1){%>
+                                                    确认
+                                                <% }else if (language==2){%>
+                                                    confirm
+                                                <% }%>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal-delete -->
+                    <div class="modal fade" id="delete-<%= team[x].Teamid %>" tabindex="-1" role="dialog"
+                        aria-labelledby="delete-<%= team[x].Teamid %>-Label" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="delete-<%= team[x].Teamid %>-Label">
+                                        <%= team[x].Teamname %>　
+                                        <% if (language==0){%>
+                                            群組
+                                        <% }else if (language==1){%>
+                                            群组
+                                        <% }else if (language==2){%>
+                                            Group
+                                        <% }%>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <label>
+                                        <% if (language==0){%>
+                                            群組種類：
+                                        <% }else if (language==1){%>
+                                            群组种类：
+                                        <% }else if (language==2){%>
+                                            Group type:
+                                        <% }%>
+                                    </label>
+                                    <% for(i=0;i<devicetype.length;i++) {%>
+                                    <% if(team[x].Devicetype == devicetype[i].id) {%>
+                                    <input type="text" class="form-control" value="<%= devicetype[i].Device %>"
+                                        readonly>
+                                    <% } %>
+                                    <% } %>
+                                    <label>
+                                        <% if (language==0){%>
+                                            群組設備：
+                                        <% }else if (language==1){%>
+                                            群组设备：
+                                        <% }else if (language==2){%>
+                                            Group device:
+                                        <% }%>
+                                    </label>
+                                    <% var arb = JSON.parse(team[x].Devicemac); %>
+                                    <% for(l=0;l<arb.length;l++) {%>
+                                    <% for(m=0;m<device.length;m++) {%>
+                                    <% if(arb[l] == device[m].Mac) {%>
+                                    <input type="text" class="form-control" value="<%= device[m].Name %>" readonly>
+                                    <% } %>
+                                    <% } %>
+                                    <% } %>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                        <% if (language==0){%>
+                                            取消
+                                        <% }else if (language==1){%>
+                                            取消
+                                        <% }else if (language==2){%>
+                                            cancel
+                                        <% }%>
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                        onclick="deletevalue_group('<%= team[x].Teamid %>','<%= language%>')">
+                                        <% if (language==0){%>
+                                            確認
+                                        <% }else if (language==1){%>
+                                            确认
+                                        <% }else if (language==2){%>
+                                            confirm
+                                        <% }%>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <% var arr = JSON.parse(team[x].Devicemac); %>
+                <% for(y=0;y<arr.length;y++) {%>
+                <td>
+                    <% for(h=0;h<device.length;h++) {%>
+                    <% if(arr[y] == device[h].Mac) {%>
+                    <span style="font-size: 23px"><%= device[h].Name %></span>
+                    <% } %>
+                    <% } %>
+                </td>
+                <% } %>
+            </tr>
+        </tbody>
+    </table>
+    <% } %>
+    <% } %>
+    <% } %>
+
+</div>

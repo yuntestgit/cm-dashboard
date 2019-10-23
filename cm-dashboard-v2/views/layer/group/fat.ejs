@@ -1,0 +1,246 @@
+<% console.log(muti_data)%>
+<table style="width:100%;height:100%;text-align: center;background-color: white">
+    <tr style="height: 50%">
+            <td style="width:50%">
+                <div id="Fat_chart" style="width:100%">FusionCharts will render here</div>
+            </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="Water_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="Muscle_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="Bone_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <script type="text/javascript">
+        var Fat_array = new Array();
+        var Water_array = new Array();
+        var Muscle_array = new Array();
+        var Bone_array = new Array();
+        var group_data = JSON.parse('<%- JSON.stringify(muti_data) %>');
+        var group_name = JSON.parse('<%- JSON.stringify(muti_name) %>');
+        var count = 0;
+        for (var i = 0; i < group_data.length; i++) {
+            for (var y = 0; y < group_data[i].length; y++) {
+                var x = new Array();
+                var z = new Array();
+                var w = new Array();
+                var q = new Array();
+                x[0] = parseInt(group_data[i][y].Fat, 10);
+                z[0] = parseInt(group_data[i][y].Water, 10);
+                w[0] = parseInt(group_data[i][y].Muscle, 10);
+                q[0] = parseInt(group_data[i][y].Bone, 10);
+                x[1] = z[1] = w[1]= q[1]= group_name[i][0].Name;
+                x[2] = z[2] = w[2]= q[2]= group_data[i][y].Time.split(' ')[0] + ' ' + group_data[i][y].Time.split(' ')[1];
+                Fat_array[count] = x;
+                Water_array[count] = z;
+                Muscle_array[count] = w;
+                Bone_array[count] = q;
+                count++;
+            }
+        }
+        var Fat_schema = [{
+            "name": "脂肪",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        // console.log(head_array);
+        // console.log(foot_array);
+
+        var FatDataStore = new FusionCharts.DataStore();
+        var FatTable = FatDataStore.createDataTable(Fat_array, Fat_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Fat_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: FatTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "脂肪",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                xAxis: {
+                    initialinterval: {
+                        from: "07-Sep-19",
+                        to: "07-Sep-19"
+                    }
+                },
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+
+
+        var Water_schema = [{
+            "name": "水分",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var WaterDataStore = new FusionCharts.DataStore();
+        var WaterTable = WaterDataStore.createDataTable(Water_array, Water_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Water_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: WaterTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "水分",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+
+        var Muscle_schema = [{
+            "name": "肌肉",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var MuscleDataStore = new FusionCharts.DataStore();
+        var MuscleTable = MuscleDataStore.createDataTable(Muscle_array, Muscle_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Muscle_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: MuscleTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "肌肉",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+
+        var Bone_schema = [{
+            "name": "骨質",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        // console.log(head_array);
+        // console.log(foot_array);
+
+        var BoneDataStore = new FusionCharts.DataStore();
+        var BoneTable = BoneDataStore.createDataTable(Bone_array, Bone_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Bone_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: BoneTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "骨質",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                xAxis: {
+                    initialinterval: {
+                        from: "07-Sep-19",
+                        to: "07-Sep-19"
+                    }
+                },
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+
+    </script>
+</table>

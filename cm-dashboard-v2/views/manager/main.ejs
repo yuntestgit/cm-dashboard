@@ -1,0 +1,145 @@
+<div id="main" style="height:800px;overflow-y:scroll">
+    <button type="button" class="btn btn-primary" style="float: right;margin-top: 10px;margin-right: 10px"
+        data-toggle="modal" data-target="#createcompany">新增院所</button>
+    <!-- Modal-create -->
+    <div class="modal fade" id="createcompany" tabindex="-1" role="dialog" aria-labelledby="createLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createLabel">新增院所</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <label for="Company" class="col-form-label">院所識別碼:</label>
+                        <input type="text" 　class="form-control" id="Company">
+                        <label for="Name" class="col-form-label">院所名稱:</label>
+                        <input type="text" 　class="form-control" id="Name">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        onclick="createvalue_company()">確認</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table id="example">
+        <thead>
+            <tr>
+                <th>院所識別碼</th>
+                <th>院所名</th>
+                <th>授予帳號</th>
+                <th>授予密碼</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(x=0;x<Company.length;x++) {%>
+                <% if(Company[x].Cpname != "STA"){%>
+                    <tr>
+                        <td><%= Company[x].Cpname %></td>
+                        <td><%= Company[x].Name %></td>
+                        <% for(y=0;y<User.length;y++) {%>
+                            <% if(Company[x].Cpname == User[y].Company ) {%>
+                            <td><%= User[y].Account %></td>
+                            <% } %>
+                        <% } %>
+                        <% for(yy=0;yy<User.length;yy++) {%>
+                            <% if(Company[x].Cpname == User[yy].Company ) {%>
+                            <td><%= User[yy].Password %></td>
+                            <% } %>
+                        <% } %>
+                        <td><button type="button" class="btn btn-secondary" data-toggle="modal"
+                            data-target="#modal-<%= Company[x].Cpname %>-del">刪除</button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modal-<%= Company[x].Cpname %>-del" tabindex="-1" role="dialog"
+                            aria-labelledby="<%= Company[x].Cpname %>-Label-del" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="<%= Company[x].Cpname %>-Label-del">
+                                            刪除　<span
+                                                style="font-size: 25px;font-style:italic"><%= Company[x].Name %></span>　資料
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form style="text-align: left">
+                                            <label for="mac" class="col-form-label">院所識別碼：</label>
+                                            <input type="text" class="form-control" value='<%= Company[x].Cpname %>'
+                                                id="mac_modify<%= Company[x].Cpname %>" readonly>
+                                            <label for="mac" class="col-form-label">院所名：</label>
+                                            <input type="text" class="form-control" value='<%= Company[x].Name %>'
+                                                id="mac_modify<%= Company[x].Cpname %>" readonly>
+                                            <label for="mac" class="col-form-label">授予帳號：</label>
+                                            <% for(yyy=0;yyy<User.length;yyy++) {%>
+                                                <% if(Company[x].Cpname == User[yyy].Company){%>
+                                            <input type="text" class="form-control" value='<%= User[yyy].Account %>'
+                                                id="mac_modify<%= User[yyy].Account %>" readonly>
+                                                <% } %>
+                                            <% } %>
+                                            <label for="mac" class="col-form-label">授予密碼：</label>
+                                            <% for(yyy=0;yyy<User.length;yyy++) {%>
+                                                <% if(Company[x].Cpname == User[yyy].Company){%>
+                                            <input type="text" class="form-control" value='<%= User[yyy].Password %>'
+                                                id="mac_modify<%= User[yyy].Password %>" readonly>
+                                                <% } %>
+                                            <% } %>                                                             
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                                onclick="deletevalue_company('<%= Company[x].Cpname %>')">確認</button>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <% } %>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                language: {
+                    search: "搜尋：",
+                    sProcessing: "处理中...",
+                    sLengthMenu: "显示 _MENU_ 项结果",
+                    sZeroRecords: "没有匹配结果",
+                    sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+                    sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+                    sInfoPostFix: "",
+                    sSearch: "搜索:",
+                    sEmptyTable: "表中数据为空",
+                    sLoadingRecords: "载入中...",
+                    sInfoThousands: ",",
+                    oPaginate: {
+                        sFirst: "首页",
+                        sPrevious: "上页",
+                        sNext: "下页",
+                        sLast: "末页"
+                    },
+                    oAria: {
+                        "sSortAscending": ": 以升排列",
+                        "sSortDescending": ": 以降排列"
+                    }
+                }
+            });
+        });
+    </script>
+
+</div>

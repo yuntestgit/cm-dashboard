@@ -1,0 +1,129 @@
+<table style="width:100%;height:100%;background-color: white">
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="Wet_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="Wat_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <script type="text/javascript">
+        var Wet_array = new Array();
+        var Wat_array = new Array();
+        var group_data = JSON.parse('<%- JSON.stringify(muti_data) %>');
+        var group_name = JSON.parse('<%- JSON.stringify(muti_name) %>');
+        var count = 0;
+        for (var i = 0; i < group_data.length; i++) {
+            for (var y = 0; y < group_data[i].length; y++) {
+                var x = new Array();
+                var z = new Array();
+                x[0] = parseInt(group_data[i][y].Wet, 10);
+                z[0] = parseInt(group_data[i][y].Wat, 10);
+                x[1] = z[1] = group_name[i][0].Name;
+                x[2] = z[2] = group_data[i][y].Time.split(' ')[0] + ' ' + group_data[i][y].Time.split(' ')[1];
+                Wet_array[count] = x;
+                Wat_array[count] = z;
+                count++;
+            }
+        }
+        var Wet_schema = [{
+            "name": "濕度",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        // console.log(head_array);
+        // console.log(foot_array);
+
+        var WetDataStore = new FusionCharts.DataStore();
+        var WetTable = WetDataStore.createDataTable(Wet_array, Wet_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Wet_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: WetTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "濕度",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                xAxis: {
+                    initialinterval: {
+                        from: "07-Sep-19",
+                        to: "07-Sep-19"
+                    }
+                },
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+
+
+        var Wat_schema = [{
+            "name": "瓦數",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var WatDataStore = new FusionCharts.DataStore();
+        var WatTable = WatDataStore.createDataTable(Wat_array, Wat_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Wat_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: WatTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "瓦數",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+    </script>
+</table>

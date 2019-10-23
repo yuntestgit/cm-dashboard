@@ -1,0 +1,30 @@
+<div style="height:1000px;">
+<div id="top" style="height:5%">
+
+    <table style="width: 90%;height: 100%;">
+        <tr>
+            <% for(device_type=0;device_type<devicetype.length;device_type++) {%>
+                <% for(device_data=0;device_data<devicedata.length;device_data++) {%>
+                    <% if(devicedata[device_data].Devicetype == devicetype[device_type].id) {%>
+                    <td style="width: 8%">
+                        <a onclick="getdevicedetaildata('<%= devicedata[device_data].Devicetype %>','<%= devicedata[device_data].Mac %>','<%= language %>')">
+                        <button type="button" class="btn btn-warning" style="width: 100%;height:90%;margin-left: 5px;margin-right: 5px;border: 1px solid black">
+                        <%= devicetype[device_type].Device %>
+                        </button>
+                        </a>
+                    </td>
+                    <% } %>
+                <% } %>
+            <% } %>
+        </tr>
+    </table>
+
+</div>
+
+<hr>
+
+<div id="bottom" style="height:95%">
+
+</div>
+
+</div>

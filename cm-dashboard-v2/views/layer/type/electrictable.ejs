@@ -1,0 +1,161 @@
+<table style="width:100%;height:100%;text-align: center;background-color: white">
+    <tr style="height: 50%">
+        <td style="width: 50%">
+            <table style="width:100%">
+                <tr style="height: 70px;">
+                    <td>
+                        <button type="button" class="btn btn-primary" style="float:left">背部上升</button>
+                        0&nbsp;<input type="range" id="head" min="0" max="66" oninput="get_head_rangevalue()"
+                            style="width: 50%;">&nbsp;66
+                        　目前角度：<input type="number" id="headv" min="0" max="66" oninput="get_head_value()"
+                            style="widows: 5%">
+                        <button type="button" class="btn btn-primary" style="float:right">背部下降</button>
+                    </td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <button type="button" class="btn btn-primary" style="float:left">腿部上升</button>
+                        0&nbsp;<input type="range" id="foot" min="0" max="28" style="width: 50%;"
+                            oninput="get_foot_rangevalue()">&nbsp;28
+                        　目前角度：<input type="number" id="footv" min="0" max="28" oninput="get_foot_value()"
+                            style="widows: 5%">
+                        <button type="button" class="btn btn-primary" style="float:right">腿部下降</button>
+                    </td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <button type="button" class="btn btn-primary" style="float:left">同時上升</button>
+                        <button type="button" class="btn btn-primary" style="float:right">同時下降</button>
+                    </td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <button type="button" class="btn btn-primary" style="float:left">桌面上升</button>
+                        0&nbsp;<input type="range" id="bed" min="0" max="35" style="width: 50%;"
+                            oninput="get_bed_rangevalue()">&nbsp;35
+                        　目前高度：<input type="number" id="bedv" min="0" max="35" oninput="get_bed_value()"
+                            style="widows: 5%">
+                        <button type="button" class="btn btn-primary" style="float:right">桌面下降</button>
+                    </td>
+                </tr>
+                <tr style="height: 70px;">
+                    <td>
+                        <button type="button" class="btn btn-primary" style="float:left">向後傾斜</button>
+                        <button type="button" class="btn btn-primary" style="float:right">向前傾斜</button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style="width:50%">
+            <canvas id="chart_all"></canvas>
+            <div style="text-align: center">
+                <a style="font-size: 20px">桌面高度</a>
+            </div>
+            <script>
+                var ctx_all = document.getElementById('chart_all');
+                var myLineChart_all = new Chart(ctx_all, {
+                    type: 'line',
+                    data: {
+                        labels: ['7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'],
+                        datasets: [{
+                            label: '公分',
+                            data: [0, 2, 4, 8, 10, 10, 10, 10, 10, 9, 8, 7, 6, 6],
+                            borderColor: "#33FFAA",
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        legend: false,
+                        scales: {
+                            yAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: '公分'
+                                },
+                                ticks: {
+                                    suggestedMax: 35,
+                                    suggestedMin: 0
+                                }
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <canvas id="chart_left"></canvas>
+            <div style="text-align: center">
+                <a style="font-size: 20px">背部角度</a>
+            </div>
+            <script>
+                var ctx_left = document.getElementById('chart_left');
+                var myLineChart_left = new Chart(ctx_left, {
+                    type: 'line',
+                    data: {
+                        labels: ['7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'],
+                        datasets: [{
+                            label: '角度',
+                            data: [0, 4, 8, 10, 20, 20, 30, 40, 60, 66, 40, 30, 20, 40],
+                            borderWidth: 3,
+                            borderColor: "#EE7700"
+                        }]
+                    },
+                    options: {
+                        legend: false,
+                        scales: {
+                            yAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: '角度'
+                                },
+                                ticks: {
+                                    suggestedMax: 66,
+                                    suggestedMin: 0
+                                }
+                            }]
+                        }
+                    }
+                });
+            </script>
+        </td>
+        <td style="width:50%">
+            <canvas id="chart_right"></canvas>
+            <div style="text-align: center">
+                <a style="font-size: 20px">腿部角度</a>
+            </div>
+            <script>
+                var ctx_right = document.getElementById('chart_right');
+                var myLineChart_right = new Chart(ctx_right, {
+                    type: 'line',
+                    data: {
+                        labels: ['7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'],
+                        datasets: [{
+                            label: '角度',
+                            data: [0, 4, 8, 10, 20, 20, 25, 26, 24, 20, 18, 12, 10, 5],
+                            borderWidth: 3,
+                            borderColor: "#00DD00"
+                        }]
+                    },
+                    options: {
+                        legend: false,
+                        scales: {
+                            yAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: '角度'
+                                },
+                                ticks: {
+                                    suggestedMax: 28,
+                                    suggestedMin: 0
+                                }
+                            }],
+                        }
+                    }
+                });
+            </script>
+            </div>
+        </td>
+    </tr>
+</table>

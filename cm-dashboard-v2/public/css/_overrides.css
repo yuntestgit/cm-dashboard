@@ -1,0 +1,127 @@
+* {
+	/*display: none;*/
+	/* background-color: #f00; */
+}
+
+/* .col-md-2,
+.col-md-2 * {
+	background-color: #fff !important;
+}
+
+.accordion .btn {
+	outline: none !important;
+	box-shadow: none !important;
+
+	border: 0 !important;
+	border-radius: 0 !important;
+	border-bottom: 2px solid #e17f10 !important;
+}
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                       
+.accordion .btn::before {
+	display: inline-block;
+	content: '';
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 15px 10px 0 10px;
+	border-color: #e17f10 transparent transparent transparent;
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* #region sideMenu - triangle */
+/* .card-body a[onclick] > .btn::after {
+	display: inline-block;
+	content: '';
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 15px 10px 0 10px;
+	border-color: #e17f10 transparent transparent transparent;
+} */
+
+/* .accordion .btn.expanded::after {
+	display: none;
+} */
+/* #endregion */
+
+/* #region 000 */
+/* .card-header a::after {
+	display: inline-block;
+	content: '';
+	position: absolute;
+	top: 18px;
+	right: 0px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 15px 10px 0 10px;
+	border-color: #e17f10 transparent transparent transparent;
+}
+
+.card-header a[aria-expanded="true"]::after {
+	display: inline-block;
+	content: '';
+	position: absolute;
+	top: 18px;
+	right: 0px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0 10px 15px 10px;
+	border-color: transparent transparent #e17f10 transparent;
+} */
+/* #endregion 000 */
+
+
+/* .collapse::after {
+	display: inline-block;
+	content: '';
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 15px 10px 0 10px;
+	border-color: #e17f10 transparent transparent transparent;
+}
+
+.collapse.show::before {
+	display: inline-block;
+	content: '';
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 15px 10px 0 10px;
+	border-color: #f00 transparent transparent transparent;
+} */

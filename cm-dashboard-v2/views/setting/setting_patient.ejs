@@ -1,0 +1,716 @@
+<div id="main" style="height:850px;overflow-y:scroll">
+
+    <button type="button" class="btn btn-primary" style="float: right;margin-top: 10px;margin-right: 10px"
+        data-toggle="modal" data-target="#createpatient">
+        <% if (language==0){%>
+            新增使用者
+        <% }else if (language==1){%>
+            新增使用者
+        <% }else if (language==2){%>
+            Add user
+        <% }%>
+        </button>
+    <!-- Modal-create -->
+    <div class="modal fade" id="createpatient" tabindex="-1" role="dialog" aria-labelledby="createLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createLabel">
+                        <% if (language==0){%>
+                            新增使用者
+                        <% }else if (language==1){%>
+                            新增使用者
+                        <% }else if (language==2){%>
+                            Add user
+                        <% }%>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form style="text-align: left" action="javascript:createvalue_patient('patient','<%= language%>')">
+                        <label for="account" class="col-form-label">
+                                <% if (language==0){%>
+                                    病例號：
+                                <% }else if (language==1){%>
+                                    病历号：
+                                <% }else if (language==2){%>
+                                    Case number：
+                                <% }%>
+                            </label>
+                        <input type="text" class="form-control" id="account" required>
+                        <!-- <label for="password" class="col-form-label">密碼:</label> -->
+                        <!-- <input type="password" class="form-control" id="password" style="visibility: collapse"> -->
+                        <label for="username" class="col-form-label">
+                                <% if (language==0){%>
+                                    姓名：
+                                <% }else if (language==1){%>
+                                    姓名：
+                                <% }else if (language==2){%>
+                                    Name：
+                                <% }%>
+                                </label>
+                        <input type="text" class="form-control" id="username" required>
+                        <label for="email" class="col-form-label">
+                                <% if (language==0){%>
+                                    電子信箱：
+                                <% }else if (language==1){%>
+                                    电子信箱：
+                                <% }else if (language==2){%>
+                                    email：
+                                <% }%>
+                            </label>
+                        <input type="email" class="form-control" id="email" required>
+                        <label for="phone" class="col-form-label">
+                                <% if (language==0){%>
+                                    聯絡電話：
+                                <% }else if (language==1){%>
+                                    联络电话：
+                                <% }else if (language==2){%>
+                                    Contact number：
+                                <% }%>
+                            </label>
+                        <input type="phone" class="form-control" id="phone" required>
+
+                        <label for="floor" class="col-form-label">
+                                <% if (language==0){%>
+                                    樓層:
+                                <% }else if (language==1){%>
+                                    楼层:
+                                <% }else if (language==2){%>
+                                    floor:
+                                <% }%> 
+                            </label>
+                        <select class="form-control" id="floor" onchange="giveSelection(this.options[this.options.selectedIndex].value)">
+                            <option value="">
+                                    <% if (language==0){%>
+                                        暫無
+                                    <% }else if (language==1){%>
+                                        暂无
+                                    <% }else if (language==2){%>
+                                        No data
+                                    <% }%>
+                            </option>
+                            <% for(f=0;f<floor.length;f++) {%>
+                            <option value='<%= floor[f].Number %>'><%= floor[f].Number %></option>
+                            <% } %>
+                        </select>
+
+                        <label for="room" class="col-form-label">
+                                <% if (language==0){%>
+                                    房號:
+                                <% }else if (language==1){%>
+                                    房号:
+                                <% }else if (language==2){%>
+                                    Room No:
+                                <% }%> 
+                            </label>
+                        <select class="form-control" id="room">
+                            <% if(room[0].Number==null) {%>
+                            <option data-option="" value="">
+                                    <% if (language==0){%>
+                                        暫無
+                                    <% }else if (language==1){%>
+                                        暂无
+                                    <% }else if (language==2){%>
+                                        No data
+                                    <% }%>
+                            </option>
+                            <% }else{ %>
+                            <option data-option="" value="">
+                                    <% if (language==0){%>
+                                        暫無
+                                    <% }else if (language==1){%>
+                                        暂无
+                                    <% }else if (language==2){%>
+                                        No data
+                                    <% }%>
+                            </option>
+                            <% for(i=0;i<room.length;i++) {%>
+                            <option data-option='<%= room[i].FloorNumber %>' value='<%= room[i].Number %>'><%= room[i].Number %></option>
+                            <% } %>
+                            <% } %>
+                        </select>
+
+                        <script>
+                            var sel1 = document.querySelector('#floor');
+                            var sel2 = document.querySelector('#room');
+                            var options2 = sel2.querySelectorAll('option');
+                            function giveSelection(selValue) {
+                            sel2.innerHTML = '';
+                                for(var i = 0; i < options2.length; i++) {
+                                    if(options2[i].dataset.option === selValue) {
+                                    sel2.appendChild(options2[i]);
+                                    }
+                                }
+                            }
+                            giveSelection(sel1.value);
+                        </script>
+                
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    <% if (language==0){%>
+                                        取消
+                                    <% }else if (language==1){%>
+                                        取消
+                                    <% }else if (language==2){%>
+                                        cancel
+                                    <% }%>
+                                </button>
+                            <button type="submit" class="btn btn-primary">
+                                    <% if (language==0){%>
+                                        確認
+                                    <% }else if (language==1){%>
+                                        确认
+                                    <% }else if (language==2){%>
+                                        confirm
+                                    <% }%>
+                                </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <table id="patienttable">
+        <thead>
+            <tr>
+                <th>
+                        <% if (language==0){%>
+                            病例號：
+                        <% }else if (language==1){%>
+                            病历号：
+                        <% }else if (language==2){%>
+                            Case number：
+                        <% }%>
+                </th>
+                <!-- <th>密碼</th> -->
+                <th>
+                        <% if (language==0){%>
+                            姓名：
+                        <% }else if (language==1){%>
+                            姓名：
+                        <% }else if (language==2){%>
+                            Name：
+                        <% }%>
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            電子信箱：
+                        <% }else if (language==1){%>
+                            电子信箱：
+                        <% }else if (language==2){%>
+                            email：
+                        <% }%>
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            聯絡電話：
+                        <% }else if (language==1){%>
+                            联络电话：
+                        <% }else if (language==2){%>
+                            Contact number：
+                        <% }%>
+                </th>
+                <th>
+                        <% if (language==0){%>
+                            房號:
+                        <% }else if (language==1){%>
+                            房号:
+                        <% }else if (language==2){%>
+                            Room No:
+                        <% }%> 
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(x=0;x<user.length;x++) {%>
+            <tr>
+                <td><%= user[x].Account %></td>
+                <!-- <td>*******</td> -->
+                <td><%= user[x].Username %></td>
+                <td><%= user[x].Email %></td>
+                <td><%= user[x].Phone %></td>
+                <% if(user[x].Room　==　null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>  
+                </td>
+                <% }else{ %>
+                <td><%= user[x].Room %></td>
+                <% } %>
+                <td><button type="button" class="btn btn-info" data-toggle="modal"
+                        data-target="#modal-<%= user[x].Account %>-mod">
+                        <% if (language==0){%>
+                            修改
+                        <% }else if (language==1){%>
+                            修改
+                        <% }else if (language==2){%>
+                            modify
+                        <% }%> 
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal-<%= user[x].Account %>-mod" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= user[x].Account %>-Label-mod" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= user[x].Account %>-Label-mod">
+                                            <% if (language==0){%>
+                                                修改
+                                            <% }else if (language==1){%>
+                                                修改
+                                            <% }else if (language==2){%>
+                                                modify
+                                            <% }%> 　<span
+                                            style="font-size: 25px;font-style:italic"><%= user[x].Account %></span>　
+                                            <% if (language==0){%>
+                                                資料
+                                            <% }else if (language==1){%>
+                                                资料
+                                            <% }else if (language==2){%>
+                                                data
+                                            <% }%> 
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form style="text-align: left">
+                                        <label for="account_modify<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                病例號：
+                                            <% }else if (language==1){%>
+                                                病历号：
+                                            <% }else if (language==2){%>
+                                                Case number：
+                                            <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value="<%= user[x].Account %>"
+                                            id="account_modify<%= user[x].Account %>" readonly>
+                                        <!-- <label for="password_modify<%= user[x].Account %>" class="col-form-label">密碼:</label> -->
+                                        <!-- <input type="password" class="form-control" value="<%= user[x].Password %>" id="password_modify<%= user[x].Account %>"> -->
+                                        <label for="username_modify<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                姓名：
+                                            <% }else if (language==1){%>
+                                                姓名：
+                                            <% }else if (language==2){%>
+                                                Name：
+                                            <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value="<%= user[x].Username %>"
+                                            id="username_modify<%= user[x].Account %>">
+                                        <label for="email_modify<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                電子信箱：
+                                            <% }else if (language==1){%>
+                                                电子信箱：
+                                            <% }else if (language==2){%>
+                                                email：
+                                            <% }%>
+                                        </label>
+                                        <input type="email" class="form-control" value="<%= user[x].Email %>"
+                                            id="email_modify<%= user[x].Account %>">
+                                        <label for="phone_modify<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                聯絡電話：
+                                            <% }else if (language==1){%>
+                                                联络电话：
+                                            <% }else if (language==2){%>
+                                                Contact number：
+                                            <% }%>
+                                        </label>
+                                        <input type="phone" class="form-control" value="<%= user[x].Phone %>"
+                                            id="phone_modify<%= user[x].Account %>">
+
+                                        <label for="floor_modify<%= user[x].Account %>"
+                                                class="col-form-label">
+                                                <% if (language==0){%>
+                                                    樓層:
+                                                <% }else if (language==1){%>
+                                                    楼层:
+                                                <% }else if (language==2){%>
+                                                    floor:
+                                                <% }%> 
+                                            </label>
+                                        <select class="form-control" id="floor_modify<%= user[x].Account %>" onchange="giveSelection1('<%= user[x].Account %>',this.value)">
+                                            <% if(user[x].Room ==　null) {%>
+                                                <option value='' selected="selected">
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%> 
+
+                                                </option>
+                                                <% for(fl=0;fl<floor.length;fl++) {%>
+                                                <option value='<%= floor[fl].Number %>'><%= floor[fl].Number %></option>
+                                                <% } %>
+                                            <% }else{ %>
+                                                <option value=''>
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%> 
+                                                </option>
+                                                <% for(fly=0;fly<floor.length;fly++) {%>
+                                                    <% if(user[x].Room == room[fly].Number) {%>
+                                                    <option value='<%= room[fly].FloorNumber %>' selected="selected"><%= room[fly].FloorNumber %></option>
+                                                    <% var flag = room[fly].FloorNumber %>
+                                                    <% } %>
+                                                <% } %>
+                                                <% for(flr=0;flr<floor.length;flr++) {%>
+                                                    <% if(floor[flr].Number != flag) {%>
+                                                    <option value='<%= floor[flr].Number %>'><%= floor[flr].Number %></option>    
+                                                    <% } %>                                                                       
+                                                <% } %>                      
+                                            <% } %>
+                                        </select>
+
+                                        <label for="room_modify<%= user[x].Account %>"
+                                                class="col-form-label">
+                                                <% if (language==0){%>
+                                                    房號:
+                                                <% }else if (language==1){%>
+                                                    房号:
+                                                <% }else if (language==2){%>
+                                                    Room No:
+                                                <% }%> 
+                                            </label>
+                                        <select class="form-control" id="room_modify<%= user[x].Account %>">
+                                            <% if(user[x].Room ==　null) {%>
+                                                <option data-option='' value='' selected="selected">
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%> 
+                                                </option>
+                                                <% for(y=0;y<room.length;y++) {%>
+                                                <option data-option='<%= room[y].FloorNumber %>' value='<%= room[y].Number %>'><%= room[y].Number %></option>
+                                                <% } %>
+                                            <% }else{ %>
+                                                <option data-option='' value=''>
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%> 
+                                                </option>
+                                                <% for(yy=0;yy<room.length;yy++) {%>
+                                                <% if(user[x].Room == room[yy].Number) {%>
+                                                <option data-option='<%= room[yy].FloorNumber %>' value='<%= room[yy].Number %>' selected="selected">
+                                                    <%= room[yy].Number %></option>
+                                                <% }else{ %>
+                                                <option data-option='<%= room[yy].FloorNumber %>' value='<%= room[yy].Number %>'><%= room[yy].Number %></option>
+                                                <% } %>
+                                                <% } %>
+                                            <% } %>
+                                        </select>
+
+                                        <script>
+                                            var sel11;
+                                            var sel22;
+                                            var options22;
+                                            function giveSelection1(id,selValue) {
+                                                sel11 = document.querySelector('#floor_modify'+id);
+                                                sel22 = document.querySelector('#room_modify'+id);
+                                                options22 = sel22.querySelectorAll('option'); 
+                                                sel22.innerHTML = '';
+                                                for(var i = 0; i < options2.length; i++) {
+                                                    if(options2[i].dataset.option === selValue) {
+                                                        sel22.appendChild(options2[i]);
+                                                    }
+                                                }
+                                            }
+                                        </script>
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if (language==0){%>
+                                                取消
+                                            <% }else if (language==1){%>
+                                                取消
+                                            <% }else if (language==2){%>
+                                                cancel
+                                            <% }%>
+                                    </button>
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="modifyvalue_patient('patient','<%= user[x].Account %>','<%= language%>')"
+                                        data-dismiss="modal">
+                                        <% if (language==0){%>
+                                            確認
+                                            <% }else if (language==1){%>
+                                                确认
+                                            <% }else if (language==2){%>
+                                                confirm
+                                            <% }%>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td><button type="button" class="btn btn-secondary" data-toggle="modal"
+                        data-target="#modal-<%= user[x].Account %>-del">
+                        <% if (language==0){%>
+                            刪除
+                        <% }else if (language==1){%>
+                            删除
+                        <% }else if (language==2){%>
+                            Delete
+                        <% }%>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal-<%= user[x].Account %>-del" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= user[x].Account %>-Label-del" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= user[x].Account %>-Label-del">
+                                            <% if (language==0){%>
+                                                刪除
+                                            <% }else if (language==1){%>
+                                                删除
+                                            <% }else if (language==2){%>
+                                                Delete
+                                            <% }%>　<span
+                                            style="font-size: 25px;font-style:italic"><%= user[x].Account %></span>　
+                                            <% if (language==0){%>
+                                                資料
+                                            <% }else if (language==1){%>
+                                                资料
+                                            <% }else if (language==2){%>
+                                                data
+                                            <% }%>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form style="text-align: left">
+                                        <label for="account_delete<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                病例號：
+                                            <% }else if (language==1){%>
+                                                病历号：
+                                            <% }else if (language==2){%>
+                                                Case number：
+                                            <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value="<%= user[x].Account %>"
+                                            id="account_delete<%= user[x].Account %>" readonly>
+                                        <!-- <label for="password_delete<%= user[x].Account %>" class="col-form-label">密碼:</label> -->
+                                        <!-- <input type="password" class="form-control" value="<%= user[x].Password %>" id="password_delete<%= user[x].Account %>" readonly> -->
+                                        <label for="username_delete<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                姓名：
+                                            <% }else if (language==1){%>
+                                                姓名：
+                                            <% }else if (language==2){%>
+                                                Name：
+                                            <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value="<%= user[x].Username %>"
+                                            id="username_delete<%= user[x].Account %>" readonly>
+                                        <label for="email_delete<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                電子信箱：
+                                            <% }else if (language==1){%>
+                                                电子信箱：
+                                            <% }else if (language==2){%>
+                                                email：
+                                            <% }%>
+                                        </label>
+                                        <input type="email" class="form-control" value="<%= user[x].Email %>"
+                                            id="email_delete<%= user[x].Account %>" readonly>
+                                        <label for="phone_delete<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                聯絡電話：
+                                            <% }else if (language==1){%>
+                                                联络电话：
+                                            <% }else if (language==2){%>
+                                                Contact number：
+                                            <% }%>
+                                        </label>
+                                        <input type="phone" class="form-control" value="<%= user[x].Phone %>"
+                                            id="phone_delete<%= user[x].Account %>" readonly>
+                                        <label for="room_delete<%= user[x].Account %>"
+                                            class="col-form-label">
+                                            <% if (language==0){%>
+                                                房號:
+                                            <% }else if (language==1){%>
+                                                房号:
+                                            <% }else if (language==2){%>
+                                                Room No:
+                                            <% }%> 
+                                        </label>
+                                        <% if(user[x].Room　== null ) {%>
+                                        <input type="text" class="form-control" value="暂无"
+                                            id="room_delete<%= user[x].Account %>" readonly>
+                                        <% }else{　%>
+                                        <input type="text" class="form-control" value="<%= user[x].Room %>"
+                                            id="room_delete<%= user[x].Account %>" readonly>
+                                        <% } %>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if (language==0){%>
+                                                取消
+                                                <% }else if (language==1){%>
+                                                    取消
+                                                <% }else if (language==2){%>
+                                                    cancel
+                                                <% }%>
+                                    </button>
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="deletevalue_patient('patient','<%= user[x].Account %>','<%= language%>')"
+                                        data-dismiss="modal">
+                                        <% if (language==0){%>
+                                            確認
+                                            <% }else if (language==1){%>
+                                                确认
+                                            <% }else if (language==2){%>
+                                                confirm
+                                            <% }%>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+    
+
+    <script>
+        if ('<%= language%>'==0){
+            $(document).ready(function () {
+                $('#patienttable').DataTable({
+                    language: {
+                        search: "搜尋：",
+                        sProcessing: "處理中...",
+                        sLengthMenu: "顯示 _MENU_ 項结果",
+                        sZeroRecords: "没有匹配结果",
+                        sInfo: "顯示第 _START_ 至 _END_ 項结果，共 _TOTAL_ 項",
+                        sInfoEmpty: "顯示第 0 至 0 項结果，共 0 項",
+                        sInfoFiltered: "(由 _MAX_ 項结果過濾)",
+                        sInfoPostFix: "",
+                        sSearch: "搜索:",
+                        sEmptyTable: "表中數據為空",
+                        sLoadingRecords: "載入中...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "首頁",
+                            sPrevious: "上頁",
+                            sNext: "下頁",
+                            sLast: "末頁"
+                        },
+                        oAria: {
+                            "sSortAscending": ": 以升排列",
+                            "sSortDescending": ": 以降排列"
+                        }
+                    }
+                });
+            });
+        }
+        else if('<%= language%>'==1){
+            $(document).ready(function () {
+                $('#patienttable').DataTable({
+                    language: {
+                        search: "搜尋：",
+                        sProcessing: "处理中...",
+                        sLengthMenu: "显示 _MENU_ 项结果",
+                        sZeroRecords: "没有匹配结果",
+                        sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                        sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+                        sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+                        sInfoPostFix: "",
+                        sSearch: "搜索:",
+                        sEmptyTable: "表中数据为空",
+                        sLoadingRecords: "载入中...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "首页",
+                            sPrevious: "上页",
+                            sNext: "下页",
+                            sLast: "末页"
+                        },
+                        oAria: {
+                            "sSortAscending": ": 以升排列",
+                            "sSortDescending": ": 以降排列"
+                        }
+                    }
+                });
+            });
+        }
+        else if('<%= language%>'==2){
+            $(document).ready(function () {
+                $('#patienttable').DataTable({
+                    language: {
+                        search: "Search：",
+                        sProcessing: "Processing...",
+                        sLengthMenu: "Display _MENU_ results",
+                        sZeroRecords: "No matching results",
+                        sInfo: "Showing _START_ to _END_ results， _TOTAL_ items",
+                        sInfoEmpty: "Showing 0 to 0 results， 0 items",
+                        sInfoFiltered: "(Filtered by _MAX_ result)",
+                        sInfoPostFix: "",
+                        sSearch: "Search：",
+                        sEmptyTable: "The data in the table is empty",
+                        sLoadingRecords: "Processing...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "top page",
+                            sPrevious: "previous page",
+                            sNext: "next page",
+                            sLast: "last page"
+                        },
+                        oAria: {
+                            "sSortAscending": ": In ascending",
+                            "sSortDescending": ": In descending"
+                        }
+                    }
+                });
+            });
+        }
+        
+    </script>
+</div>

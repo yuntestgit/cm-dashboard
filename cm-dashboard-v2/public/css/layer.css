@@ -1,0 +1,20 @@
+.layer {
+    position:sticky;
+    top:0;
+    z-index:9000;
+}
+
+.layer_rom{
+    height: 50px;
+}
+
+.layer_top{
+    margin-top: 10px;
+    padding-right:0px;
+    padding-left:0px; 
+}
+
+.top_btn{
+    float: left;
+    margin-top: 10px;
+}

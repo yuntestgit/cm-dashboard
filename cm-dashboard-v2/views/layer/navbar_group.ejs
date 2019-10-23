@@ -1,0 +1,43 @@
+<div class="container-fluid" id="navbar">
+
+    <hr style="border:1.5px solid;">
+    <div style="text-align: center">
+        <a style="font-size: 18px;" href="javascript:history.go(0)">護聯網平台</a>
+    </div>
+    <hr style="border:1.5px solid;">
+
+    <div>
+        <% var arl = JSON.parse(team[0].Devicemac); %>
+        <% for(p=0;p<arl.length;p++) {%>
+            <% for(h=0;h<device.length;h++) {%>
+                <% if(arl[p] == device[h].Mac) {%>
+                    <div>
+                    <% if(device[h].Username==null) {%>
+                        <a　style="font-size: 20px">設備: <%= device[h].Name %></a><br>
+                        <a　style="font-size: 20px">暫無使用</a><br>
+                        <hr style="border: 1px dashed black">
+                    <% }else{ %>
+                        <% for(u=0;u<patient.length;u++) {%>
+                            <% if(patient[u].Username==device[h].Username) {%>
+                                <a　style="font-size: 20px">設備: <%= device[h].Name %></a><br>
+                                <a　style="font-size: 20px">姓名:<%= patient[u].Username %></a><br>
+                                <% for(r=0;r<room.length;r++) {%>
+                                    <% if(patient[u].Room == room[r].Number) {%>
+                                        <a　style="font-size: 20px">樓層: <%= room[r].FloorNumber %></a><br>
+                                        <a　style="font-size: 20px">房號: <%= room[r].Number %></a><br>
+                                    <% } %>
+                                <% } %>
+                                <hr style="border: 1px dashed black">
+                            <% } %>
+                        <% } %>
+                    <% } %>
+                    </div>
+                <% } %>
+            <% } %>
+        <% } %>
+
+        <img src="/image/back.png" width="20px" height="20px" onclick="javascript:history.go(0)" style="margin-left: 90%;"/>
+    </div>
+
+    <hr>
+</div>

@@ -1,0 +1,691 @@
+<script src="/js/jQueryRotate.js"></script>
+<!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- 判斷點擊事件 -->
+<script type="text/javascript">
+
+  // function check(n){
+  //     if(n == ""){
+  //     document.getElementById("label_room").style.visibility="collapse";
+  //     document.getElementById("room").style.visibility="collapse";
+  //     $("#room").val("");
+  //     var rrm = document.getElementById("room");
+  //     // alert(rrm.options[rrm.options.selectedIndex].value);
+  //     }else{
+  //     document.getElementById("label_room").style.visibility="visible";
+  //     document.getElementById("room").style.visibility="visible";
+  //     fll = document.getElementById("floor");
+  //     // alert(fll.options[fll.options.selectedIndex].value);
+  //     }
+  // }
+
+  function connect_gateway(mac){
+    $.post("/connect/gateway",{mac:mac},function(data){
+      if(data=="連線成功"){
+        alert("success");
+      }else{
+        alert("fail");
+      }
+    });
+  }
+
+  function deletevalue(type, value) {
+	$("#load").css("display","block");//loading_on
+    $.post("/setting/delete", { type: type, value: value });
+		$("#load").css("display","none");//loading_off
+		location.reload();
+  }
+
+  function createvalue_floor(type) {
+    var value;
+    value = document.getElementById("floorvalue").value;
+	$("#load").css("display","block");//loading_on
+    $.post("/setting/create", { type: type, value: value }, function (data) {
+		$("#load").css("display","none");//loading_off
+	  if (data == "新增樓層成功") {
+        location.reload();
+      } else {
+        alert("已有相同樓層之號碼!!!");
+      }
+    }, "text");
+  }
+
+  function createvalue_room(type, floor) {
+    var valuerm;
+    valuerm = document.getElementById("roomvalue_" + floor).value;
+	$("#load").css("display","block");//loading_on
+    $.post("/setting/create", { type: type, floor: floor, value: valuerm }, function (data) {
+		$("#load").css("display","none");//loading_off
+      if (data == "新增房號成功") {
+        location.reload();
+      } else {
+        alert("該樓層已有相同房號!!!");
+      }
+    }, "text");
+  }
+
+  function deletevalue_room(type, value) {
+	$("#load").css("display","block");//loading_on
+    $.post("/setting/delete", { type: type, value: value },function(data){
+		$("#load").css("display","none");//loading_off
+	  if (data == "刪除房號成功") {
+        location.reload();
+      } else {
+        alert("刪除房號失敗");
+      }
+    }, "text");
+  }
+
+  function gofloorroom() {
+    location.reload();
+  }
+
+  function gomanage(language) {
+	$("#load").css("display","block");//loading_on
+    $("#main").load("/setting/show/manage",{language:language}, function () {
+		$("#load").css("display","none");//loading_off
+    	$("#main").css("overflow-y", "unset");
+    });
+  }
+
+  function gopatient(language) {
+	$("#load").css("display","block");//loading_on
+    $("#main").load("/setting/show/patient",{language:language} ,function () {
+		$("#load").css("display","none");//loading_off
+     	$("#main").css("overflow-y", "unset");
+    });
+  }
+
+  function gonext(id, type,language) {
+	$("#load").css("display","block");//loading_on
+    $("#main").load("/setting/show/device", { id: id, type,language}, function () {
+		$("#load").css("display","none");//loading_off
+      	$("#main").css("overflow-y", "unset");
+    });
+  }
+
+  function gothreshold(id, type,language) {
+	$("#load").css("display","block");//loading_on
+    $("#main").load("/setting/show/threshold", { id: id, type,language }, function () {
+		$("#load").css("display","none");//loading_off
+    	$("#main").css("overflow-y", "unset");
+    });
+  }
+
+  function gogroup(language) {
+	$("#load").css("display","block");//loading_on
+    $("#main").load("/setting/show/group",{language}, function () {
+		$("#load").css("display","none");//loading_off
+      	 $("#main").css("overflow-y", "unset");
+    });
+  }
+
+  function createvalue_user(type,language) {
+    var account = document.getElementById("account").value;
+    var password = document.getElementById("password").value;
+    var username = document.getElementById("username").value;
+    var email = document.getElementById("email").value;
+    var phone = document.getElementById("phone").value;
+	$("#load").css("display","block");//loading_on
+	$.post("/setting/create", { type: type, account: account, password: password, username: username, email: email, phone: phone }, function (data) {
+	  $("#load").css("display","none");//loading_off
+	  if (data == "新增使用者成功") {
+        // location.reload();
+        $('#createuser').modal('hide');
+        setTimeout(function(){
+          gomanage(language);
+        },200);
+      } else {
+        alert("勿輸入相同使用者帳號");
+      }
+    }, "text");
+  }
+
+  function modifyvalue_user(type, account,language) {
+    var account_mod = document.getElementById("account_modify" + account).value;
+    var password_mod = document.getElementById("password_modify" + account).value;
+    var username_mod = document.getElementById("username_modify" + account).value;
+    var email_mod = document.getElementById("email_modify" + account).value;
+    var phone_mod = document.getElementById("phone_modify" + account).value;
+	$("#load").css("display","block");//loading_on
+    $.post("/setting/modify", { type: type, account: account_mod, password: password_mod, username: username_mod, email: email_mod, phone: phone_mod }, function (data) {
+	  $("#load").css("display","none");//loading_off
+      if (data == "修改使用者成功") {
+        // location.reload();
+        $("#modal-"+account+"-mod").modal('hide');
+        setTimeout(function(){
+          gomanage(language);
+        },200);
+      } else {
+        alert("修改使用者資料失敗");
+      }
+    }, "text");
+
+  }
+
+  function deletevalue_user(type, account,language) {
+	$("#load").css("display","block");//loading_on
+    $.post("/setting/delete", { type: type, value: account },function(data){
+	  $("#load").css("display","none");//loading_off
+      if (data == "刪除使用者成功") {
+        // location.reload();
+        $("#modal-"+account+"-del").modal('hide');
+        setTimeout(function(){
+          gomanage(language);
+        },200);
+      } else {
+        alert("刪除使用者失敗");
+      }
+    }, "text")
+  }
+
+  function createvalue_patient(type,language) {
+
+    // document.getElementById("createpatient").classList.remove("modal");
+    // document.getElementById("createpatient").classList.remove("fade");
+    // document.getElementById("createpatient").classList.remove("show");
+    // console.log(document.getElementById("createpatient").classList);
+
+    var account = document.getElementById("account").value;
+    // var password = document.getElementById("password").value;
+    var password = "none";
+    var username = document.getElementById("username").value;
+    var email = document.getElementById("email").value;
+    var phone = document.getElementById("phone").value;
+    var room = document.getElementById("room").value;
+    $("#load").css("display","block");//loading_on
+    $.post("/setting/create", { type: type, account: account, password: password, username: username, email: email, phone: phone, room: room }, function (data) {
+	  $("#load").css("display","none");//loading_off
+      if (data == "新增病患成功") {
+        // location.reload();
+        $('#createpatient').modal('hide');
+        setTimeout(function(){
+          gopatient(language);
+        },200);
+      } else {
+        alert("已有相同病患之病歷號!!!");
+      }
+    }, "text");
+
+  }
+
+  function modifyvalue_patient(type, account,language) {
+    var account_mod = document.getElementById("account_modify" + account).value;
+    // var password_mod = document.getElementById("password_modify" + account).value;
+    var password_mod = "none";
+    var username_mod = document.getElementById("username_modify" + account).value;
+    var email_mod = document.getElementById("email_modify" + account).value;
+    var phone_mod = document.getElementById("phone_modify" + account).value;
+    var room_mod = document.getElementById("room_modify" + account).value;
+	$("#load").css("display","block");//loading_on
+    $.post("/setting/modify", { type: type, account: account_mod, password: password_mod, username: username_mod, email: email_mod, phone: phone_mod, room: room_mod }, function (data) {
+	  $("#load").css("display","none");//loading_off
+	  if (data == "修改病患成功") {
+        // location.reload();
+        $("#modal-"+account+"-mod").modal('hide');
+        setTimeout(function(){
+          gopatient(language);
+        },200);
+      } else {
+        alert("修改病患資料失敗");
+      }
+    }, "text");
+  }
+
+  function deletevalue_patient(type, account,language) {
+	$("#load").css("display","block");//loading_on
+    $.post("/setting/delete", { type: type, value: account },function(data){
+	  $("#load").css("display","none");//loading_off
+      if (data == "刪除病患成功") {
+        // location.reload();
+        $("#modal-"+account+"-del").modal('hide');
+        setTimeout(function(){
+          gopatient(language);
+        },200);
+      } else {
+        alert("刪除病患資料失敗!!!");
+      }
+    }, "text");
+  }
+
+  function createvalue_device(type,id,language) {
+
+    var mac = document.getElementById("mac").value;
+    var name = document.getElementById("name").value;
+    var description = document.getElementById("description").value;
+    var room = document.getElementById("room").value;
+    var user = document.getElementById("user").value;
+    var service = document.getElementById("service").value;
+    var receive = document.getElementById("receive").value;
+    var send = document.getElementById("send").value;
+
+    var device_type;
+    switch(id){
+      case '2':
+        device_type="床";
+      break;
+      case '3':
+        device_type="睡眠帶";
+      break;
+      case '4':
+        device_type="感知照明";
+      break;
+      case '5':
+        device_type="加濕器";
+      break;
+      case '6':
+        device_type="空氣質量";
+      break;
+      case '7':
+        device_type="血壓計";
+      break;
+      case '8':
+        device_type="脂肪計";
+      break;
+      case '9':
+        device_type="電動桌";
+      break;
+      case '10':
+        device_type="電動沙發";
+      break;
+      case '11':
+        device_type="血糖計";
+      break;
+      case '12':
+        device_type="額溫計";
+      break;
+    }
+    // console.log(device_type);
+
+    var flaaaaag=0;
+    for(mac_check=0;mac_check<mac.length;mac_check++){
+      var gate1=1;//0-1
+      var gate2=1;//A-Z
+      var gate3=1;//a-z
+      var single_str = mac[mac_check].charCodeAt();
+      if(single_str>=48 && single_str<=57){
+        gate1=0;
+      };
+      if(single_str>=65 && single_str<=90){
+        gate2=0;
+      };
+      if(single_str>=97 && single_str<=122){
+        gate3=0;
+      };
+      if(gate1==1&&gate2==1&&gate3==1){
+        flaaaaag++;
+      }
+      console.log(gate1+"/"+gate2+"/"+gate3);
+    };
+    if(flaaaaag>0){
+      alert("識別碼不可輸入符號!!!");
+    }else{
+      // alert("新增");
+	  $("#load").css("display","block");//loading_on
+      $.post("/setting/create", { id:id,type: type, mac: mac, name: name, description: description, room: room, user: user, service: service, receive: receive, send: send }, function (data) {
+        // console.log(data);
+		$("#load").css("display","none");//loading_off
+        if (data == "新增設備成功") {
+          $("#createdevice").modal('hide');
+          setTimeout(function(){
+            // console.log(id+"/"+device_type);
+            gonext(id,device_type,language);
+          },200);
+        } else {
+          alert("已有相同設備識別碼!!!");
+        }
+      }, "text");
+    }
+  }
+
+  function deletevalue_device(type,mac,id,language) {
+
+    var device_type;
+    switch(id){
+      case '2':
+        device_type="床";
+      break;
+      case '3':
+        device_type="睡眠帶";
+      break;
+      case '4':
+        device_type="感知照明";
+      break;
+      case '5':
+        device_type="加濕器";
+      break;
+      case '6':
+        device_type="空氣質量";
+      break;
+      case '7':
+        device_type="血壓計";
+      break;
+      case '8':
+        device_type="脂肪計";
+      break;
+      case '9':
+        device_type="電動桌";
+      break;
+      case '10':
+        device_type="電動沙發";
+      break;
+      case '11':
+        device_type="血糖計";
+      break;
+      case '12':
+        device_type="額溫計";
+      break;
+    }
+    $("#load").css("display","block");//loading_on
+    $.post("/setting/delete", { type: type, value: mac,id:id },function(data){
+	  $("#load").css("display","none");//loading_off
+      if (data == "刪除設備成功") {
+        $("#modal-"+mac+"-del").modal('hide');
+        setTimeout(function(){
+          // console.log(id+"/"+device_type);
+          gonext(id,device_type,language);
+        },200);
+      } else {
+        alert("刪除設備資料失敗");
+      }
+    }, "text");
+  }
+
+  function modifyvalue_device(type,mac,id,language) {
+    var mac_modify = document.getElementById("mac_modify" + mac).value;
+    var name_modify = document.getElementById("name_modify" + mac).value;
+    var description_modify = document.getElementById("description_modify" + mac).value;
+    var room_modify = document.getElementById("room_modify" + mac).value;
+    var user_modify = document.getElementById("user_modify" + mac).value;
+
+    console.log(language);
+
+    var device_type;
+    switch(id){
+      case '2':
+        device_type="床";
+      break;
+      case '3':
+        device_type="睡眠帶";
+      break;
+      case '4':
+        device_type="感知照明";
+      break;
+      case '5':
+        device_type="加濕器";
+      break;
+      case '6':
+        device_type="空氣質量";
+      break;
+      case '7':
+        device_type="血壓計";
+      break;
+      case '8':
+        device_type="脂肪計";
+      break;
+      case '9':
+        device_type="電動桌";
+      break;
+      case '10':
+        device_type="電動沙發";
+      break;
+      case '11':
+        device_type="血糖計";
+      break;
+      case '12':
+        device_type="額溫計";
+      break;
+    }
+    $("#load").css("display","block");//loading_on
+    $.post("/setting/modify", { type: type, mac: mac, name: name_modify, description: description_modify, room: room_modify, user: user_modify }, function (data) {
+	  $("#load").css("display","none");//loading_off
+      if (data == "修改設備成功") {
+        $("#modal-"+mac+"-mod").modal('hide');
+        setTimeout(function(){
+          // console.log(id+"/"+device_type);
+          gonext(id,device_type,language);
+        },200);
+      } else {  
+		alert("修改設備資料失敗");
+      }
+    }, "text");
+  }
+
+  function createvalue_gateway(type,language) {
+    var mac = "'"+document.getElementById("mac").value+"'";
+    var mac1 = document.getElementById("mac").value;
+    var name = "'"+document.getElementById("name").value+"'";
+    var des = document.getElementById("description").value;
+    if(des==''){
+      var description = 'NULL';
+    }else{
+      var description = "'"+des+"'";
+    }
+
+    var flo = document.getElementById("floor").value;
+    if(flo==''){
+      var floor = 'NULL';
+    }else{
+      var floor = "'"+flo+"'";
+    }
+
+    var rmo = document.getElementById("room").value;
+    if(rmo==''){
+      var room = 'NULL';
+    }else{
+      var room = "'"+rmo+"'";
+    }
+
+    var de1 = document.getElementById("device1").value;
+    if(de1==''){
+      var device1 = 'NULL';
+    }else{
+      var device1 = "'"+de1+"'";
+    }
+
+    var de2 = document.getElementById("device2").value;
+    if(de2==''){
+      var device2 = 'NULL';
+    }else{
+      var device2 = "'"+de2+"'"
+    }
+
+    var de3 = document.getElementById("device3").value;
+    if(de3==''){
+      var device3 = 'NULL';
+    }else{
+      var device3 = "'"+de3+"'";
+    }
+
+    var de4 = document.getElementById("device4").value;
+    if(de4==''){
+      var device4 = 'NULL';
+    }else{
+      var device4 = "'"+de4+"'";
+    }
+
+    var flaaaaag=0;
+    for(mac_check=0;mac_check<mac1.length;mac_check++){
+      var gate1=1;//0-1
+      var gate2=1;//A-Z
+      var gate3=1;//a-z
+      var single_str = mac1[mac_check].charCodeAt();
+      if(single_str>=48 && single_str<=57){
+        gate1=0;
+      };
+      if(single_str>=65 && single_str<=90){
+        gate2=0;
+      };
+      if(single_str>=97 && single_str<=122){
+        gate3=0;
+      };
+      if(gate1==1&&gate2==1&&gate3==1){
+        flaaaaag++;
+      }
+    };
+    if(flaaaaag>0){
+      alert("識別碼不可輸入符號!!!");
+    }else{
+	  $("#load").css("display","block");//loading_on
+      $.post("/setting/create", {type: type, mac: mac, name: name, description: description,floor:floor,room:room,device1:device1,device2:device2,device3:device3,device4:device4}, function (data) {
+		$("#load").css("display","none");//loading_off
+        if (data == "新增閘道器成功") {
+          // location.reload();
+          $("#creategateway").modal('hide');
+          setTimeout(function(){
+            gonext('1','閘道器',language);
+          },200);
+        } else {
+          alert("已有相同閘道器識別碼!!!");
+        }
+      }, "text");
+    }
+  }
+
+  function modifyvalue_gateway(mac,language) {
+    
+    var mac = document.getElementById("mac_modify"+mac).value;
+    var name = "'"+document.getElementById("name_modify"+mac).value+"'";
+    var des = document.getElementById("description_modify"+mac).value;
+    if(des==''){
+      var description = 'NULL';
+    }else{
+      var description = "'"+des+"'";
+    }
+    var flo = document.getElementById("floor_modify"+mac).value;
+    if(flo==''){
+      var floor = 'NULL';
+    }else{
+      var floor = "'"+flo+"'";
+    }
+    var de1 = document.getElementById("device1_modify"+mac).value;
+    if(de1==''){
+      var device1 = 'NULL';
+    }else{
+      var device1 = "'"+de1+"'";
+    }
+    var de2 = document.getElementById("device2_modify"+mac).value;
+    if(de2==''){
+      var device2 = 'NULL';
+    }else{
+      var device2 = "'"+de2+"'";
+    }
+    var de3 = document.getElementById("device3_modify"+mac).value;
+    if(de3==''){
+      var device3 = 'NULL';
+    }else{
+      var device3 = "'"+de3+"'";
+    }
+    var de4 = document.getElementById("device4_modify"+mac).value;
+    if(de4==''){
+      var device4 = 'NULL';
+    }else{
+      var device4 = "'"+de4+"'";
+    }
+    $("#load").css("display","block");//loading_on
+    $.post("/setting/modify", {type: "gateway", mac: mac, name: name, description: description,floor:floor,device1:device1,device2:device2,device3:device3,device4:device4}, function (data) {
+	  $("#load").css("display","none");//loading_off
+	  if (data == "修改閘道器成功") {
+        // location.reload();
+        $("#modal-"+mac+"-mod").modal('hide');
+        setTimeout(function(){
+          gonext('1','閘道器',language);
+        },200);
+      } else {  
+        alert("修改閘道器資料失敗");
+      }
+    }, "text");
+  }
+
+  function deletevalue_gateway(mac,language) {
+	$("#load").css("display","block");//loading_on
+	$.post("/setting/delete", { type: "gateway", value: mac },function(data){
+	  $("#load").css("display","none");//loading_off
+	  if (data == "刪除閘道器成功") {
+        $("#modal-"+mac+"-del").modal('hide');
+        setTimeout(function(){
+          gonext('1','閘道器',language);
+        },200);
+      } else {
+        alert("刪除閘道器資料失敗");
+      }
+    }, "text");
+  }
+
+  function createvalue_group(language){
+    var teamname = document.getElementById("groupname").value;
+    var teamtype = document.getElementById("devicetype").value;
+    var teamgroup = $("#devicegroup").select2('data');
+    var teamarray = new Array();
+    for(x=0;x<teamgroup.length;x++){
+      gg(teamgroup[x].id);
+    }
+    function gg(value){
+      teamarray.push(value);
+    }
+    $("#load").css("display","block");//loading_on
+    $.post("/setting/create", {type:"group",teamname:teamname,teamtype:teamtype,teamarray:JSON.stringify(teamarray)},function(data){
+	  $("#load").css("display","none");//loading_off
+	  if (data == "新增群組成功") {
+        $("#createteam").modal('hide');
+        setTimeout(function(){
+          gogroup(language);
+        },200);
+      } else {
+        alert("新增群組資料失敗");
+      }
+    }, "text");
+  }
+
+  function deletevalue_group(mac,language) {
+	$("#load").css("display","block");//loading_on
+	$.post("/setting/delete", { type: "group", value: mac },function(data){
+	  $("#load").css("display","none");//loading_off
+	  if (data == "刪除群組成功") {
+        $("#delete-"+mac).modal('hide');
+        setTimeout(function(){
+          gogroup(language);
+        },200);
+      } else {
+        alert("刪除群組資料失敗");
+      }
+    }, "text");
+  }
+
+  function modifyvalue_group(mac,language) {
+    var gpname = document.getElementById("groupname"+mac).value;
+    var gptype = document.getElementById("devicetype"+mac).value;
+    var teamgp = $("#devicegroup"+mac).select2('data');
+    var gparray = new Array();
+    for(r=0;r<teamgp.length;r++){
+      gg(teamgp[r].id);
+    }
+    function gg(value){
+      gparray.push(value);
+    }
+	$("#load").css("display","block");//loading_on
+    $.post("/setting/modify", {type:"group",mac:mac,teamname:gpname,teamtype:gptype,teamarray:JSON.stringify(gparray)},function(data){
+	  $("#load").css("display","none");//loading_off
+	  if (data == "修改群組成功") {
+        $("#modify-"+mac).modal('hide');
+        setTimeout(function(){
+          gogroup(language);
+        },200);
+      } else {
+        alert("修改群組資料失敗");
+      }
+    }, "text");
+  }
+
+</script>
+
+</body>
+
+</html>

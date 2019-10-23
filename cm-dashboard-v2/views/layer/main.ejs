@@ -1,0 +1,282 @@
+<div id="main" style="height:100%;overflow-y:scroll;overflow-x:scroll">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#action_single">
+                <% if (language==0){%>
+                個人管理
+                <% }else if (language==1){%>
+                    个人管理
+                <% }else if (language==2){%>
+                    Personal management
+                <% }%>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#action_group">
+                <% if (language==0){%>
+                    群組管理
+                <% }else if (language==1){%>
+                    群组管理
+                <% }else if (language==2){%>
+                    Group management
+                <% }%>
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active container" id="action_single"
+            style="margin-left: 0px;margin-right: 0px;max-width: 100%">
+            <% if(floor[0].Number == null){ %>
+            <span style="font-size: 20px">
+                <% if (language==0){%>
+                    暫無資料<br>請點擊右上方設置新增資料
+                <% }else if (language==1){%>
+                    暂无资料<br>请点击右上方设置新增资料
+                <% }else if (language==2){%>
+                    No data available<br>Please click on the top right to set up new information.
+                <% }%>
+            </span>
+            <% }else{ %>
+            <% for(var mf=0;mf< floor.length;mf++) {%>
+            <table class="table" style="margin-top:20px;border-top:0px;border-bottom: 0px;">
+                <thead>
+                    <tr>
+                        <th style="border: 0px">
+                            <h2><%= floor[mf].Number %>　
+                                <% if (language==0){%>
+                                    樓
+                                <% }else if (language==1){%>
+                                    楼
+                                <% }else if (language==2){%>
+                                    floor
+                                <% }%>
+                            </h2>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="background-color:white">
+                    <% for(var mr=0;mr< room.length;mr++) {%>
+                    <% if(room[mr].FloorNumber == floor[mf].Number) {%>
+                    <tr>
+                        <td style="border: 10px">
+                            <% for(var par=0;par<patient.length;par++) {%>
+                                <% if(patient[par].Room==room[mr].Number) {%>
+                                    <% for(th=0;th<threshold.length;th++){ %>
+                                        <% if(patient[par].Username==threshold[th][0].Username) {%>
+                                            <% 
+                                                <!-- console.log(threshold[th][0].Username); -->
+                                                var threshold_value = JSON.parse(threshold[th][0].Threshold);
+                                                <!-- console.log(sleeptape_detail[th]); -->
+                                                var warnings=0;
+                                                var flagv=0;
+                                                <!-- console.log(threshold_value); -->
+                                                var t3data = sleeptape_detail[th]; 
+                                            %>
+                                            <% if(threshold_value != null){ %>
+                                            
+                                                <%  for(t3=0;t3<t3data.length;t3++) {
+                                                        flagv=0;
+                                                        if(threshold_value[0]!="NULL" && flagv==0 ){
+                                                            if(t3data[t3].Breathe>threshold_value[0]){
+                                                                warnings++;
+                                                                flagv=1;
+                                                            }
+                                                        }
+                                                        if(threshold_value[1]!="NULL" && flagv==0 ){
+                                                            if(t3data[t3].Bloodoxygen>threshold_value[1]){
+                                                                warnings++;
+                                                                flagv=1;
+                                                            }
+                                                        }
+                                                        if(threshold_value[2]!="NULL" && flagv==0 ){
+                                                            if(t3data[t3].Heartrate>threshold_value[2]){
+                                                                warnings++;
+                                                                flagv=1;
+                                                            }
+                                                        }
+                                                    } 
+                                                <!-- console.log("warnings:"+warnings);  -->
+                                                %>
+                                                <% if(warnings>=1) {%>
+                                                    <button id='<%= patient[par].Username %>' class="btn btn-secondary"
+                                                        onclick="getpatientdata('<%= room[mr].FloorNumber %>','<%= patient[par].Room %>','<%= patient[par].Username %>','<%= language %>')"
+                                                        role="button" style="width:200px;color:black;background-color:rgb(206, 36, 36);margin: 5px">
+                                                <% }else{ %>
+                                                    <button id='<%= patient[par].Username %>' class="btn btn-secondary"
+                                                            onclick="getpatientdata('<%= room[mr].FloorNumber %>','<%= patient[par].Room %>','<%= patient[par].Username %>','<%= language %>')"
+                                                            role="button" style="width:200px;color:black;background-color:lightgreen;margin: 5px">
+                                                <% } %>
+                                                    <div style="text-align: center;height: 10%">
+                                                        <a style="font-size: 20px"><%= patient[par].Room %></a>
+                                                    </div>
+                                                    <!--<div style="height: 80%;border: 1px solid black;text-align: left;background: white">
+                                                        <% for(var chd=0;chd<checkdevice.length;chd++) {%>
+                                                            <% if(checkdevice[chd].Username == patient[par].Username) {%>
+                                                                <% for(var rel=0;rel<realtime.length;rel++) {%>
+                                                                    <% if(realtime[rel].Class == checkdevice[chd].Mac) {%>
+                                                                        <a>
+                                                                            <% if(language==0) {%>
+                                                                                呼吸率一
+                                                                            <% }else if(language==1){%>
+                                                                                呼吸率一
+                                                                            <% }else if(language==2){%>
+                                                                                Breathe rate-
+                                                                            <% } %>
+                                                                                <%= realtime[rel].Breathe %>
+                                                                            <% if (language==0){%>
+                                                                                次/分
+                                                                            <% }else if (language==1){%>
+                                                                                次/分
+                                                                            <% }else if (language==2){%>
+                                                                                Times/minute
+                                                                            <% }%>
+                                                                        </a><br>
+                                                                        <a>
+                                                                            <% if(language==0) {%>
+                                                                                心率一
+                                                                            <% }else if(language==1){%>
+                                                                                心率一
+                                                                            <% }else if(language==2){%>
+                                                                                Heart rate-
+                                                                            <% } %>
+                                                                                <%= realtime[rel].Heartrate %>
+                                                                            <% if (language==0){%>
+                                                                                次/分
+                                                                            <% }else if (language==1){%>
+                                                                                次/分
+                                                                            <% }else if (language==2){%>
+                                                                                Times/minute
+                                                                            <% }%>
+                                                                        </a>
+                                                                    <% } %>
+                                                                <% } %>
+                                                            <% } %>
+                                                        <% } %>
+                                                    </div>-->
+                                                    <div style="text-align: center;height: 10%">
+                                                        <a><%= patient[par].Username %></a>
+                                                    </div>
+                                                </button>
+
+                                            <% }else{ %>
+
+                                                <button id='<%= patient[par].Username %>' class="btn btn-secondary"
+                                                        onclick="getpatientdata('<%= room[mr].FloorNumber %>','<%= patient[par].Room %>','<%= patient[par].Username %>','<%= language %>')"
+                                                        role="button" style="width:200px;color:black;background-color:lightgreen;margin: 5px">
+                                                <div style="text-align: center;height: 10%">
+                                                <a style="font-size: 20px"><%= patient[par].Room %></a>
+                                                </div>
+                                                <!--<div style="height: 80%;border: 1px solid black;text-align: left;background: white">
+                                                    <% for(var chd=0;chd<checkdevice.length;chd++) {%>
+                                                        <% if(checkdevice[chd].Username == patient[par].Username) {%>
+                                                            <% for(var rel=0;rel<realtime.length;rel++) {%>
+                                                                <% if(realtime[rel].Class == checkdevice[chd].Mac) {%>
+                                                                    <a>
+                                                                        <% if(language==0) {%>
+                                                                            呼吸率一
+                                                                        <% }else if(language==1){%>
+                                                                            呼吸率一
+                                                                        <% }else if(language==2){%>
+                                                                            Breathe rate-
+                                                                        <% } %>
+                                                                            <%= realtime[rel].Breathe %>
+                                                                        <% if (language==0){%>
+                                                                            次/分
+                                                                        <% }else if (language==1){%>
+                                                                            次/分
+                                                                        <% }else if (language==2){%>
+                                                                            Times/minute
+                                                                        <% }%>
+                                                                    </a><br>
+                                                                    <a>
+                                                                        <% if(language==0) {%>
+                                                                            心率一
+                                                                        <% }else if(language==1){%>
+                                                                            心率一
+                                                                        <% }else if(language==2){%>
+                                                                            Heart rate-
+                                                                        <% } %>
+                                                                            <%= realtime[rel].Heartrate %>
+                                                                        <% if (language==0){%>
+                                                                            次/分
+                                                                        <% }else if (language==1){%>
+                                                                            次/分
+                                                                        <% }else if (language==2){%>
+                                                                            Times/minute
+                                                                        <% }%>
+                                                                    </a>
+                                                                <% } %>
+                                                            <% } %>
+                                                        <% } %>
+                                                    <% } %>
+                                                </div>-->
+                                                <div style="text-align: center;height: 10%">
+                                                    <a><%= patient[par].Username %></a>
+                                                </div>
+                                                </button>
+
+                                            <% } %>
+
+                                        <% } %>
+                                    <% } %>
+                                <% } %>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% } %>
+                    <% } %>
+                </tbody>
+            </table>
+            <% } %>
+            <% } %>
+        </div>
+        <div class="tab-pane container" id="action_group" style="margin-left: 0px;margin-right: 0px;max-width: 100%">
+            <% if(group[0].id == null){ %>
+            <span style="font-size: 20px">
+                <% if (language==0){%>
+                    暫無資料<br>請點擊右上方設置新增資料
+                <% }else if (language==1){%>
+                    暂无资料<br>请点击右上方设置新增资料
+                <% }else if (language==2){%>
+                    No data available<br>Please click on the top right to set up new information.
+                <% }%>
+            </span>
+            <% }else{ %>
+            <% for(var gp=0;gp< group.length;gp++) {%>
+            <table class="table" style="margin-top:20px;border-top:0px;border-bottom: 0px;">
+                <thead>
+                    <tr>
+                        <th style="border: 0px">
+                            <h2><%= group[gp].Teamname %>(<%= type[group[gp].Devicetype-1].Device %>)</h2>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody style="background-color:white">
+                    <tr>
+                        <td>
+                            <button class="btn btn-warning" onclick="getgroup('<%= group[gp].Devicetype %>','<%= group[gp].Teamid %>','<%= language %>')" role="button"
+                                style="width:100%;color:black;margin: 5px">
+                                <div style="text-align: center;height: 10%">
+                                    <% var aro = JSON.parse(group[gp].Devicemac); %>
+                                    <% for(p=0;p<aro.length;p++) {%>
+                                    <% for(h=0;h<device.length;h++) {%>
+                                    <% if(aro[p] == device[h].Mac) {%>
+                                    <span style="font-size: 20px"><%= device[h].Name %></span>
+                                    <% } %>
+                                    <% } %>
+                                    <% } %>
+                                </div>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <% } %>
+            <% } %>
+        </div>
+    </div>
+
+</div>

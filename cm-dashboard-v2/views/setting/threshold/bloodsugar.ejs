@@ -1,0 +1,366 @@
+<div id="main" style="height:850px;overflow-y:scroll">
+
+    <% if(device[0].id==null){ %>
+
+        <% if (language==0){%>
+            暫無資料請先點擊右方按鈕新增資料
+        <% }else if (language==1){%>
+            暂无资料请先点击右方按钮新增资料
+        <% }else if (language==2){%>
+            No information, please click the button on the right to add information.
+        <% }%>
+
+    <% }else{ %>
+    <div style="margin-top: 10px"></div>
+    <table id="example">
+        <thead>
+            <tr>
+                <th>
+                        <% if (language==0){%>
+                            識別碼
+                        <% }else if (language==1){%>
+                            识别码
+                        <% }else if (language==2){%>
+                            Identifier
+                        <% }%> 
+                    </th>
+                <th>
+                    <% if (language==0){%>
+                        設備名稱
+                    <% }else if (language==1){%>
+                        设备名称
+                    <% }else if (language==2){%>
+                        Device name
+                    <% }%>
+                    </th>
+                <th>
+                        <% if (language==0){%>
+                            血糖值
+                        <% }else if (language==1){%>
+                            血糖值
+                        <% }else if (language==2){%>
+                            Blood sugar level
+                        <% }%>
+                    </th>
+                <th></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <% for(x=0;x<device.length;x++) {%>
+            <tr>
+                <td><%= device[x].Mac %></td>
+
+                <% if(device[x].Name == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td><%= device[x].Name %></td>
+                <% } %>
+
+                <% if(device[x].Threshold == null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <% var w = JSON.parse(device[x].Threshold) %>
+
+                <% if(w[0] == "NULL") {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td><%= w[0] %></td>
+                <% } %>
+
+                <% } %>
+
+                <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal"
+                        data-target="#threshold-<%= device[x].Mac%>">
+                        <% if (language==0){%>
+                            設定
+                        <% }else if (language==1){%>
+                            设定
+                        <% }else if (language==2){%>
+                            set up
+                        <% }%>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="threshold-<%= device[x].Mac%>" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= device[x].Mac%>-Label" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= device[x].Mac %>-Label">
+                                        <span style="font-size: 25px;font-style:italic"><%= device[x].Name %> 
+                                            <% if (language==0){%>
+                                                告警值：
+                                            <% }else if (language==1){%>
+                                                告警值：
+                                            <% }else if (language==2){%>
+                                                Alarm value：
+                                            <% }%>  
+                                        </span>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="javascript:bloodsugar_threshold('<%= device[x].Mac %>','<%= language%>')">
+                                        <script>
+                                            var mac = JSON.parse('<%- JSON.stringify(device[x].Mac) %>');
+                                            // console.log(mac);
+                                        </script>
+                                        <% if(device[x].Threshold==null) {%>
+                                        <div>
+                                            <label for="glucose-<%= device[x].Mac %>" class="col-form-label">
+                                                    <% if (language==0){%>
+                                                        血糖值：
+                                                    <% }else if (language==1){%>
+                                                        血糖值：
+                                                    <% }else if (language==2){%>
+                                                        Blood sugar level：
+                                                    <% }%>
+                                            </label>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="glucose-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="glucose-c-<%= device[x].Mac %>"
+                                                onclick="glucose_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                        </div>
+                                        
+                                        <% }else{ %>
+                                        <% var qq=JSON.parse(device[x].Threshold) %>
+                                        <div>
+                                            <label for="glucose-<%= device[x].Mac %>" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    血糖值：
+                                                <% }else if (language==1){%>
+                                                    血糖值：
+                                                <% }else if (language==2){%>
+                                                    Blood sugar level：
+                                                <% }%>
+                                            </label>
+                                            <% if(qq[0]=="NULL") {%>
+                                            <input type="number" style="width: 70%" value="0" min="0"
+                                                id="glucose-<%= device[x].Mac %>" required disabled>
+                                            <input type="checkbox" id="glucose-c-<%= device[x].Mac %>"
+                                                onclick="glucose_c('<%= device[x].Mac %>')" checked>
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% }else{ %>
+                                            <input type="number" style="width: 70%" value="<%= qq[0] %>" min="0"
+                                                id="glucose-<%= device[x].Mac %>" required>
+                                            <input type="checkbox" id="glucose-c-<%= device[x].Mac %>"
+                                                onclick="glucose_c('<%= device[x].Mac %>')">
+                                                <% if (language==0){%>
+                                                    不設定
+                                                <% }else if (language==1){%>
+                                                    不设定
+                                                <% }else if (language==2){%>
+                                                    Not set
+                                                <% }%>
+                                            <% } %>
+                                        </div>
+                                    
+                                        <% } %>
+
+                                        <script>
+                                            function glucose_c(mac) {
+                                                var gc = document.getElementById("glucose-c-" + mac).checked;
+                                                if (gc == true) {
+                                                    document.getElementById("glucose-" + mac).setAttribute("disabled", true);
+                                                    document.getElementById("glucose-" + mac).value = 0;
+                                                } else {
+                                                    document.getElementById("glucose-" + mac).removeAttribute("disabled");
+                                                }
+                                            };
+                                        
+                                        </script>
+
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">                                               
+                                                    <% if (language==0){%>
+                                                        確認
+                                                    <% }else if (language==1){%>
+                                                        确认
+                                                    <% }else if (language==2){%>
+                                                        confirm
+                                                    <% }%>
+                                            </button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">
+                                                <% if (language==0){%>
+                                                    取消
+                                                <% }else if (language==1){%>
+                                                    取消
+                                                <% }else if (language==2){%>
+                                                    cancel
+                                                <% }%>
+                                            </button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function bloodsugar_threshold(mac,language) {
+                            var glucose = parseInt(document.getElementById("glucose-" + mac).value);
+                            var gc = document.getElementById("glucose-c-" + mac).checked;
+                            if (gc == true) {
+                                glucose = 'NULL';
+                            }
+                            // console.log(glucose);
+                            $.post("/modify/threshold", { type: 'bloodsugar', mac: mac, glucose: glucose}, function (data) {
+                                if (data == "修改告警值成功") {
+                                    // location.reload();
+                                    $("#threshold-"+mac).modal('hide');
+                                    setTimeout(function(){
+                                        gothreshold('11','血糖計',language);
+                                    },200);
+                                } else {
+                                    alert("修改告警值失敗");
+                                }
+                            }, "text");
+                        }
+                    </script>
+
+                </td>
+
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script>
+        if ('<%= language%>'==0){
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    language: {
+                        search: "搜尋：",
+                        sProcessing: "處理中...",
+                        sLengthMenu: "顯示 _MENU_ 項结果",
+                        sZeroRecords: "没有匹配结果",
+                        sInfo: "顯示第 _START_ 至 _END_ 項结果，共 _TOTAL_ 項",
+                        sInfoEmpty: "顯示第 0 至 0 項结果，共 0 項",
+                        sInfoFiltered: "(由 _MAX_ 項结果過濾)",
+                        sInfoPostFix: "",
+                        sSearch: "搜索:",
+                        sEmptyTable: "表中數據為空",
+                        sLoadingRecords: "載入中...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "首頁",
+                            sPrevious: "上頁",
+                            sNext: "下頁",
+                            sLast: "末頁"
+                        },
+                        oAria: {
+                            "sSortAscending": ": 以升排列",
+                            "sSortDescending": ": 以降排列"
+                        }
+                    }
+                });
+            });
+        }
+        else if('<%= language%>'==1){
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    language: {
+                        search: "搜尋：",
+                        sProcessing: "处理中...",
+                        sLengthMenu: "显示 _MENU_ 项结果",
+                        sZeroRecords: "没有匹配结果",
+                        sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                        sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+                        sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+                        sInfoPostFix: "",
+                        sSearch: "搜索:",
+                        sEmptyTable: "表中数据为空",
+                        sLoadingRecords: "载入中...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "首页",
+                            sPrevious: "上页",
+                            sNext: "下页",
+                            sLast: "末页"
+                        },
+                        oAria: {
+                            "sSortAscending": ": 以升排列",
+                            "sSortDescending": ": 以降排列"
+                        }
+                    }
+                });
+            });
+        }
+        else if('<%= language%>'==2){
+            $(document).ready(function () {
+                $('#example').DataTable({
+                    language: {
+                        search: "Search：",
+                        sProcessing: "Processing...",
+                        sLengthMenu: "Display _MENU_ results",
+                        sZeroRecords: "No matching results",
+                        sInfo: "Showing _START_ to _END_ results， _TOTAL_ items",
+                        sInfoEmpty: "Showing 0 to 0 results， 0 items",
+                        sInfoFiltered: "(Filtered by _MAX_ result)",
+                        sInfoPostFix: "",
+                        sSearch: "Search：",
+                        sEmptyTable: "The data in the table is empty",
+                        sLoadingRecords: "Processing...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "top page",
+                            sPrevious: "previous page",
+                            sNext: "next page",
+                            sLast: "last page"
+                        },
+                        oAria: {
+                            "sSortAscending": ": In ascending",
+                            "sSortDescending": ": In descending"
+                        }
+                    }
+                });
+            });
+        }
+        
+    </script>
+
+    <% } %>
+</div>

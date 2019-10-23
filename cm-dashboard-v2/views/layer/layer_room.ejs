@@ -1,0 +1,195 @@
+<div id="main" style="height:870px">
+    <div class="row" style="height:100%;">
+        <!-- 左側 -->
+        <div class="col-md-2">
+            <div class="container-fluid">
+                <hr style="border-top:1.5px solid slategray ;width:auto;">
+                <a style="font-size: 18px"><span id="floor-room"></span>　房號</a>
+                <hr style="border-top:1.5px solid slategray ;width:auto;">
+                <div class="accordion" id="accordionTool_device">
+                    <% for(var device_id=0;device_id<devicetype.length;device_id++) {%>
+                    <div class="card" style="background-color: unset;border: unset">
+                        <div class="card-header" id="deviceid<%= devicetype[device_id].id %>"
+                            style="background-color: unset;border: unset">
+                            <a class="card-link" data-toggle="collapse"
+                                data-target="#collapse_deviceid<%= devicetype[device_id].id %>" aria-expanded="true"
+                                aria-controls="collapse_deviceid<%= devicetype[device_id].id %>">
+                                <button type="button" class="btn btn-warning" style="width: 100%;text-align: left">
+                                <%= devicetype[device_id].Device %>
+                                <% time=0 %>
+                                <% for(var dvc=0;dvc<device.length;dvc++) {%>
+                                <% if(devicetype[device_id].id == device[dvc].Devicetype ) {%>
+                                <% time++ %>
+                                <% } %>
+                                <% } %>
+                                ___<%= time %>項
+                                </button>
+                            </a>
+                        </div>
+                        <div id="collapse_deviceid<%= devicetype[device_id].id %>" class="collapse"
+                            aria-labelledby="deviceid<%= devicetype[device_id].id %>"
+                            data-parent="#accordionTool_device">
+                            <% for(var dv=0;dv<device.length;dv++) {%>
+                            <% if(devicetype[device_id].id == device[dv].Devicetype ) {%>
+                            <div class="card-body">
+                                <a style="font-size: 14px;margin-left:60px" onclick="getdevice('<%= devicetype[device_id].id %>','<%= devicetype[device_id].Device%>','<%= device[dv].Mac%>')">
+                                    <button type="button" class="btn btn-warning"><%= device[dv].Username%>
+                                    </button>
+                                </a>
+                            </div>
+                            <% } %>
+                            <% } %>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <!--　右側 -->
+        <div class="col-md-10">
+            <div id="device_detail">
+                <table class="table" style="margin-top:20px;border-top:0px;height: 20%;">
+                    <thead>
+                        <tr>
+                            <th><a style="font-size: 20px">即時概況</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <% if(device[0].id != null ) {%>
+                                <% none=1 %>
+                                <% i=0 %>
+                                <% for(var pe=0;pe<device.length;pe++) {%>
+                                    <!-- 8個 -->
+                                    <% if(device[pe].Devicetype == 2 ) {%>
+                                        <!-- 4次 -->
+                                        <% none=0 %>
+                                        <td style="text-align: center;width: 260px">
+                                            <div class="card" style="text-align: left;">
+                                                <div class="card-body" onclick="getdevice('2','睡眠帶','<%= device[pe].Mac%>')" >
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <img src="/image/bed.png" alt="bed" style="width:70px;height:70px">
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <%= device[pe].Username %><br>
+                                                            <%= devicerealtime[i].Heartrate %><br>
+                                                            <% i++ %>
+                                                            狀態：正常
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <a>編號-<%= pe+1 %></a>
+                                        </td>
+                                    <% } %>
+                                <% } %>
+                                <% if(none == 1){%>
+                                <td style="text-align: center">
+                                    <a>查無資料</a>
+                                </td>
+                                <%}%>
+                            <% }else {%>
+                            <td style="text-align: center">
+                                <a>查無資料</a>
+                            </td>
+                            <% }%>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr style="border-top:1.5px solid black ;">
+                <table class="table" style="margin-top:20px;border-top:0px;height: 80%;">
+                    <thead>
+                        <tr>
+                            <th>
+                                <a style="font-size: 20px">公共設備</a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="row">
+
+                                    <div class="col-md-6" id="room_left">
+                                        <a style="font-size: 20px">室內溫度</a>
+                                        <canvas id="chart_room_1"></canvas>
+                                        <script>
+                                            var ctx_room_1 = document.getElementById('chart_room_1');
+                                            var myLineChart1 = new Chart(ctx_room_1, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
+                                                    datasets: [{
+                                                        label: '溫度',
+                                                        data: [29, 28, 29, 28, 28, 29],
+                                                        backgroundColor: [
+                                                            'rgba(255, 99, 132, 0.2)',
+                                                            'rgba(54, 162, 235, 0.2)',
+                                                            'rgba(255, 206, 86, 0.2)',
+                                                            'rgba(75, 192, 192, 0.2)',
+                                                            'rgba(153, 102, 255, 0.2)',
+                                                            'rgba(255, 159, 64, 0.2)'
+                                                        ],
+                                                        borderColor: [
+                                                            'rgba(255, 99, 132, 1)',
+                                                            'rgba(54, 162, 235, 1)',
+                                                            'rgba(255, 206, 86, 1)',
+                                                            'rgba(75, 192, 192, 1)',
+                                                            'rgba(153, 102, 255, 1)',
+                                                            'rgba(255, 159, 64, 1)'
+                                                        ],
+                                                        borderWidth: 1
+                                                    }]
+                                                },
+                                                option: {}
+                                            });
+                                        </script>
+                                    </div>
+
+                                    <div class="col-md-6" id="room_left">
+                                        <a style="font-size: 20px">空氣品質</a>
+                                        <canvas id="chart_room_2"></canvas>
+                                        <script>
+                                            var ctx_room_2 = document.getElementById('chart_room_2');
+                                            var myLineChart2 = new Chart(ctx_room_2, {
+                                                type: 'line',
+                                                data: {
+                                                    labels: ['9:00', '10:00', '11:00', '12:00', '13:00', '14:00'],
+                                                    datasets: [{
+                                                        label: 'AQI指標',
+                                                        data: [20, 30, 10, 5, 20, 30],
+                                                        backgroundColor: [
+                                                            'rgba(255, 99, 132, 0.2)',
+                                                            'rgba(54, 162, 235, 0.2)',
+                                                            'rgba(255, 206, 86, 0.2)',
+                                                            'rgba(75, 192, 192, 0.2)',
+                                                            'rgba(153, 102, 255, 0.2)',
+                                                            'rgba(255, 159, 64, 0.2)'
+                                                        ],
+                                                        borderColor: [
+                                                            'rgba(255, 99, 132, 1)',
+                                                            'rgba(54, 162, 235, 1)',
+                                                            'rgba(255, 206, 86, 1)',
+                                                            'rgba(75, 192, 192, 1)',
+                                                            'rgba(153, 102, 255, 1)',
+                                                            'rgba(255, 159, 64, 1)'
+                                                        ],
+                                                        borderWidth: 1
+                                                    }]
+                                                },
+                                                option: {}
+                                            });
+                                        </script>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

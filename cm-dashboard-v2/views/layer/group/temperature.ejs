@@ -1,0 +1,76 @@
+<% console.log(muti_data)%>
+<table style="width:100%;height:100%;text-align: center;background-color: white">
+    <tr style="height: 100%">
+            <td style="width:100%">
+                <div id="Temperature_chart" style="width:100%">FusionCharts will render here</div>
+            </td>
+    </tr>
+    <script type="text/javascript">
+        var Temperature_array = new Array();
+        var group_data = JSON.parse('<%- JSON.stringify(muti_data) %>');
+        var group_name = JSON.parse('<%- JSON.stringify(muti_name) %>');
+        var count = 0;
+        for (var i = 0; i < group_data.length; i++) {
+            for (var y = 0; y < group_data[i].length; y++) {
+                var x = new Array();
+                x[0] = parseInt(group_data[i][y].Temperature, 10);
+                x[1] = group_name[i][0].Name;
+                x[2] = group_data[i][y].Time.split(' ')[0] + ' ' + group_data[i][y].Time.split(' ')[1];
+                Temperature_array[count] = x;
+                count++;
+            }
+        }
+        var Temperature_schema = [{
+            "name": "體溫",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        // console.log(head_array);
+        // console.log(foot_array);
+
+        var TemperatureDataStore = new FusionCharts.DataStore();
+        var TemperatureTable = TemperatureDataStore.createDataTable(Temperature_array, Temperature_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Temperature_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: TemperatureTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "體溫",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                xAxis: {
+                    initialinterval: {
+                        from: "07-Sep-19",
+                        to: "07-Sep-19"
+                    }
+                },
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+    </script>
+</table>

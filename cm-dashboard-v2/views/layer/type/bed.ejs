@@ -1,0 +1,1241 @@
+<% var times = data.length-1 ; %>
+<% console.log(gatewayMac) %>
+<% if (gatewayMac == "NULL") { %>
+    <%   console.log("Mac NULL"); %>
+
+    <span style="color: tomato;font-size: 20px">
+        <% if(language==0) {%>
+            裝置暫無連結閘道器，請至上方設置連結
+        <% }else if(language==1){%>
+            装置暂无连结闸道器，请至上方设置连结
+        <% }else if(language==2){%>
+            There is no connected gateway in the device.<br>Please set the link to the top.
+        <% } %>
+    </span>
+
+<% }else{ %>
+
+    <%   console.log("gatewayMac:"+gatewayMac); %>
+
+    <% if (record[0].Record == null) { %>
+        <%   record[0].Head=0; %>
+        <%   record[0].Foot=0; %>
+        <% } %>
+        <% if (record[1].Record == null) { %>
+        <%   record[1].Head=0; %>
+        <%   record[1].Foot=0; %>
+        <% } %>
+        <% console.log(connectdevice) %>
+        
+        <div>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#schedule">
+                        <% if(language==0) {%>
+                            排程
+                        <% }else if(language==1){%>
+                            排程
+                        <% }else if(language==2){%>
+                            Schedule
+                        <% } %>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#control">
+                        <% if(language==0) {%>
+                            控制/監測
+                        <% }else if(language==1){%>
+                            控制/监测
+                        <% }else if(language==2){%>
+                            Control/Monitoring
+                        <% } %>
+                    </a>
+                </li>
+            </ul>
+        
+            <div class="tab-content">
+                <div class="tab-pane container" id="control"
+                    style="margin-left: 0px;margin-right: 0px;max-width: 100%;padding-left: 0px;padding-right: 0px">
+                    <table style="width:100%;height:100%;text-align: center;background-color: white">
+                        <!-- 上半部 -->
+                        <tr style="height: 50%">
+                            <!-- 左半邊 -->
+                            <td  style="width:50%">
+                                <div>
+                                    <img src="/image/bedd.png" alt="bed" style="width:90%">
+                                </div>
+                            </td>
+                            <!-- 右半邊 -->
+                            <td style="width:50%;position: relative">
+                                <div class="custom-control custom-switch" style="text-align: left;background-color: white;height: 25px;">
+                                <input type="checkbox" class="custom-control-input" id="customSwitch" onclick="connectgateway()">
+                                <label class="custom-control-label" for="customSwitch">
+                                    <% if(language==0) {%>
+                                        連接狀態(On/Off)
+                                    <% }else if(language==1){%>
+                                        连接状态(On/Off)
+                                    <% }else if(language==2){%>
+                                        Connection status(On/Off)
+                                    <% } %>
+                                </label>
+                                    <script>
+                                        function connectgateway(){
+                                            var gatewaymac = JSON.parse('<%- JSON.stringify(gatewayMac) %>');
+                                            var connectdevice = JSON.parse('<%- JSON.stringify(connectdevice) %>');
+                                            var serviceuuid = JSON.parse('<%- JSON.stringify(serviceuuid) %>');
+                                            var receiveuuid = JSON.parse('<%- JSON.stringify(receiveuuid) %>');
+                                            var senduuid = JSON.parse('<%- JSON.stringify(senduuid) %>');
+                                            var devicetype = JSON.parse('<%- JSON.stringify(devicetype) %>');
+                                            var ss = document.getElementById("customSwitch").checked;
+                                            if(ss==true){
+                                                $.post("/connect/gateway",{gatewaymac:gatewaymac,connectdevice:connectdevice,method:"connect",serviceuuid:serviceuuid,receiveuuid:receiveuuid,senduuid:senduuid,devicetype:devicetype},function(data){
+                                                    console.log(data);
+                                                    if(data=="成功"){
+                                                        alert("連線成功");
+                                                        document.getElementById("mask").style.visibility="hidden";
+                                                    }else{
+                                                        alert("連線失敗");
+                                                    }
+                                                });
+                                            }else{
+                                                document.getElementById("mask").style.visibility="visible";
+                                                $.post("/connect/gateway",{gatewaymac:gatewaymac,connectdevice:connectdevice,method:"disconnect"},function(data){
+                                                    console.log(data);
+                                                    if(data=="成功"){
+                                                        alert("解除連線");
+                                                        document.getElementById("mask").style.visibility="hidden";
+                                                    }else{
+                                                        alert("解除連線失敗");
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    </script>
+                                </div>
+                                <div id="mask" style="width: 100%; height: 490px;background-color:rgb(255,255,255,0.6);position: absolute;padding-top: 0px;visibility: visible;">
+                                    
+                                </div>
+                                <table style="width:100%">
+                                    <tr style="height: 70px;">
+                                        <td>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('headup','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:left">
+                                                <% if(language==0) {%>
+                                                    背部上升
+                                                <% }else if(language==1){%>
+                                                    背部上升
+                                                <% }else if(language==2){%>
+                                                    Back Up
+                                                <% } %>
+                                            </button>
+                                            0&nbsp;<input type="range" id="head" min="0" max="66" style="width: 50%;"
+                                                value='<%= data[times].Head %>' oninput="get_head_rangevalue()"
+                                                onchange="dochange('head','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>','<%= data[times].Head %>','<%= data[times].Foot %>','<%= data[times].Bed %>')">&nbsp;66
+                                                <% if(language==0) {%>
+                                                    目前角度：
+                                                <% }else if(language==1){%>
+                                                    目前角度：
+                                                <% }else if(language==2){%>
+                                                    Current angle:
+                                                <% } %><input type="number" id="headv" min="0" max="66" oninput="get_head_value()"
+                                                value='<%= data[times].Head %>'
+                                                onchange="dochange('head','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>','<%= data[times].Head %>','<%= data[times].Foot %>','<%= data[times].Bed %>')">
+                                            <!-- <span id="headv"></span> -->
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('headdown','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:right">
+                                                <% if(language==0) {%>
+                                                    背部下降
+                                                <% }else if(language==1){%>
+                                                    背部下降
+                                                <% }else if(language==2){%>
+                                                    Back Down
+                                                <% } %>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr style="height: 70px;">
+                                        <td>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('footup','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:left">
+                                                <% if(language==0) {%>
+                                                    腿部上升
+                                                <% }else if(language==1){%>
+                                                    腿部上升
+                                                <% }else if(language==2){%>
+                                                    Leg Up
+                                                <% } %>
+                                            </button>
+                                            0&nbsp;<input type="range" id="foot" min="0" max="28" style="width: 50%;"
+                                                oninput="get_foot_rangevalue()" value='<%= data[times].Foot %>'
+                                                onchange="dochange('foot','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>','<%= data[times].Head %>','<%= data[times].Foot %>','<%= data[times].Bed %>')">&nbsp;28
+                                                <% if(language==0) {%>
+                                                    目前角度：
+                                                <% }else if(language==1){%>
+                                                    目前角度：
+                                                <% }else if(language==2){%>
+                                                    Current angle:
+                                                <% } %><input type="number" id="footv" min="0" max="28" oninput="get_foot_value()"
+                                                value='<%= data[times].Foot %>'
+                                                onchange="dochange('foot','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>','<%= data[times].Head %>','<%= data[times].Foot %>','<%= data[times].Bed %>')">
+                                            <!-- <span id="footv"></span> -->
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('footdown','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:right">
+                                                <% if(language==0) {%>
+                                                    腿部下降
+                                                <% }else if(language==1){%>
+                                                    腿部下降
+                                                <% }else if(language==2){%>
+                                                    Leg Down
+                                                <% } %>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr style="height: 70px;">
+                                        <td>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('fullup','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:left">
+                                                <% if(language==0) {%>
+                                                    同時上升
+                                                <% }else if(language==1){%>
+                                                    同时上升
+                                                <% }else if(language==2){%>
+                                                    Up simultaneously
+                                                <% } %>
+                                            </button>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('fulldown','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:right">
+                                                <% if(language==0) {%>
+                                                    同時下降
+                                                <% }else if(language==1){%>
+                                                    同时下降
+                                                <% }else if(language==2){%>
+                                                    Down simultaneously
+                                                <% } %>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr style="height: 70px;">
+                                        <td>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('bedup','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:left">
+                                                <% if(language==0) {%>
+                                                    整床上升
+                                                <% }else if(language==1){%>
+                                                    整床上升
+                                                <% }else if(language==2){%>
+                                                    Bed Up
+                                                <% } %>
+                                            </button>
+                                            0&nbsp;<input type="range" id="bed" min="0" max="35" style="width: 50%;"
+                                                oninput="get_bed_rangevalue()" value='<%= data[times].Bed %>'
+                                                onchange="dochange('bed','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>','<%= data[times].Head %>','<%= data[times].Foot %>','<%= data[times].Bed %>')">&nbsp;35
+                                                <% if(language==0) {%>
+                                                    目前角度：
+                                                <% }else if(language==1){%>
+                                                    目前角度：
+                                                <% }else if(language==2){%>
+                                                    Current angle:
+                                                <% } %><input type="number" id="bedv" min="0" max="35" oninput="get_bed_value()"
+                                                style="widows: 5%" value='<%= data[times].Bed %>'
+                                                onchange="dochange('bed','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>','<%= data[times].Head %>','<%= data[times].Foot %>','<%= data[times].Bed %>')">
+                                            <!-- <span id="bedv"></span> -->
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('beddown','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:right">
+                                                <% if(language==0) {%>
+                                                    整床下降
+                                                <% }else if(language==1){%>
+                                                    整床下降
+                                                <% }else if(language==2){%>
+                                                    Bed Down
+                                                <% } %>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr style="height: 70px;">
+                                        <td>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('headdownfootup','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:left">
+                                                <% if(language==0) {%>
+                                                    向後傾斜
+                                                <% }else if(language==1){%>
+                                                    向后倾斜
+                                                <% }else if(language==2){%>
+                                                    Tilt Back
+                                                <% } %>
+                                            </button>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('headupfootdown','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:right">
+                                                <% if(language==0) {%>
+                                                    向前傾斜
+                                                <% }else if(language==1){%>
+                                                    向前倾斜
+                                                <% }else if(language==2){%>
+                                                    Tilt Forward
+                                                <% } %>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr style="height: 70px;">
+                                        <td>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('SaveRecord1','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:left">
+                                                <% if(language==0) {%>
+                                                    儲存至記憶位置1
+                                                <% }else if(language==1){%>
+                                                    储存至记忆位置1
+                                                <% }else if(language==2){%>
+                                                    Save to memory location 1
+                                                <% } %>
+                                            </button>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('SaveRecord2','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>')"
+                                                style="float:right">
+                                                <% if(language==0) {%>
+                                                    儲存至記憶位置2
+                                                <% }else if(language==1){%>
+                                                    储存至记忆位置2
+                                                <% }else if(language==2){%>
+                                                    Save to memory location 2
+                                                <% } %>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr style="height: 70px;">
+                                        <td>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('ReturnRecord1','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>','<%= record[0].Head %>','<%= record[0].Foot %>')"
+                                                style="float:left">
+                                                <% if(language==0) {%>
+                                                    回復至記憶位置1
+                                                <% }else if(language==1){%>
+                                                    回复至记忆位置1
+                                                <% }else if(language==2){%>
+                                                    Reply to memory location 1
+                                                <% } %>
+                                            </button>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="bed('ReturnRecord2','<%= mac %>','<%= gatewayMac %>','<%= connectdevice %>','<%= record[1].Head %>','<%= record[1].Foot %>')"
+                                                style="float:right">
+                                                <% if(language==0) {%>
+                                                    回復至記憶位置2
+                                                <% }else if(language==1){%>
+                                                    回复至记忆位置2
+                                                <% }else if(language==2){%>
+                                                    Reply to memory location 2
+                                                <% } %>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <!-- 下半部 -->
+                        <tr style="height: 50%">
+                            <td style="width:50%">
+                                <div id="container" style="width:100%"></div>
+                                <script type="text/javascript">
+                                    var temp_array = new Array();
+                                    var database_data = JSON.parse('<%- JSON.stringify(data) %>');
+                                    for (var i = 0; i < database_data.length; i++) {
+                                        var x = new Array();
+                                        x[0] = parseInt(database_data[i].Head, 10);
+                                        x[1] = parseInt(database_data[i].Foot, 10);
+                                        x[2] = database_data[i].Time.split(' ')[0] + ' ' + database_data[i].Time.split(' ')[1];
+                                        temp_array[i] = x;
+                                    }
+                                    var ss = [{
+                                        "name": "背部",
+                                        "type": "number"
+                                    }, {
+                                        "name": "腿部",
+                                        "type": "number"
+                                    }, {
+                                        "name": "Time",
+                                        "type": "date",
+                                        "format": "%Y-%m-%d %H:%M:%S"
+                                    }]
+                                    // console.log(temp_array);
+                                    var fusionDataStore = new FusionCharts.DataStore();
+                                    var fusionTable = fusionDataStore.createDataTable(temp_array, ss);
+                                    new FusionCharts({
+                                        type: 'timeseries',
+                                        renderAt: 'container',
+                                        width: "90%",
+                                        height: 650,
+                                        dataSource: {
+                                            data: fusionTable,
+                                            caption: {
+                                                text: 'Online Sales of a SuperStore in the US'
+                                            },
+                                            "yAxis": [{
+                                                "plot": {
+                                                    "value": "背部",//對應schema的欄位
+                                                    "connectNullData": true,
+                                                    "style": {
+                                                        "line.null": {
+                                                            "stroke-dasharray": "10",
+                                                            "stroke": "#d0d0d0"
+                                                        },
+                                                        "border": 30,
+                                                    },
+                                                    "lineThickness": "20"
+                                                },
+                                                "min": "0",
+                                                "max": "66",
+                                                referenceLine: [{
+                                                    "label": "Daily Target",
+                                                    "value": 30
+                                                }],
+                                                format: {
+                                                    "Suffix": "°",
+                                                },
+                                            }, {
+                                                "plot": {
+                                                    "value": "腿部",
+                                                    "connectNullData": true,
+                                                    "style": {
+                                                        "line.null": {
+                                                            "stroke-dasharray": "10",
+                                                            "stroke": "#d0d0d0"
+                                                        },
+                                                    },
+                                                },
+                                                "min": "0",
+                                                "max": "28",
+                                                format: {
+                                                    "Suffix": "°",
+                                                }
+                                            }],
+                                            xAxis: {
+                                                initialinterval: {
+                                                    from: "07-Sep-19",
+                                                    to: "07-Sep-19"
+                                                }
+                                            },
+                                            chart: {
+                                                exportEnabled: "1", //Enable Export Feature
+                                            }
+                                        }
+                                    }).render()
+                                </script>
+                            </td>
+                            <td style="width:50%">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-pane active container" id="schedule"
+                    style="margin-left: 0px;margin-right: 0px;max-width: 100%;padding-left: 0px;padding-right: 0px">
+                    <table style="width:100%;height:100%;text-align: center;background-color: white">
+                        <tr style="width: 100%;height: 100%;">
+                            <td style="width: 100%">
+                                <div id='calendar' style="max-width:95%;margin:40px auto;"></div>
+                                <script>
+                                    var language = JSON.parse('<%- JSON.stringify(language) %>');
+                                    // document.addEventListener('DOMContentLoaded', function() {
+                                    var calendarEl = document.getElementById('calendar');
+                                    var id;
+                                    var scheduledata = Array();
+                                    scheduledata = JSON.parse('<%- JSON.stringify(schedule) %>');
+                                    // console.log(scheduledata);
+                                    if(language==0){
+                                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                                            plugins: ['interaction', 'dayGrid', 'timeGrid', 'timeGrid'],
+                                            timeZone: 'UTC',
+                                            selectable: true,
+                                            locale:'zh-tw',
+                                            defaultView: 'timeGridWeek',
+                                            eventLimit: true,
+                                            header: {
+                                                left: 'prev,next today',
+                                                center: 'title',
+                                                right: 'timeGridWeek,timeGridDay'
+                                            },
+                                            buttonText:{
+                                                today:"今日",
+                                                week:"週",
+                                                day:"日",
+                                            },
+                                            dateClick: function (info_click) {
+                                                // console.log(info_click);
+                                                var startdate = info_click.dateStr.substring(0,16);
+                                                // console.log(startdate);
+                                                $('#startdate').val(startdate);
+                                                $('#createschedule').modal();
+                                            },
+                                            eventSources:[
+                                                {
+                                                    events: scheduledata
+                                                }
+                                            ],
+                                            eventClick: function (info_event) {
+                                                for(q=0;q<scheduledata.length;q++){
+                                                    if(scheduledata[q].id == info_event.event.id){
+                                                        $('#data_start').val(scheduledata[q].start);
+                                                        id = scheduledata[q].id;
+                                                        if(scheduledata[q].Startvalue_head==null){
+                                                            $('#data_start_head').val(0);
+                                                            document.getElementById("data_start_head").setAttribute("disabled",true);
+                                                            $('#data_start_head_n').val(0);
+                                                            document.getElementById("data_start_head_n").setAttribute("readonly",true);
+                                                            $('#data_start_head_c').attr('checked',true);
+                                                        }else{
+                                                            $('#data_start_head').val(scheduledata[q].Startvalue_head);
+                                                            $('#data_start_head_n').val(scheduledata[q].Startvalue_head);
+                                                        }
+                                                        if(scheduledata[q].Startvalue_foot==null){
+                                                            $('#data_start_foot').val(0);
+                                                            document.getElementById("data_start_foot").setAttribute("disabled",true);
+                                                            $('#data_start_foot_n').val(0);
+                                                            document.getElementById("data_start_foot_n").setAttribute("readonly",true);
+                                                            $('#data_start_foot_c').attr('checked',true);
+                                                        }else{
+                                                            $('#data_start_foot').val(scheduledata[q].Startvalue_foot);
+                                                            $('#data_start_foot_n').val(scheduledata[q].Startvalue_foot);
+                                                        }
+                                                        if(scheduledata[q].Startvalue_bed==null){
+                                                            $('#data_start_bed').val(0);
+                                                            document.getElementById("data_start_bed").setAttribute("disabled",true);
+                                                            $('#data_start_bed_n').val(0);
+                                                            document.getElementById("data_start_bed_n").setAttribute("readonly",true);
+                                                            $('#data_start_bed_c').attr('checked',true);
+                                                        }else{
+                                                            $('#data_start_bed').val(scheduledata[q].Startvalue_bed);
+                                                            $('#data_start_bed_n').val(scheduledata[q].Startvalue_bed);
+                                                        }
+                                                        $('#scheduledata').modal();
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        calendar.render();
+                                    }else if(language==1){
+                                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                                            plugins: ['interaction', 'dayGrid', 'timeGrid', 'timeGrid'],
+                                            timeZone: 'UTC',
+                                            selectable: true,
+                                            locale:'zh-ch',
+                                            defaultView: 'timeGridWeek',
+                                            eventLimit: true,
+                                            header: {
+                                                left: 'prev,next today',
+                                                center: 'title',
+                                                right: 'timeGridWeek,timeGridDay'
+                                            },
+                                            buttonText:{
+                                                today:"今天",
+                                                week:"周",
+                                                day:"日",
+                                            },
+                                            dateClick: function (info_click) {
+                                                // console.log(info_click);
+                                                var startdate = info_click.dateStr.substring(0,16);
+                                                // console.log(startdate);
+                                                $('#startdate').val(startdate);
+                                                $('#createschedule').modal();
+                                            },
+                                            eventSources:[
+                                                {
+                                                    events: scheduledata
+                                                }
+                                            ],
+                                            eventClick: function (info_event) {
+                                                for(q=0;q<scheduledata.length;q++){
+                                                    if(scheduledata[q].id == info_event.event.id){
+                                                        $('#data_start').val(scheduledata[q].start);
+                                                        id = scheduledata[q].id;
+                                                        if(scheduledata[q].Startvalue_head==null){
+                                                            $('#data_start_head').val(0);
+                                                            document.getElementById("data_start_head").setAttribute("disabled",true);
+                                                            $('#data_start_head_n').val(0);
+                                                            document.getElementById("data_start_head_n").setAttribute("readonly",true);
+                                                            $('#data_start_head_c').attr('checked',true);
+                                                        }else{
+                                                            $('#data_start_head').val(scheduledata[q].Startvalue_head);
+                                                            $('#data_start_head_n').val(scheduledata[q].Startvalue_head);
+                                                        }
+                                                        if(scheduledata[q].Startvalue_foot==null){
+                                                            $('#data_start_foot').val(0);
+                                                            document.getElementById("data_start_foot").setAttribute("disabled",true);
+                                                            $('#data_start_foot_n').val(0);
+                                                            document.getElementById("data_start_foot_n").setAttribute("readonly",true);
+                                                            $('#data_start_foot_c').attr('checked',true);
+                                                        }else{
+                                                            $('#data_start_foot').val(scheduledata[q].Startvalue_foot);
+                                                            $('#data_start_foot_n').val(scheduledata[q].Startvalue_foot);
+                                                        }
+                                                        if(scheduledata[q].Startvalue_bed==null){
+                                                            $('#data_start_bed').val(0);
+                                                            document.getElementById("data_start_bed").setAttribute("disabled",true);
+                                                            $('#data_start_bed_n').val(0);
+                                                            document.getElementById("data_start_bed_n").setAttribute("readonly",true);
+                                                            $('#data_start_bed_c').attr('checked',true);
+                                                        }else{
+                                                            $('#data_start_bed').val(scheduledata[q].Startvalue_bed);
+                                                            $('#data_start_bed_n').val(scheduledata[q].Startvalue_bed);
+                                                        }
+                                                        $('#scheduledata').modal();
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        calendar.render();
+                                    }else if(language==2){
+                                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                                            plugins: ['interaction', 'dayGrid', 'timeGrid', 'timeGrid'],
+                                            timeZone: 'UTC',
+                                            selectable: true,
+                                            locale:'en',
+                                            defaultView: 'timeGridWeek',
+                                            eventLimit: true,
+                                            header: {
+                                                left: 'prev,next today',
+                                                center: 'title',
+                                                right: 'timeGridWeek,timeGridDay'
+                                            },
+                                            buttonText:{
+                                                today:"today",
+                                                week:"week",
+                                                day:"day",
+                                            },
+                                            dateClick: function (info_click) {
+                                                // console.log(info_click);
+                                                var startdate = info_click.dateStr.substring(0,16);
+                                                // console.log(startdate);
+                                                $('#startdate').val(startdate);
+                                                $('#createschedule').modal();
+                                            },
+                                            eventSources:[
+                                                {
+                                                    events: scheduledata
+                                                }
+                                            ],
+                                            eventClick: function (info_event) {
+                                                for(q=0;q<scheduledata.length;q++){
+                                                    if(scheduledata[q].id == info_event.event.id){
+                                                        $('#data_start').val(scheduledata[q].start);
+                                                        id = scheduledata[q].id;
+                                                        if(scheduledata[q].Startvalue_head==null){
+                                                            $('#data_start_head').val(0);
+                                                            document.getElementById("data_start_head").setAttribute("disabled",true);
+                                                            $('#data_start_head_n').val(0);
+                                                            document.getElementById("data_start_head_n").setAttribute("readonly",true);
+                                                            $('#data_start_head_c').attr('checked',true);
+                                                        }else{
+                                                            $('#data_start_head').val(scheduledata[q].Startvalue_head);
+                                                            $('#data_start_head_n').val(scheduledata[q].Startvalue_head);
+                                                        }
+                                                        if(scheduledata[q].Startvalue_foot==null){
+                                                            $('#data_start_foot').val(0);
+                                                            document.getElementById("data_start_foot").setAttribute("disabled",true);
+                                                            $('#data_start_foot_n').val(0);
+                                                            document.getElementById("data_start_foot_n").setAttribute("readonly",true);
+                                                            $('#data_start_foot_c').attr('checked',true);
+                                                        }else{
+                                                            $('#data_start_foot').val(scheduledata[q].Startvalue_foot);
+                                                            $('#data_start_foot_n').val(scheduledata[q].Startvalue_foot);
+                                                        }
+                                                        if(scheduledata[q].Startvalue_bed==null){
+                                                            $('#data_start_bed').val(0);
+                                                            document.getElementById("data_start_bed").setAttribute("disabled",true);
+                                                            $('#data_start_bed_n').val(0);
+                                                            document.getElementById("data_start_bed_n").setAttribute("readonly",true);
+                                                            $('#data_start_bed_c').attr('checked',true);
+                                                        }else{
+                                                            $('#data_start_bed').val(scheduledata[q].Startvalue_bed);
+                                                            $('#data_start_bed_n').val(scheduledata[q].Startvalue_bed);
+                                                        }
+                                                        $('#scheduledata').modal();
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        calendar.render();
+                                    };
+                                    // });
+                                </script>
+                            </td>
+                        </tr>
+                    </table>
+                    <!-- Modal-create -->
+                    <div class="modal fade" id="createschedule" tabindex="-1" role="dialog" aria-labelledby="createLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createLabel">
+                                        <% if(language==0) {%>
+                                            新增排程
+                                        <% }else if(language==1){%>
+                                            新增排程
+                                        <% }else if(language==2){%>
+                                            Create Schedule
+                                        <% } %>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form action="javascript:createschedule('<%= mac %>')">
+                                    <div class="modal-body">
+                                        <label for="startdate" class="col-form-label">
+                                            <% if(language==0) {%>
+                                                日期:
+                                            <% }else if(language==1){%>
+                                                日期:
+                                            <% }else if(language==2){%>
+                                                Date:
+                                            <% } %>
+                                        </label>
+                                        <input type="datetime-local" class="form-control" id="startdate" required>
+                                        <div>
+                                            <label class="col-form-label">
+                                                <% if(language==0) {%>
+                                                    頭部度數:
+                                                <% }else if(language==1){%>
+                                                    头部度数:
+                                                <% }else if(language==2){%>
+                                                    Head Degree:
+                                                <% } %>
+                                            </label>
+                                            0&nbsp;<input type="range" min="0" max="66" id="startvalue_head" value="0" required style="width: 50%" oninput="change_sth()">&nbsp;66
+                                            <input type="number" min="0" max="66" id="startvalue_head_n" value="0" required oninput="change_sthn()"> 
+                                            <input type="checkbox" id="startvalue_head_c">
+                                                <% if(language==0) {%>
+                                                    不設定
+                                                <% }else if(language==1){%>
+                                                    不设定
+                                                <% }else if(language==2){%>
+                                                    Not set
+                                                <% } %>
+                                            <script>
+                                                $(function(){
+                                                    $("#startvalue_head_c").change(function() {
+                                                    if(this.checked) {
+                                                        // alert(1);
+                                                        document.getElementById("startvalue_head_n").setAttribute("readonly",true);
+                                                        document.getElementById("startvalue_head_n").value=0;
+                                                        document.getElementById("startvalue_head").setAttribute("disabled",true);
+                                                        document.getElementById("startvalue_head").value=0;
+                                                    }else{
+                                                        // alert(2);
+                                                        document.getElementById("startvalue_head_n").removeAttribute("readonly");
+                                                        document.getElementById("startvalue_head").removeAttribute("disabled");
+                                                    }
+        
+                                                });
+                                                })
+                                                function change_sth() {
+                                                    var bn = document.getElementById("startvalue_head").value;
+                                                    if (bn >= 66) {
+                                                    bn = 66;
+                                                    }
+                                                    if (bn < 0) {
+                                                    bn = 0;
+                                                    }
+                                                    document.getElementById("startvalue_head_n").value = bn;
+                                                }
+                                                function change_sthn() {
+                                                    var nb = document.getElementById("startvalue_head_n").value;
+                                                    if (nb >= 66) {
+                                                    nb = 66;
+                                                    }
+                                                    if (nb < 0) {
+                                                    nb = 0;
+                                                    }
+                                                    document.getElementById("startvalue_head").value = nb;
+                                                }
+                                            </script>
+                                        </div>
+                                        <div>
+                                            <label  class="col-form-label">
+                                                <% if(language==0) {%>
+                                                    腿部度數:
+                                                <% }else if(language==1){%>
+                                                    腿部度数:
+                                                <% }else if(language==2){%>
+                                                    Leg degree:
+                                                <% } %>
+                                            </label>
+                                            0&nbsp;<input type="range" min="0" max="28" id="startvalue_foot" value="0" required  style="width: 50%" oninput="change_stf()">&nbsp;28
+                                            <input type="number" min="0" max="28" id="startvalue_foot_n" value="0" required oninput="change_stfn()">
+                                            <input type="checkbox" id="startvalue_foot_c">
+                                                <% if(language==0) {%>
+                                                    不設定
+                                                <% }else if(language==1){%>
+                                                    不设定
+                                                <% }else if(language==2){%>
+                                                    Not set
+                                                <% } %>
+                                            <script>
+                                                $(function(){
+                                                    $("#startvalue_foot_c").change(function() {
+                                                    if(this.checked) {
+                                                        // alert(1);
+                                                        document.getElementById("startvalue_foot_n").setAttribute("readonly",true);
+                                                        document.getElementById("startvalue_foot_n").value=0;
+                                                        document.getElementById("startvalue_foot").setAttribute("disabled",true);
+                                                        document.getElementById("startvalue_foot").value=0;
+                                                    }else{
+                                                        // alert(2);
+                                                        document.getElementById("startvalue_foot_n").removeAttribute("readonly");
+                                                        document.getElementById("startvalue_foot").removeAttribute("disabled");
+                                                    }
+                                                });
+                                                })
+                                                function change_stf() {
+                                                    var fn = document.getElementById("startvalue_foot").value;
+                                                    if (fn >= 28) {
+                                                    fn = 28;
+                                                    }
+                                                    if (fn < 0) {
+                                                    fn = 0;
+                                                    }
+                                                    document.getElementById("startvalue_foot_n").value = fn;
+                                                }
+                                                function change_stfn() {
+                                                    var nf = document.getElementById("startvalue_foot_n").value;
+                                                    if (nf >= 28) {
+                                                    nf = 28;
+                                                    }
+                                                    if (nf < 0) {
+                                                    nf = 0;
+                                                    }
+                                                    document.getElementById("startvalue_foot").value = nf;
+                                                }
+                                            </script>
+                                        </div>
+                                        <div>
+                                            <label class="col-form-label">
+                                                <% if(language==0) {%>
+                                                    整床高度:
+                                                <% }else if(language==1){%>
+                                                    整床高度:
+                                                <% }else if(language==2){%>
+                                                    Bed height:
+                                                <% } %>
+                                            </label>
+                                            0&nbsp;<input type="range" min="0" max="35" id="startvalue_bed" value="0" required  style="width: 50%" oninput="change_stb()">&nbsp;35
+                                            <input type="number" min="0" max="35" id="startvalue_bed_n" value="0" required oninput="change_stbn()">
+                                            <input type="checkbox" id="startvalue_bed_c">
+                                                <% if(language==0) {%>
+                                                    不設定
+                                                <% }else if(language==1){%>
+                                                    不设定
+                                                <% }else if(language==2){%>
+                                                    Not set
+                                                <% } %>
+                                            <script>
+                                                $(function(){
+                                                    $("#startvalue_bed_c").change(function() {
+                                                    if(this.checked) {
+                                                        // alert(1);
+                                                        document.getElementById("startvalue_bed_n").setAttribute("readonly",true);
+                                                        document.getElementById("startvalue_bed_n").value=0;
+                                                        document.getElementById("startvalue_bed").setAttribute("disabled",true);
+                                                        document.getElementById("startvalue_bed").value=0;
+                                                    }else{
+                                                        // alert(2);
+                                                        document.getElementById("startvalue_bed_n").removeAttribute("readonly");
+                                                        document.getElementById("startvalue_bed").removeAttribute("disabled");
+                                                    }
+                                                });
+                                                })
+                                                function change_stb() {
+                                                    var bd = document.getElementById("startvalue_bed").value;
+                                                    if (bd >= 35) {
+                                                    bd = 35;
+                                                    }
+                                                    if (bd < 0) {
+                                                    bd = 0;
+                                                    }
+                                                    document.getElementById("startvalue_bed_n").value = bd;
+                                                }
+                                                function change_stbn() {
+                                                    var db = document.getElementById("startvalue_bed_n").value;
+                                                    if (db >= 35) {
+                                                    db = 35;
+                                                    }
+                                                    if (db < 0) {
+                                                    db = 0;
+                                                    }
+                                                    document.getElementById("startvalue_bed").value = db;
+                                                }
+                                            </script>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">
+                                            <% if(language==0) {%>
+                                                確認
+                                            <% }else if(language==1){%>
+                                                确认
+                                            <% }else if(language==2){%>
+                                                Confirm
+                                            <% } %>
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if(language==0) {%>
+                                                取消
+                                            <% }else if(language==1){%>
+                                                取消
+                                            <% }else if(language==2){%>
+                                                Cancel
+                                            <% } %>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function createschedule(mac){
+                            var mac = mac;
+                            var start_date= document.getElementById("startdate").value;
+                            var start_value_head= document.getElementById("startvalue_head").value;
+                            var startvalue_head_check = document.getElementById("startvalue_head_c").checked;
+                            var start_value_foot= document.getElementById("startvalue_foot").value;
+                            var startvalue_foot_check = document.getElementById("startvalue_foot_c").checked;
+                            var start_value_bed= document.getElementById("startvalue_bed").value;
+                            var startvalue_bed_check = document.getElementById("startvalue_bed_c").checked;
+                            if(startvalue_head_check==true){
+                                var start_value_head = 'NULL';
+                            }
+                            if(startvalue_foot_check==true){
+                                var start_value_foot = 'NULL';
+                            }
+                            if(startvalue_bed_check==true){
+                                var start_value_bed = 'NULL';
+                            }
+                            // alert(mac+"/"+start_date+"/"+start_value_head+"/"+start_value_foot+"/"+start_value_bed);
+                            // alert(start_date);
+                            $.post("/create/schedule",{mac:mac,startdate:start_date,startvaluehead:start_value_head,startvaluefoot:start_value_foot,startvaluebed:start_value_bed},function(data){
+                                if(data=="新增排程成功"){
+                                    // alert("success");
+                                    location.reload();
+                                }else{
+                                    alert("新增排程失敗");
+                                }
+                            },"text");
+                        }
+                    </script>
+        
+                    <!-- Modal-data -->
+                    <div class="modal fade" id="scheduledata" tabindex="-1" role="dialog" aria-labelledby="dataLabel"
+                    aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="dataLabel">
+                                        <% if(language==0) {%>
+                                            排程資料:
+                                        <% }else if(language==1){%>
+                                            排程资料:
+                                        <% }else if(language==2){%>
+                                            Schedule Information:
+                                        <% } %>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <!-- <div style="position: absolute;padding-left: 91%;padding-top: 9%;"> -->
+                                <form action="javascript:modifyschedule('<%= mac %>')">
+                                    <div class="modal-body">
+                                        <label for="data_start" class="col-form-label">
+                                            <% if(language==0) {%>
+                                                日期:
+                                            <% }else if(language==1){%>
+                                                日期:
+                                            <% }else if(language==2){%>
+                                                Date:
+                                            <% } %>
+                                        </label>
+                                        <input type="datetime-local" class="form-control" id="data_start" required>
+        
+                                        <div>
+                                            <label class="col-form-label">
+                                                <% if(language==0) {%>
+                                                    頭部高度:
+                                                <% }else if(language==1){%>
+                                                    头部高度:
+                                                <% }else if(language==2){%>
+                                                    Head height:
+                                                <% } %>
+                                            </label>
+                                            0&nbsp;<input type="range" min="0" max="66" id="data_start_head" value="0" required style="width: 50%" oninput="change_dsh()">&nbsp;66
+                                            <input type="number" min="0" max="66" id="data_start_head_n" value="0" required oninput="change_dshn()"> 
+                                            <input type="checkbox" id="data_start_head_c">
+                                                <% if(language==0) {%>
+                                                    不設定
+                                                <% }else if(language==1){%>
+                                                    不设定
+                                                <% }else if(language==2){%>
+                                                    Not set
+                                                <% } %>
+                                            <script>
+                                                $(function(){
+                                                    $("#data_start_head_c").change(function() {
+                                                    if(this.checked) {
+                                                        // alert(1);
+                                                        document.getElementById("data_start_head_n").setAttribute("readonly",true);
+                                                        document.getElementById("data_start_head_n").value=0;
+                                                        document.getElementById("data_start_head").setAttribute("disabled",true);
+                                                        document.getElementById("data_start_head").value=0;
+                                                    }else{
+                                                        // alert(2);
+                                                        document.getElementById("data_start_head_n").removeAttribute("readonly");
+                                                        document.getElementById("data_start_head").removeAttribute("disabled");
+                                                    }
+        
+                                                });
+                                                })
+                                                function change_dsh() {
+                                                    var bnd = document.getElementById("data_start_head").value;
+                                                    if (bnd >= 66) {
+                                                    bnd = 66;
+                                                    }
+                                                    if (bnd < 0) {
+                                                    bnd = 0;
+                                                    }
+                                                    document.getElementById("data_start_head_n").value = bnd;
+                                                }
+        
+                                                function change_dshn() {
+                                                    var nbd = document.getElementById("data_start_head_n").value;
+                                                    if (nbd >= 66) {
+                                                    nbd = 66;
+                                                    }
+                                                    if (nbd < 0) {
+                                                    nbd = 0;
+                                                    }
+                                                    document.getElementById("data_start_head").value = nbd;
+                                                }
+        
+                                            </script>
+                                        </div>
+        
+                                        <div>
+                                            <label  class="col-form-label">
+                                                <% if(language==0) {%>
+                                                    腿部度數:
+                                                <% }else if(language==1){%>
+                                                    腿部高度:
+                                                <% }else if(language==2){%>
+                                                    Leg height:
+                                                <% } %>
+                                            </label>
+                                            0&nbsp;<input type="range" min="0" max="28" id="data_start_foot" value="0" required  style="width: 50%" oninput="change_dsf()">&nbsp;28
+                                            <input type="number" min="0" max="28" id="data_start_foot_n" value="0" required oninput="change_dsfn()">
+                                            <input type="checkbox" id="data_start_foot_c">
+                                                <% if(language==0) {%>
+                                                    不設定
+                                                <% }else if(language==1){%>
+                                                    不设定
+                                                <% }else if(language==2){%>
+                                                    Not set
+                                                <% } %>
+                                            <script>
+                                                $(function(){
+                                                    $("#data_start_foot_c").change(function() {
+                                                    if(this.checked) {
+                                                        // alert(1);
+                                                        document.getElementById("data_start_foot_n").setAttribute("readonly",true);
+                                                        document.getElementById("data_start_foot_n").value=0;
+                                                        document.getElementById("data_start_foot").setAttribute("disabled",true);
+                                                        document.getElementById("data_start_foot").value=0;
+                                                    }else{
+                                                        // alert(2);
+                                                        document.getElementById("data_start_foot_n").removeAttribute("readonly");
+                                                        document.getElementById("data_start_foot").removeAttribute("disabled");
+                                                    }
+                                                });
+                                                })
+        
+                                                function change_dsf() {
+                                                    var fnd = document.getElementById("data_start_foot").value;
+                                                    if (fnd >= 28) {
+                                                    fnd = 28;
+                                                    }
+                                                    if (fnd < 0) {
+                                                    fnd = 0;
+                                                    }
+                                                    document.getElementById("data_start_foot_n").value = fnd;
+                                                }
+        
+                                                function change_dsfn() {
+                                                    var nfd = document.getElementById("data_start_foot_n").value;
+                                                    if (nfd >= 28) {
+                                                    nfd = 28;
+                                                    }
+                                                    if (nfd < 0) {
+                                                    nfd = 0;
+                                                    }
+                                                    document.getElementById("data_start_foot").value = nfd;
+                                                }
+        
+                                            </script>
+                                        </div>
+        
+                                        <div>
+                                            <label class="col-form-label">
+                                                <% if(language==0) {%>
+                                                    整床高度:
+                                                <% }else if(language==1){%>
+                                                    整床高度:
+                                                <% }else if(language==2){%>
+                                                    Bed height:
+                                                <% } %>
+                                            </label>
+                                            0&nbsp;<input type="range" min="0" max="35" id="data_start_bed" value="0" required  style="width: 50%" oninput="change_dsb()">&nbsp;35
+                                            <input type="number" min="0" max="35" id="data_start_bed_n" value="0" required oninput="change_dsbn()">
+                                            <input type="checkbox" id="data_start_bed_c">
+                                                <% if(language==0) {%>
+                                                    不設定
+                                                <% }else if(language==1){%>
+                                                    不设定
+                                                <% }else if(language==2){%>
+                                                    Not set
+                                                <% } %>
+                                            <script>
+                                                $(function(){
+                                                    $("#data_start_bed_c").change(function() {
+                                                    if(this.checked) {
+                                                        // alert(1);
+                                                        document.getElementById("data_start_bed_n").setAttribute("readonly",true);
+                                                        document.getElementById("data_start_bed_n").value=0;
+                                                        document.getElementById("data_start_bed").setAttribute("disabled",true);
+                                                        document.getElementById("data_start_bed").value=0;
+                                                    }else{
+                                                        // alert(2);
+                                                        document.getElementById("data_start_bed_n").removeAttribute("readonly");
+                                                        document.getElementById("data_start_bed").removeAttribute("disabled");
+                                                    }
+                                                });
+                                                })
+        
+                                                function change_dsb() {
+                                                    var bdd = document.getElementById("data_start_bed").value;
+                                                    if (bdd >= 35) {
+                                                    bdd = 35;
+                                                    }
+                                                    if (bdd < 0) {
+                                                    bdd = 0;
+                                                    }
+                                                    document.getElementById("data_start_bed_n").value = bdd;
+                                                }
+        
+                                                function change_dsbn() {
+                                                    var dbd = document.getElementById("data_start_bed_n").value;
+                                                    if (dbd >= 35) {
+                                                    dbd = 35;
+                                                    }
+                                                    if (dbd < 0) {
+                                                    dbd = 0;
+                                                    }
+                                                    document.getElementById("data_start_bed").value = dbd;
+                                                }
+                                            </script>
+                                        </div>
+        
+                                        <!-- <label for="enddate" class="col-form-label">結束日期:</label>
+                                        <input type="datetime-local" class="form-control" onchange="checktimebig(this.value)" id="enddate" required>
+                                        <label for="endvalue" class="col-form-label">結束度數:</label>
+                                        <input type="number" min="0" max="66" class="form-control" id="endvalue" required> -->
+        
+                                    </div>
+        
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger mr-auto" onclick="deleteschedule('<%= mac %>')" >
+                                            <% if(language==0) {%>
+                                                刪除
+                                            <% }else if(language==1){%>
+                                                删除
+                                            <% }else if(language==2){%>
+                                                Delete
+                                            <% } %>
+                                        </button>
+                                        <button type="submit" class="btn btn-info">
+                                            <% if(language==0) {%>
+                                                修改
+                                            <% }else if(language==1){%>
+                                                修改
+                                            <% }else if(language==2){%>
+                                                Modify
+                                            <% } %>
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if(language==0) {%>
+                                                取消
+                                            <% }else if(language==1){%>
+                                                取消
+                                            <% }else if(language==2){%>
+                                                Cancel
+                                            <% } %>
+                                        </button>
+                                    </div>
+                                    <script>
+                                        function modifyschedule(mac){
+        
+                                            var mac = mac;
+                                            var data_start= document.getElementById("data_start").value;
+                                            var data_start_head= document.getElementById("data_start_head").value;
+                                            var data_start_head_c = document.getElementById("data_start_head_c").checked;
+                                            var data_start_foot= document.getElementById("data_start_foot").value;
+                                            var data_start_foot_c = document.getElementById("data_start_foot_c").checked;
+                                            var data_start_bed= document.getElementById("data_start_bed").value;
+                                            var data_start_bed_c = document.getElementById("data_start_bed_c").checked;
+                            
+                                            if( data_start_head_c == true){
+                                                var data_start_head = 'NULL';
+                                            }
+                                            if( data_start_foot_c == true){
+                                                var data_start_foot = 'NULL';
+                                            }
+                                            if( data_start_bed_c == true){
+                                                var data_start_bed = 'NULL';
+                                            }
+        
+                                            // alert(mac+"/"+id+"/"+data_start+"/"+data_start_head+"/"+data_start_foot+"/"+data_start_bed);
+        
+                                            $.post("/modify/schedule",{mac:mac,id:id,startdate:data_start,startvaluehead:data_start_head,startvaluefoot:data_start_foot,startvaluebed:data_start_bed},function(data){
+                                                if(data=="修改排程成功"){
+                                                    // alert("修改排程成功");
+                                                    location.reload();
+                                                }else{
+                                                    alert("修改排程失敗");
+                                                }
+                                            },"text");
+                                            
+                                        }
+        
+                                        function deleteschedule(mac){
+                                            $.post("/delete/schedule",{mac:mac,id:id},function(data){
+                                                if(data=="刪除排程成功"){
+                                                    // alert("刪除排程成功");
+                                                    location.reload();
+                                                }else{
+                                                    alert("刪除排程失敗");
+                                                }
+                                            },"text");
+                                        }
+                                    </script>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<% } %>

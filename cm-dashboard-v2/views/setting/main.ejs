@@ -1,0 +1,319 @@
+<div id="main" style="height:800px;overflow-y:scroll">
+    <button type="button" class="btn btn-primary" style="float: right;margin-top: 10px;margin-right: 10px"
+        data-toggle="modal" data-target="#createfloor">
+        <% if (language==0){%>
+            新增樓層
+            <% }else if (language==1){%>
+                新增楼层
+            <% }else if (language==2){%>
+                Add floor
+            <% }%>
+        </button>
+    <!-- Modal-create -->
+    <div class="modal fade" id="createfloor" tabindex="-1" role="dialog" aria-labelledby="createLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createLabel">
+                            <% if (language==0){%>
+                                新增樓層
+                                <% }else if (language==1){%>
+                                    新增楼层
+                                <% }else if (language==2){%>
+                                    Add floor
+                                <% }%>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="javascript:createvalue_floor('floor')">
+                <div class="modal-body">
+                    <label for="floorvalue" class="col-form-label">
+                            <% if (language==0){%>
+                                樓層號碼:
+                                <% }else if (language==1){%>
+                                    新增楼层
+                                <% }else if (language==2){%>
+                                    Add floor
+                                <% }%>
+                        </label>
+                    <input type="number" min="1" max="30"  class="form-control" id="floorvalue" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <% if (language==0){%>
+                                取消
+                                <% }else if (language==1){%>
+                                    取消
+                                <% }else if (language==2){%>
+                                    cancel
+                                <% }%>
+                                </button>
+                    <button type="submit" class="btn btn-primary">
+                            <% if (language==0){%>
+                                確認
+                                <% }else if (language==1){%>
+                                    确认
+                                <% }else if (language==2){%>
+                                    confirm
+                                <% }%>
+                        </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <% if(floor[0].Number == null ){ %>
+        <span　style="font-size:20px">
+                <% if (language==0){%>
+                    暫無樓層資料<br>請先新增樓層
+                    <% }else if (language==1){%>
+                        暂无楼层资料<br>请先新增楼层
+                    <% }else if (language==2){%>
+                        No floor information<br>Please add floor first
+                    <% }%>
+                    </span>
+    <% }else{ %>
+        <% for(floor_number=0;floor_number<floor.length;floor_number++) {%>
+            <table class="table" style="margin-top:20px;border-top:0px;border-bottom: 0px;">
+                <thead>
+                    <tr>
+                        <th>
+                            <span style="font-size: 35px"><%= floor[floor_number].Number %>
+                                <% if (language==0){%>
+                                    樓
+                                <% }else if (language==1){%>
+                                    楼
+                                <% }else if (language==2){%>
+                                    floor
+                                <% }%></span>　<button type="button"
+                                class="btn btn-secondary" data-toggle="modal"
+                                data-target="#floor-<%= floor[floor_number].Number %>">
+                                <% if (language==0){%>
+                                    刪除
+                                <% }else if (language==1){%>
+                                    刪除
+                                <% }else if (language==2){%>
+                                    delete
+                                <% }%></button>　<button type="button"
+                                class="btn btn-primary" data-toggle="modal"
+                                data-target="#roomcreate-<%= floor[floor_number].Number %>">
+                                <% if (language==0){%>
+                                    新增房號
+                                <% }else if (language==1){%>
+                                    新增房号
+                                <% }else if (language==2){%>
+                                    New house number
+                                <% }%></button>
+                            <!-- Modal-delete -->
+                            <div class="modal fade" id="floor-<%= floor[floor_number].Number %>" tabindex="-1" role="dialog"
+                                aria-labelledby="floor-<%= floor[floor_number].Number %>-Label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="floor-<%= floor[floor_number].Number %>-Label">
+                                                <%= floor[floor_number].Number %>
+                                                <% if (language==0){%>
+                                                    樓
+                                                <% }else if (language==1){%>
+                                                    楼
+                                                <% }else if (language==2){%>
+                                                    floor
+                                                <% }%></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            
+                                                <% if (language==0){%>
+                                                    刪除資料
+                                                <% }else if (language==1){%>
+                                                    删除资料
+                                                <% }else if (language==2){%>
+                                                    Delete data
+                                                <% }%>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    <% if (language==0){%>
+                                                        取消
+                                                        <% }else if (language==1){%>
+                                                            取消
+                                                        <% }else if (language==2){%>
+                                                            cancel
+                                                        <% }%>
+                                            </button>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="deletevalue('floor','<%= floor[floor_number].Number %>')"
+                                                data-dismiss="modal">
+                                                <% if (language==0){%>
+                                                    確認
+                                                    <% }else if (language==1){%>
+                                                        确认
+                                                    <% }else if (language==2){%>
+                                                        confirm
+                                                    <% }%>
+                                                </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal-create -->
+                            <div class="modal fade" id="roomcreate-<%= floor[floor_number].Number %>" tabindex="-1"
+                                role="dialog" aria-labelledby="roomcreate-<%= floor[floor_number].Number %>-Label"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="floor-<%= floor[floor_number].Number %>-Label">
+                                                <%= floor[floor_number].Number %>
+                                                <% if (language==0){%>
+                                                    樓
+                                                <% }else if (language==1){%>
+                                                    楼
+                                                <% }else if (language==2){%>
+                                                    floor
+                                                <% }%>
+                                                >　
+                                                <% if (language==0){%>
+                                                    新增房號
+                                                <% }else if (language==1){%>
+                                                    新增房号
+                                                <% }else if (language==2){%>
+                                                    New house number
+                                                <% }%></h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="javascript:createvalue_room('room','<%= floor[floor_number].Number %>')">
+                                        <div class="modal-body">
+                                            <label for="roomvalue" class="col-form-label">
+                                                    <% if (language==0){%>
+                                                        房間號碼(樓層/房號):
+                                                    <% }else if (language==1){%>
+                                                        房间号码(楼层/房号):
+                                                    <% }else if (language==2){%>
+                                                        Room number (floor / room number):
+                                                    <% }%></label>
+                                            <input type="number" min="<%= floor[floor_number].Number %>01" max="<%= floor[floor_number].Number %>99"  class="form-control" id="roomvalue_<%= floor[floor_number].Number %>" required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    <% if (language==0){%>
+                                                        取消
+                                                        <% }else if (language==1){%>
+                                                            取消
+                                                        <% }else if (language==2){%>
+                                                            cancel
+                                                        <% }%>
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">
+                                                    <% if (language==0){%>
+                                                        確認
+                                                        <% }else if (language==1){%>
+                                                            确认
+                                                        <% }else if (language==2){%>
+                                                            confirm
+                                                        <% }%>
+                                            </button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <% for(room_number=0;room_number<room.length;room_number++) {%>
+                        <% if(room[room_number].FloorNumber==floor[floor_number].Number) {%>
+                        <td>
+                            <span style="font-size: 23px"><%= room[room_number].Number %>
+                                <% if (language==0){%>
+                                    房號
+                                <% }else if (language==1){%>
+                                    房号
+                                <% }else if (language==2){%>
+                                    Room No
+                                <% }%>
+                            </span>　<button type="button"
+                                class="btn btn-secondary" data-toggle="modal"
+                                data-target="#modal-<%= room[room_number].Number %>">
+                                <% if (language==0){%>
+                                    刪除
+                                <% }else if (language==1){%>
+                                    删除
+                                <% }else if (language==2){%>
+                                    Delete
+                                <% }%>
+                            </button>
+            
+                            <!-- Modal -->
+                            <div class="modal fade" id="modal-<%= room[room_number].Number %>" tabindex="-1" role="dialog"
+                                aria-labelledby="<%= room[room_number].Number %>-Label" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="<%= room[room_number].Number %>-Label">
+                                                <%= room[room_number].Number %>
+                                                <% if (language==0){%>
+                                                    房號
+                                                <% }else if (language==1){%>
+                                                    房号
+                                                <% }else if (language==2){%>
+                                                    Room No
+                                                <% }%>
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                                <% if (language==0){%>
+                                                    刪除資料
+                                                <% }else if (language==1){%>
+                                                    删除资料
+                                                <% }else if (language==2){%>
+                                                    Delete data
+                                                <% }%>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                <% if (language==0){%>
+                                                取消
+                                                <% }else if (language==1){%>
+                                                    取消
+                                                <% }else if (language==2){%>
+                                                    cancel
+                                                <% }%></button>
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="deletevalue_room('room','<%= room[room_number].Number %>')"
+                                                data-dismiss="modal">
+                                                <% if (language==0){%>
+                                                    確認
+                                                    <% }else if (language==1){%>
+                                                        确认
+                                                    <% }else if (language==2){%>
+                                                        confirm
+                                                    <% }%>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                        </td>
+                        <% } %>
+                        <% } %>
+                    </tr>
+                </tbody>
+            </table>
+            <% } %>
+    <% } %>
+
+</div>

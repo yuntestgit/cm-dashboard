@@ -1,0 +1,82 @@
+<% include header.ejs %>
+<input id="language" style="visibility:collapse;position:fixed" name="language" value="<%= language %>">
+<body>
+
+  <div id="load" class="loading" style="display:none;z-index:9999;">
+    <!-- <div>
+      <div class="c1"></div>
+      <div class="c2"></div>
+      <div class="c3"></div>
+      <div class="c4"></div>
+    </div>
+    <span>等待中...</span> -->
+    <div class="spinner-border text-warning" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+  <!-- 上方行 -->
+  <div class="container-fluid layer">
+    <div class="row layer_rom">
+      <div class="col-xl-2 col-md-2" style="background-color:white">
+        <h1 style="font-size: 20px;text-align: center;" class="layer_top"><a>
+          <% if (language==0){%>
+            LOGO 星聯宏和
+            <% }else if (language==1){%>
+            LOGO 星联宏和
+            <% }else if (language==2){%>
+            LOGO STA
+            <% }%>
+          </a></h1>
+      </div>
+      <div class="col-xl-8 col-md-8" style="background-color: #754F44">
+        <h1 style="font-size: 20px;" class="layer_top"><a style="color: white">
+            <% if (language==0){%>
+              照護資訊管理系統
+              <% }else if (language==1){%>
+              照护资讯管理系统
+              <% }else if (language==2){%>
+                Care information management system
+              <% }%>
+        </a></h1>
+      </div>
+      <div class="col-xl-1 col-md-1" style="background-color: #fff1b9">
+        <h1 style="font-size: 15px;text-align: center" class="layer_top"><%= name[0].Username %><br>
+          <% if (language==0){%>
+            設置管理中...
+            <% }else if (language==1){%>
+              设置管理中...
+            <% }else if (language==2){%>
+              Setting management...
+            <% }%>
+          </h1>
+      </div>
+      <div class="col-xl-1 col-md-1" style="background-color: #fff1b9">
+        <form action="/user/login" method="POST" style="float: right;margin-top: -3px">
+          <input name="account" style="visibility:collapse;width: 0px" value='<%= name[0].Account %>'>
+          <input name="password" style="visibility:collapse;width: 0px" value='<%= name[0].Password %>'>
+          <input name="language" style="visibility:collapse;width: 0px" value='<%= language %>'>
+          <!-- <a href="/user/login" class="post"><button style="float: right;margin-left: 20px;margin-top: -3px">退出</button></a> -->
+          <input type="submit" class="top_btn" value="退出">
+        </form>
+        <form action="/setting/show" method="POST" style="float: right;margin-top: -3px">
+          <input name="name" style="visibility:collapse;width: 0px" value='<%= name[0].Username %>'>
+          <!-- <input type="submit" value="設置"> -->
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- 側邊列 -->
+      <% include navbar.ejs %>
+      <!-- 主畫面 -->
+      <main role="main" class="col-md-10" style="background-color:white;margin-left:auto!important">
+        <% include main.ejs %>
+      </main>
+
+    </div>
+  </div>
+
+  <% include footer.ejs %>

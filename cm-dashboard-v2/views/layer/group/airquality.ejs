@@ -1,0 +1,392 @@
+<table style="width:100%;height:100%;background-color: white">
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="Temperature_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="Wet_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="PM_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="CO2_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="CHA_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="TVOC_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="Wat_chart" style="width:100%">FusionCharts will render here</div>
+        </td>
+    </tr>
+    <script type="text/javascript">
+        var Temperature_array = new Array();
+        var Wet_array = new Array();
+        var PM_array = new Array();
+        var CO2_array = new Array();
+        var CHA_array = new Array();
+        var TVOC_array = new Array();
+        var Wat_array = new Array();
+        var group_data = JSON.parse('<%- JSON.stringify(muti_data) %>');
+        var group_name = JSON.parse('<%- JSON.stringify(muti_name) %>');
+        var count = 0;
+        for (var i = 0; i < group_data.length; i++) {
+            for (var y = 0; y < group_data[i].length; y++) {
+                var x = new Array();
+                var z = new Array();
+                var w = new Array();
+                var a = new Array();
+                var b = new Array();
+                var c = new Array();
+                var d = new Array();
+                
+                x[0] = parseInt(group_data[i][y].Temperature, 10);
+                z[0] = parseInt(group_data[i][y].Wet, 10);
+                w[0] = parseInt(group_data[i][y].PM, 10);
+                a[0] = parseInt(group_data[i][y].CO2, 10);
+                b[0] = parseInt(group_data[i][y].CHA, 10);
+                c[0] = parseInt(group_data[i][y].TVOC, 10);
+                d[0] = parseInt(group_data[i][y].Wat, 10);
+
+                x[1] = z[1] = w[1]= a[1] = b[1] = c[1]= d[1]= group_name[i][0].Name;
+                x[2] = z[2] = w[2]= a[2] = b[2] = c[2]= d[2]= group_data[i][y].Time.split(' ')[0] + ' ' + group_data[i][y].Time.split(' ')[1];
+                Temperature_array[count] = x;
+                Wet_array[count] = z;
+                PM_array[count] = w;
+                CO2_array[count] = a;
+                CHA_array[count] = b;
+                TVOC_array[count] = c;
+                Wat_array[count] = d;
+                count++;
+            }
+        }
+        var Temperature_schema = [{
+            "name": "溫度",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        // console.log(head_array);
+        // console.log(foot_array);
+
+        var TemperatureDataStore = new FusionCharts.DataStore();
+        var TemperatureTable = TemperatureDataStore.createDataTable(Temperature_array, Temperature_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Temperature_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: TemperatureTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "溫度",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                xAxis: {
+                    initialinterval: {
+                        from: "07-Sep-19",
+                        to: "07-Sep-19"
+                    }
+                },
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+
+
+        var Wet_schema = [{
+            "name": "濕度",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var WetDataStore = new FusionCharts.DataStore();
+        var WetTable = WetDataStore.createDataTable(Wet_array, Wet_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Wet_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: WetTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "濕度",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+
+        var PM_schema = [{
+            "name": "PM2.0",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var PMDataStore = new FusionCharts.DataStore();
+        var PMTable = PMDataStore.createDataTable(PM_array, PM_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'PM_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: PMTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "PM2.0",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+        var CO2_schema = [{
+            "name": "二氧化碳",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var CO2DataStore = new FusionCharts.DataStore();
+        var CO2Table = CO2DataStore.createDataTable(CO2_array, CO2_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'CO2_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: CO2Table,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "二氧化碳",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+        var CHA_schema = [{
+            "name": "甲醛",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var CHADataStore = new FusionCharts.DataStore();
+        var CHATable = CHADataStore.createDataTable(CHA_array, CHA_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'CHA_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: CHATable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "甲醛",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+        var TVOC_schema = [{
+            "name": "揮發性氣體",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var TVOCDataStore = new FusionCharts.DataStore();
+        var TVOCTable = TVOCDataStore.createDataTable(TVOC_array, TVOC_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'TVOC_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: TVOCTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "揮發性氣體",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+        var Wat_schema = [{
+            "name": "瓦數",
+            "type": "number"
+        }, {
+            "name": "Type",
+            "type": "string"
+        }, {
+            "name": "Time",
+            "type": "date",
+            "format": "%Y-%m-%d %H:%M:%S"
+        }]
+        var WatDataStore = new FusionCharts.DataStore();
+        var WatTable = WatDataStore.createDataTable(Wat_array, Wat_schema);
+
+        new FusionCharts({
+            type: 'timeseries',
+            renderAt: 'Wat_chart',
+            width: "90%",
+            height: 650,
+            dataSource: {
+                data: WatTable,
+                "series": "Type",
+                "yAxis": [{
+                    "plot": {
+                        "value": "瓦數",//對應schema的欄位
+                        "connectNullData": true,
+                        "style": {
+                            "line.null": {
+                                "stroke-dasharray": "10",
+                                "stroke": "#d0d0d0"
+                            },
+                            "border": 30,
+                        },
+                        "lineThickness": "20"
+                    },
+                    "min": "0",
+                    "max": "100",
+                }],
+                chart: {
+                    exportEnabled: "1", //Enable Export Feature
+                }
+            }
+        }).render()
+    </script>
+</table>

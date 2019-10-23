@@ -1,0 +1,314 @@
+<table style="width:100%;height:100%;background-color: white">
+    <tr style="height: 50%">
+        <td style="width:50%">
+            <div id="container" style="width:100%">FusionCharts will render here</div>
+            <script type="text/javascript">
+                
+                var temp_array = new Array();
+                var database_data = JSON.parse('<%- JSON.stringify(data) %>');
+                
+                for (var i = 0; i < database_data.length; i++) {
+                    var x = new Array();
+                    x[0] = parseInt(database_data[i].Temperature, 10);
+                    x[1] = parseInt(database_data[i].Wet, 10);
+                    x[2] = parseInt(database_data[i].PM, 10);
+                    x[3] = parseInt(database_data[i].CO2, 10);
+                    x[4] = parseInt(database_data[i].CHA, 10);
+                    x[5] = parseInt(database_data[i].TVOC, 10);
+                    x[6] = parseInt(database_data[i].Wat, 10);
+                    x[7] = database_data[i].Time.split(' ')[0] + ' ' + database_data[i].Time.split(' ')[1];
+                    temp_array[i] = x;
+                }
+                var ss = [{
+                    "name": "濕度",
+                    "type": "number"
+                }, {
+                    "name": "溫度",
+                    "type": "number"
+                }, {
+                    "name": "PM2.0",
+                    "type": "number"
+                }, {
+                    "name": "二氧化碳",
+                    "type": "number"
+                }, {
+                    "name": "甲醛",
+                    "type": "number"
+                }, {
+                    "name": "揮發性氣體",
+                    "type": "number"
+                }, {
+                    "name": "電量",
+                    "type": "number"
+                }, {
+                    "name": "Time",
+                    "type": "date",
+                    "format": "%Y-%m-%d %H:%M:%S"
+                }]
+                // console.log(temp_array);
+                var fusionDataStore = new FusionCharts.DataStore();
+                var fusionTable = fusionDataStore.createDataTable(temp_array, ss);
+                if('<%- threshold[0].Threshold %>'){
+                    var database_threshold =JSON.parse('<%- threshold[0].Threshold %>');
+                        new FusionCharts({
+                        type: 'timeseries',
+                        renderAt: 'container',
+                        width: "90%",
+                        height: 650,
+                        dataSource: {
+                            data: fusionTable,
+                            "yAxis": [{
+                                "plot": {
+                                    "value": "濕度",//對應schema的欄位
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                        "border": 30,
+                                    },
+                                    "lineThickness": "20"
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[0]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "溫度",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[1]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "PM2.0",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[2]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "二氧化碳",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[3]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "甲醛",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[4]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "揮發性氣體",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[5]
+                                }],
+                            }, {
+                                "plot": {
+                                    "value": "電量",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                                referenceLine: [{
+                                    "label": "告警值",
+                                    "value": database_threshold[6]
+                                }],
+                            }],
+                            xAxis: {
+                                initialinterval: {
+                                    from: "07-Sep-19",
+                                    to: "07-Sep-19"
+                                }
+                            },
+                            chart: {
+                                exportEnabled: "1", //Enable Export Feature
+                            }
+                        }
+                    }).render()
+                }
+                else{
+                    new FusionCharts({
+                        type: 'timeseries',
+                        renderAt: 'container',
+                        width: "90%",
+                        height: 650,
+                        dataSource: {
+                            data: fusionTable,
+                            "yAxis": [{
+                                "plot": {
+                                    "value": "濕度",//對應schema的欄位
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                        "border": 30,
+                                    },
+                                    "lineThickness": "20"
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }, {
+                                "plot": {
+                                    "value": "溫度",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }, {
+                                "plot": {
+                                    "value": "PM2.0",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }, {
+                                "plot": {
+                                    "value": "二氧化碳",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }, {
+                                "plot": {
+                                    "value": "甲醛",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }, {
+                                "plot": {
+                                    "value": "揮發性氣體",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }, {
+                                "plot": {
+                                    "value": "瓦數",
+                                    "connectNullData": true,
+                                    "style": {
+                                        "line.null": {
+                                            "stroke-dasharray": "10",
+                                            "stroke": "#d0d0d0"
+                                        },
+                                    },
+                                },
+                                "min": "0",
+                                "max": "100",
+                            }],
+                            xAxis: {
+                                initialinterval: {
+                                    from: "07-Sep-19",
+                                    to: "07-Sep-19"
+                                }
+                            },
+                            chart: {
+                                exportEnabled: "1", //Enable Export Feature
+                            }
+                        }
+                    }).render()
+                }
+                        
+            </script>
+        </td>
+        <td style="width:50%">
+        </td>
+    </tr>
+</table>

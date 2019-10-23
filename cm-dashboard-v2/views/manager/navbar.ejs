@@ -1,0 +1,35 @@
+<div class="col-md-2" style="display: block;background-color: #FDD692" id="navbar">
+  <div class="container-fluid">
+
+    <hr style="border:1.5px solid;">
+    <div style="text-align: center">
+      <a style="font-size: 18px;" href="javascript:history.go(0)">功能列</a>
+    </div>
+    <hr style="border:1.5px solid;">
+
+    <div class="accordion" id="accordionTool">
+
+      <div class="card" style="background-color: unset;border: unset">
+        <div class="card-header" id="cpname_heading" style="background-color: unset;border: unset;padding: 5px 0px">
+          <a class="card-link" data-toggle="collapse" data-target="#cpname_collapse" aria-expanded="true"
+            aria-controls="cpname_collapse">
+            <button type="button" class="btn" style="width: 100%;text-align: left;border: 1px solid black">院所總覽</button>
+          </a>
+        </div>
+        <div id="cpname_collapse" class="collapse show" aria-labelledby="cpname_heading"
+          data-parent="#accordionTool">
+          <% for(cn=0;cn<Company.length;cn++) {%>
+            <% if(Company[cn].Cpname != "STA") {%>
+              <div class="card-body" style="text-align: right;padding: 0.25rem">
+                <a style="font-size: 16px;color:white;">
+                  <button type="button" class="btn" style="width: 80%;border: 1px solid"><%= Company[cn].Name %></button>
+                </a>
+              </div>
+            <% } %>
+          <% } %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

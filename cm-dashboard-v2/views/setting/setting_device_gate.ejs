@@ -1,0 +1,1630 @@
+<div id="main" style="height:850px;overflow-y:scroll">
+
+    <button type="button" class="btn btn-primary" style="float: right;margin-top: 10px;margin-right: 10px"
+        data-toggle="modal" data-target="#creategateway">
+        <% if (language==0){%>
+            新增閘道器
+        <% }else if (language==1){%>
+            新增闸道器
+        <% }else if (language==2){%>
+            New gateway
+        <% }%>
+        </button>
+    <!-- Modal-create -->
+    <div class="modal fade" id="creategateway" tabindex="-1" role="dialog" aria-labelledby="createLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createLabel">
+                        <% if (language==0){%>
+                            新增閘道器
+                        <% }else if (language==1){%>
+                            新增闸道器
+                        <% }else if (language==2){%>
+                            New gateway
+                        <% }%>    
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form style="text-align: left" action="javascript:createvalue_gateway('gateway','<%= language %>')">
+                        <label for="mac" class="col-form-label">
+                            <% if (language==0){%>
+                                識別碼：
+                            <% }else if (language==1){%>
+                                识别码：
+                            <% }else if (language==2){%>
+                                Identifier:
+                            <% }%>
+                        </label>
+                        <input type="text" class="form-control" id="mac" required>
+                        <label for="name" class="col-form-label">
+                            <% if (language==0){%>
+                                名稱:
+                            <% }else if (language==1){%>
+                                名称:
+                            <% }else if (language==2){%>
+                                name:
+                            <% }%> 
+                        </label>
+                        <input type="text" class="form-control" id="name" required>
+                        <label for="description" class="col-form-label">
+                            <% if (language==0){%>
+                                描述:
+                            <% }else if (language==1){%>
+                                描述:
+                            <% }else if (language==2){%>
+                                description:
+                            <% }%> 
+                        </label>
+                        <input type="text" class="form-control" id="description">
+
+                        <label for="floor" class="col-form-label">
+                            <% if (language==0){%>
+                                樓層:
+                            <% }else if (language==1){%>
+                                楼层:
+                            <% }else if (language==2){%>
+                                floor:
+                            <% }%> 
+                        </label>
+                        <select class="form-control" id="floor" onchange="giveSelection(this.value)">
+                            <option value="">
+                                <% if (language==0){%>
+                                    暫無
+                                <% }else if (language==1){%>
+                                    暂无
+                                <% }else if (language==2){%>
+                                    No data
+                                <% }%>
+                            </option>
+                            <% for(f=0;f<floor.length;f++) {%>
+                            <option value='<%= floor[f].Number %>'><%= floor[f].Number %></option>
+                            <% } %>
+                        </select>
+                        <%  %>
+
+                        <label for="room" class="col-form-label">
+                            <% if (language==0){%>
+                                房號:
+                            <% }else if (language==1){%>
+                                房号:
+                            <% }else if (language==2){%>
+                                Room No:
+                            <% }%> 
+                        </label>
+                        <select id="room" class="form-control">
+                            <option data-option="" value="">
+                                <% if (language==0){%>
+                                    暫無
+                                <% }else if (language==1){%>
+                                    暂无
+                                <% }else if (language==2){%>
+                                    No data
+                                <% }%>
+                            </option>
+                            <% for(r=0;r<room.length;r++) {%>
+                            <option data-option='<%= room[r].FloorNumber %>' value='<%= room[r].Number %>'><%= room[r].Number %></option>
+                            <% } %>
+                        </select>
+
+                        <script>
+                            var sele1 = document.querySelector('#floor');
+                            var sele2 = document.querySelector('#room');
+                            var optionse2 = sele2.querySelectorAll('option');
+                            function giveSelection(selValue) {
+                            sele2.innerHTML =　'';
+                                for(var i = 0; i < optionse2.length; i++) {
+                                    if(optionse2[i].dataset.option === selValue) {
+                                    sele2.appendChild(optionse2[i]);
+                                    }
+                                }
+                            }
+                            giveSelection(sele1.value);
+                        </script>
+
+                        <label for="device1" class="col-form-label">
+                            <% if (language==0){%>
+                                連接裝置-1:
+                            <% }else if (language==1){%>
+                                连接装置-1:
+                            <% }else if (language==2){%>
+                                Connecting device-1:
+                            <% }%> 
+                        </label>
+                        <select class="form-control" id="device1" onmousedown="getnowvalue('deice1',this.value)" onchange="giveSelection_device1(this.value)">
+                            <option value="">
+                                <% if (language==0){%>
+                                    暫無
+                                <% }else if (language==1){%>
+                                    暂无
+                                <% }else if (language==2){%>
+                                    No data
+                                <% }%>
+                            </option>
+                            <% if(gateway[0].id == null) {%>
+                                <% for(d1=0;d1<device.length;d1++) {%>
+                                    <option data-option='<%= device[d1].Mac %>' value='<%= device[d1].Mac %>'><%= device[d1].Name %></option>
+                                <% } %>
+                            <% }else{ %>
+                                <% var ar1 = new Array(); %>
+                                <% for(g1=0;g1<gateway.length;g1++) {%>
+                                    <% if(gateway[g1].Connectdevice1 != null) {%>
+                                        <% ar1.push(gateway[g1].Connectdevice1) %>
+                                    <% } %>
+                                    <% if(gateway[g1].Connectdevice2 != null) {%>
+                                        <% ar1.push(gateway[g1].Connectdevice2) %>
+                                    <% } %>
+                                    <% if(gateway[g1].Connectdevice3 != null) {%>
+                                        <% ar1.push(gateway[g1].Connectdevice3) %>
+                                    <% } %>
+                                    <% if(gateway[g1].Connectdevice4 != null) {%> 
+                                        <% ar1.push(gateway[g1].Connectdevice4) %>
+                                    <% } %>
+                                <% } %>
+                                <% var i1=1; %>
+                                <% for(d1=0;d1<device.length;d1++) {%>
+                                    <% for(ar1l=0;ar1l<ar1.length;ar1l++) {%>
+                                        <% if(device[d1].Mac == ar1[ar1l]) {%>
+                                            <% i1=0; %>
+                                        <% } %>
+                                    <% } %>
+                                    <% if(i1==1) {%>
+                                        <option data-option='<%= device[d1].Mac %>' value='<%= device[d1].Mac %>'><%= device[d1].Name %></option>
+                                    <% }else{ %>
+                                        <% i1=1; %>
+                                    <% } %>
+                                <% } %>    
+                            <% } %>
+                        </select>
+                        <label for="device2" class="col-form-label">
+                            <% if (language==0){%>
+                                連接裝置-2:
+                            <% }else if (language==1){%>
+                                连接装置-2:
+                            <% }else if (language==2){%>
+                                Connecting device-2:
+                            <% }%>
+                        </label>
+                        <select class="form-control" id="device2" onmousedown="getnowvalue('deice2',this.value)" onchange="giveSelection_device2(this.value)">
+                            <option value="" selected>
+                                <% if (language==0){%>
+                                    暫無
+                                <% }else if (language==1){%>
+                                    暂无
+                                <% }else if (language==2){%>
+                                    No data
+                                <% }%>
+                            </option>
+                            <% if(gateway[0].id == null) {%>
+                                <% for(d2=0;d2<device.length;d2++) {%>
+                                    <option data-option='<%= device[d2].Mac %>' value='<%= device[d2].Mac %>'><%= device[d2].Name %></option>
+                                <% } %>
+                            <% }else{ %>
+                                <% var ar2 = new Array(); %>
+                                <% for(g2=0;g2<gateway.length;g2++) {%>
+                                    <% if(gateway[g2].Connectdevice1 != null) {%>
+                                        <% ar2.push(gateway[g2].Connectdevice1) %>
+                                    <% } %>
+                                    <% if(gateway[g2].Connectdevice2 != null) {%>
+                                        <% ar2.push(gateway[g2].Connectdevice2) %>
+                                    <% } %>
+                                    <% if(gateway[g2].Connectdevice3 != null) {%>
+                                        <% ar2.push(gateway[g2].Connectdevice3) %>
+                                    <% } %>
+                                    <% if(gateway[g2].Connectdevice4 != null) {%>
+                                        <% ar2.push(gateway[g2].Connectdevice4) %>
+                                    <% } %>
+                                <% } %>
+                                <% var i2=1; %>
+                                <% for(d2=0;d2<device.length;d2++) {%>
+                                    <% for(ar2l=0;ar2l<ar2.length;ar2l++) {%>
+                                            <% if(device[d2].Mac == ar2[ar2l]) {%>
+                                                <% i2=0; %>
+                                            <% } %>
+                                        <% } %>
+                                        <% if(i2==1) {%>
+                                            <option data-option='<%= device[d2].Mac %>' value='<%= device[d2].Mac %>'><%= device[d2].Name %></option>
+                                        <% }else{ %>
+                                            <% i2=1; %>
+                                        <% } %>
+                                    <% } %>    
+                            <% } %>
+                        </select>
+                        <label for="device3" class="col-form-label">
+                                <% if (language==0){%>
+                                    連接裝置-3:
+                                <% }else if (language==1){%>
+                                    连接装置-3:
+                                <% }else if (language==2){%>
+                                    Connecting device-3:
+                                <% }%>
+                        </label>
+                        <select class="form-control" id="device3" onmousedown="getnowvalue('deice3',this.value)" onchange="giveSelection_device3(this.value)">
+                            <option value="">
+                                    <% if (language==0){%>
+                                        暫無
+                                    <% }else if (language==1){%>
+                                        暂无
+                                    <% }else if (language==2){%>
+                                        No data
+                                    <% }%>
+                            </option>
+                            <% if(gateway[0].id == null) {%>
+                                <% for(d3=0;d3<device.length;d3++) {%>
+                                    <option data-option='<%= device[d3].Mac %>' value='<%= device[d3].Mac %>'><%= device[d3].Name %></option>
+                                <% } %>
+                            <% }else{ %>
+                                <% var ar3 = new Array(); %>
+                                <% for(g3=0;g3<gateway.length;g3++) {%>
+                                    <% if(gateway[g3].Connectdevice1 != null) {%>
+                                        <% ar3.push(gateway[g3].Connectdevice1) %>
+                                    <% } %>
+                                    <% if(gateway[g3].Connectdevice2 != null) {%>
+                                        <% ar3.push(gateway[g3].Connectdevice2) %>
+                                    <% } %>
+                                    <% if(gateway[g3].Connectdevice3 != null) {%>
+                                        <% ar3.push(gateway[g3].Connectdevice3) %>
+                                    <% } %>
+                                    <% if(gateway[g3].Connectdevice4 != null) {%>
+                                        <% ar3.push(gateway[g3].Connectdevice4) %>
+                                    <% } %>
+                                <% } %>
+                                <% var i3=1; %>
+                                <% for(d3=0;d3<device.length;d3++) {%>
+                                    <% for(ar3l=0;ar3l<ar3.length;ar3l++) {%>
+                                        <% if(device[d3].Mac == ar3[ar3l]) {%>
+                                            <% i3=0; %>
+                                        <% } %>
+                                    <% } %>
+                                    <% if(i3==1) {%>
+                                        <option data-option='<%= device[d3].Mac %>' value='<%= device[d3].Mac %>'><%= device[d3].Name %></option>
+                                    <% }else{ %>
+                                        <% i3=1; %>
+                                    <% } %>
+                                <% } %>   
+                            <% } %>
+                        </select>
+                        <label for="device4" class="col-form-label">
+                                <% if (language==0){%>
+                                    連接裝置-4:
+                                <% }else if (language==1){%>
+                                    连接装置-4:
+                                <% }else if (language==2){%>
+                                    Connecting device-4:
+                                <% }%>
+                        </label>
+                        <select class="form-control" id="device4" onmousedown="getnowvalue('deice4',this.value)" onchange="giveSelection_device4(this.value)">
+                            <option value="">
+                                    <% if (language==0){%>
+                                        暫無
+                                    <% }else if (language==1){%>
+                                        暂无
+                                    <% }else if (language==2){%>
+                                        No data
+                                    <% }%>
+                            </option>
+                            <% if(gateway[0].id == null) {%>
+                                <% for(d4=0;d4<device.length;d4++) {%>
+                                    <option data-option='<%= device[d4].Mac %>' value='<%= device[d4].Mac %>'><%= device[d4].Name %></option>
+                                <% } %>
+                            <% }else{ %>
+                                <% var ar4 = new Array(); %>
+                                <% for(g4=0;g4<gateway.length;g4++) {%>
+                                    <% if(gateway[g4].Connectdevice1 != null) {%>
+                                        <% ar4.push(gateway[g4].Connectdevice1)  %>
+                                    <% } %>
+                                    <% if(gateway[g4].Connectdevice2 != null) {%>
+                                        <% ar4.push(gateway[g4].Connectdevice2)  %>
+                                    <% } %>
+                                    <% if(gateway[g4].Connectdevice3 != null) {%>
+                                        <% ar4.push(gateway[g4].Connectdevice3)  %>
+                                    <% } %>
+                                    <% if(gateway[g4].Connectdevice4 != null) {%>
+                                        <% ar4.push(gateway[g4].Connectdevice4)  %>
+                                    <% } %>
+                                <% } %>
+                                <% var i4=1; %>
+                                <% for(d4=0;d4<device.length;d4++) {%>
+                                    <% for(ar4l=0;ar4l<ar4.length;ar4l++) {%>
+                                        <% if(device[d4].Mac == ar4[ar4l]) {%>
+                                            <% i4=0; %>
+                                        <% } %>
+                                    <% } %>
+                                    <% if(i4==1) {%>
+                                        <option data-option='<%= device[d4].Mac %>' value='<%= device[d4].Mac %>'><%= device[d4].Name %></option>
+                                    <% }else{ %>
+                                        <% i4=1; %>
+                                    <% } %>
+                                <% } %> 
+                            <% } %>
+                        </select>
+
+                        <script>
+                            var dev1 = document.querySelector('#device1');
+                            var dev2 = document.querySelector('#device2');
+                            var dev3 = document.querySelector('#device3');
+                            var dev4 = document.querySelector('#device4');
+
+                            var option1 = dev1.querySelectorAll('option');
+                            var option2 = dev2.querySelectorAll('option');
+                            var option3 = dev3.querySelectorAll('option');
+                            var option4 = dev4.querySelectorAll('option');
+                            
+                            var newoption1 = option1;
+                            var newoption2 = option2;
+                            var newoption3 = option3;
+                            var newoption4 = option4;
+
+                            function getnowvalue(device,Value) {
+                                var now = Value;
+                                // console.log("now:"+now);
+                            }
+                            function giveSelection_device1(Value) {
+                                if(Value!=""){
+                                    if(Value === dev2.value || Value === dev3.value || Value === dev4.value) {
+                                        if ('<%= language%>'==0)
+                                            alert("連接裝置不可重複");
+                                        else if('<%= language%>'==1)
+                                            alert("連接裝置不可重複");
+                                        else if('<%= language%>'==2)
+                                            alert("Connection device is not repeatable");
+                                        dev1.selectedIndex=0;
+                                    }
+                                }                          
+                            }           
+                            function giveSelection_device2(Value) {
+                                if(Value!=""){
+                                    if(Value === dev1.value || Value === dev3.value || Value === dev4.value) {
+                                        if ('<%= language%>'==0)
+                                            alert("連接裝置不可重複");
+                                        else if('<%= language%>'==1)
+                                            alert("連接裝置不可重複");
+                                        else if('<%= language%>'==2)
+                                            alert("Connection device is not repeatable");
+                                        dev2.selectedIndex=0;
+                                    }
+                                }
+                            }
+                            function giveSelection_device3(Value) {
+                                if(Value!=""){
+                                    if(Value === dev1.value || Value === dev2.value || Value === dev4.value) {
+                                        if ('<%= language%>'==0)
+                                            alert("連接裝置不可重複");
+                                        else if('<%= language%>'==1)
+                                            alert("連接裝置不可重複");
+                                        else if('<%= language%>'==2)
+                                            alert("Connection device is not repeatable");
+                                        dev3.selectedIndex=0;
+                                    }
+                                }
+                            }
+                            function giveSelection_device4(Value) {
+                                if(Value!=""){
+                                    if(Value === dev1.value || Value === dev2.value || Value === dev3.value) {
+                                        if ('<%= language%>'==0)
+                                            alert("連接裝置不可重複");
+                                        else if('<%= language%>'==1)
+                                            alert("連接裝置不可重複");
+                                        else if('<%= language%>'==2)
+                                            alert("Connection device is not repeatable");
+                                        dev4.selectedIndex=0;
+                                    }
+                                }
+                            }
+                        </script>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                    <% if (language==0){%>
+                                        取消
+                                    <% }else if (language==1){%>
+                                        取消
+                                    <% }else if (language==2){%>
+                                        cancel
+                                    <% }%>
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                    <% if (language==0){%>
+                                        確認
+                                    <% }else if (language==1){%>
+                                        确认
+                                    <% }else if (language==2){%>
+                                        confirm
+                                    <% }%>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <% if(gateway[0].id==null){ %>
+        <% if (language==0){%>
+            暫無資料請先點擊右方按鈕新增資料
+        <% }else if (language==1){%>
+            暂无资料请先点击右方按钮新增资料
+        <% }else if (language==2){%>
+            No information, please click the button on the right to add information.
+        <% }%>
+        
+    
+    <% }else{ %>
+
+    <table id="gatawaytable">
+        <thead>
+            <tr>
+                <th>
+                    <% if (language==0){%>
+                        識別碼：
+                    <% }else if (language==1){%>
+                        识别码：
+                    <% }else if (language==2){%>
+                        Identifier:
+                    <% }%> 
+                </th>
+                <th>
+                    <% if (language==0){%>
+                        名稱:
+                    <% }else if (language==1){%>
+                        名称:
+                    <% }else if (language==2){%>
+                        name:
+                    <% }%> 
+                </th>
+                <th>
+                    <% if (language==0){%>
+                    描述:
+                    <% }else if (language==1){%>
+                        描述:
+                    <% }else if (language==2){%>
+                        description:
+                    <% }%> 
+                </th>
+                <th>
+                    <% if (language==0){%>
+                        樓層:
+                    <% }else if (language==1){%>
+                        楼层:
+                    <% }else if (language==2){%>
+                        floor:
+                    <% }%> 
+                </th>
+                <th>
+                    <% if (language==0){%>
+                        房號:
+                    <% }else if (language==1){%>
+                        房号:
+                    <% }else if (language==2){%>
+                        Room No:
+                    <% }%> 
+                </th>
+                <th>
+                    <% if (language==0){%>
+                        連接裝置-1:
+                    <% }else if (language==1){%>
+                        连接装置-1:
+                    <% }else if (language==2){%>
+                        Connecting device-1:
+                    <% }%>
+                </th>
+                <th>
+                    <% if (language==0){%>
+                        連接裝置-2:
+                    <% }else if (language==1){%>
+                        连接装置-2:
+                    <% }else if (language==2){%>
+                        Connecting device-2:
+                    <% }%>
+                </th>
+                <th>
+                    <% if (language==0){%>
+                        連接裝置-3:
+                    <% }else if (language==1){%>
+                        连接装置-3:
+                    <% }else if (language==2){%>
+                        Connecting device-3:
+                    <% }%>
+                </th>
+                <th>
+                    <% if (language==0){%>
+                        連接裝置-4:
+                    <% }else if (language==1){%>
+                        连接装置-4:
+                    <% }else if (language==2){%>
+                        Connecting device-4:
+                    <% }%>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(x=0;x<gateway.length;x++) {%>
+            <tr>
+                <% if(gateway[x].Mac==null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td><%= gateway[x].Mac %></td>
+                <% } %>
+
+                <% if(gateway[x].Name==null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td><%= gateway[x].Name %></td>
+                <% } %>
+
+                <% if(gateway[x].Description==null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td><%= gateway[x].Description %></td>
+                <% } %>
+
+                <% if(gateway[x].Floor==null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td><%= gateway[x].Floor %></td>
+                <% } %>
+
+                <% if(gateway[x].Room==null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td><%= gateway[x].Room %></td>
+                <% } %>
+
+                <% if(gateway[x].Connectdevice1==null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td>
+                    <% for(connect1=0;connect1<device.length;connect1++) {%>
+                        <% if(gateway[x].Connectdevice1==device[connect1].Mac) {%>
+                            <%= device[connect1].Name %>
+                        <% } %>
+                    <% } %>
+                </td>
+                <% } %>
+
+                <% if(gateway[x].Connectdevice2==null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td>
+                    <% for(connect2=0;connect2<device.length;connect2++) {%>
+                        <% if(gateway[x].Connectdevice2==device[connect2].Mac) {%>
+                            <%= device[connect2].Name %>
+                        <% } %>
+                    <% } %>
+                </td>
+                <% } %>
+
+                <% if(gateway[x].Connectdevice3==null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td>
+                    <% for(connect3=0;connect3<device.length;connect3++) {%>
+                        <% if(gateway[x].Connectdevice3==device[connect3].Mac) {%>
+                            <%= device[connect3].Name %>
+                        <% } %>
+                    <% } %>
+                </td>
+                <% } %>
+
+                <% if(gateway[x].Connectdevice4==null) {%>
+                <td>
+                        <% if (language==0){%>
+                            暫無
+                        <% }else if (language==1){%>
+                            暂无
+                        <% }else if (language==2){%>
+                            No data
+                        <% }%>
+                </td>
+                <% }else{ %>
+                <td>
+                    <% for(connect4=0;connect4<device.length;connect4++) {%>
+                        <% if(gateway[x].Connectdevice4==device[connect4].Mac) {%>
+                            <%= device[connect4].Name %>
+                        <% } %>
+                    <% } %>
+                </td>
+                <% } %>
+
+                <td><button type="button" class="btn btn-info" data-toggle="modal"
+                        data-target="#modal-<%= gateway[x].Mac %>-mod">
+                        <% if (language==0){%>
+                            修改
+                        <% }else if (language==1){%>
+                            修改
+                        <% }else if (language==2){%>
+                            modify
+                        <% }%>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal-<%= gateway[x].Mac %>-mod" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= gateway[x].Mac %>-Label-mod" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= gateway[x].Mac %>-Label-mod">
+                                            <% if (language==0){%>
+                                                修改
+                                            <% }else if (language==1){%>
+                                                修改
+                                            <% }else if (language==2){%>
+                                                modify
+                                            <% }%>
+                                        　<span
+                                            style="font-size: 25px;font-style:italic"><%= gateway[x].Name %></span>　
+                                            <% if (language==0){%>
+                                                資料
+                                            <% }else if (language==1){%>
+                                                资料
+                                            <% }else if (language==2){%>
+                                                data
+                                            <% }%>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form style="text-align: left">
+                                        <label for="mac" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    識別碼：
+                                                <% }else if (language==1){%>
+                                                    识别码：
+                                                <% }else if (language==2){%>
+                                                    Identifier:
+                                                <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= gateway[x].Mac %>'
+                                            id="mac_modify<%= gateway[x].Mac %>" readonly>
+                                        <label for="name" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    名稱:
+                                                <% }else if (language==1){%>
+                                                    名称:
+                                                <% }else if (language==2){%>
+                                                    name:
+                                                <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= gateway[x].Name %>'
+                                            id="name_modify<%= gateway[x].Mac %>">
+                                        <label for="description" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    描述:
+                                                    <% }else if (language==1){%>
+                                                        描述:
+                                                    <% }else if (language==2){%>
+                                                        description:
+                                                    <% }%> 
+                                        </label>
+                                        <% if(gateway[x].Description == null) {%>
+                                        <input type="text" class="form-control" value=''
+                                            id="description_modify<%= gateway[x].Mac %>">
+                                        <% }else{ %>
+                                        <input type="text" class="form-control" value='<%= gateway[x].Description %>'
+                                            id="description_modify<%= gateway[x].Mac %>">
+                                        <% } %>
+                                        <label for="floor" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    樓層:
+                                                <% }else if (language==1){%>
+                                                    楼层:
+                                                <% }else if (language==2){%>
+                                                    floor:
+                                                <% }%> 
+                                        </label>
+                                        <select id="floor_modify<%= gateway[x].Mac %>" class="form-control" onchange="giveSelection1('<%= gateway[x].Mac %>',this.value)">
+                                            <% if(gateway[x].Floor == null) {%>
+                                            <option value='' selected="selected">
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%>
+                                            </option>
+                                            <% for(fg=0;fg<floor.length;fg++) {%>
+                                            <option value='<%= floor[fg].Number %>'><%= floor[fg].Number %></option>
+                                            <% } %>
+                                            <% }else{ %>
+                                            <option value=''>
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%>
+                                            </option>
+                                            <% for( fgf=0;fgf<floor.length;fgf++) {%>
+                                            <% if( gateway[x].Floor == floor[fgf].Number ) {%>
+                                            <option value='<%= floor[fgf].Number %>' selected="selected">
+                                                <%= floor[fgf].Number %></option>
+                                            <% }else{ %>
+                                            <option value='<%= floor[fgf].Number %>'><%= floor[fgf].Number %></option>
+                                            <% } %>
+                                            <% } %>
+                                            <% } %>
+                                        </select>
+                                        <label for="room" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    房號:
+                                                <% }else if (language==1){%>
+                                                    房号:
+                                                <% }else if (language==2){%>
+                                                    Room No:
+                                                <% }%> 
+                                        </label>
+                                        <select id="room_modify<%= gateway[x].Mac %>" class="form-control">
+                                            <% if(gateway[x].Room == null) {%>
+                                            <option value='' selected="selected">
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%>
+                                            </option>
+                                            <% for(rg=0;rg<room.length;rg++) {%>
+                                            <option value='<%= room[rg].Number %>'><%= room[rg].Number %></option>
+                                            <% } %>
+                                            <% }else{ %>
+                                            <option value=''>
+                                                    <% if (language==0){%>
+                                                        暫無
+                                                    <% }else if (language==1){%>
+                                                        暂无
+                                                    <% }else if (language==2){%>
+                                                        No data
+                                                    <% }%>
+                                            </option>
+                                            <% for( rgr=0;rgr<room.length;rgr++) {%>
+                                            <% if( gateway[x].Room == room[rgr].Number ) {%>
+                                            <option value='<%= room[rgr].Number %>' selected="selected">
+                                                <%= room[rgr].Number %></option>
+                                            <% }else{ %>
+                                            <option value='<%= room[rgr].Number %>'><%= room[rgr].Number %></option>
+                                            <% } %>
+                                            <% } %>
+                                            <% } %>
+                                        </select>
+                                        <script>
+                                            var sel11;
+                                            var sel22;
+                                            var options22;
+                                            function giveSelection1(id,selValue) {
+                                                sel11 = document.querySelector('#floor_modify'+id);
+                                                sel22 = document.querySelector('#room_modify'+id);
+                                                options22 = sel22.querySelectorAll('option'); 
+                                                sel22.innerHTML = '';
+                                                for(var i = 0; i < optionse2.length; i++) {
+                                                    if(optionse2[i].dataset.option === selValue) {
+                                                        sel22.appendChild(optionse2[i]);
+                                                    }
+                                                }
+                                            }
+                                        </script>
+
+                                        <label for="device1_modify" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    連接裝置-1:
+                                                <% }else if (language==1){%>
+                                                    连接装置-1:
+                                                <% }else if (language==2){%>
+                                                    Connecting device-1:
+                                                <% }%>
+                                        </label>
+                                        <select id="device1_modify<%= gateway[x].Mac %>" class="form-control" onmousedown="getnowvalue1('<%= gateway[x].Mac %>',this.value)" onchange="modifySelection_device1('<%= gateway[x].Mac %>',this.value)">
+                                            <% if(gateway[x].id == null) {%>
+                                                <option value='' selected="selected">
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%>
+                                                </option>
+                                                <% for(d1m=0;d1m<device.length;d1m++) {%>
+                                                <option value='<%= device[d1m].Mac %>'><%= device[d1m].Name %></option>
+                                                <% } %>
+                                            <% }else{ %>
+                                                <option value=''>
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%>
+                                                </option>
+                                                <% var ar1d = new Array(); %>
+                                                <% for(g1d=0;g1d<gateway.length;g1d++) {%>
+                                                    <% if(gateway[g1d].Connectdevice1 != null) {%>
+                                                        <% ar1d.push(gateway[g1d].Connectdevice1) %>
+                                                    <% } %>
+                                                    <% if(gateway[g1d].Connectdevice2 != null) {%>
+                                                        <% ar1d.push(gateway[g1d].Connectdevice2) %>
+                                                    <% } %>
+                                                    <% if(gateway[g1d].Connectdevice3 != null) {%>
+                                                        <% ar1d.push(gateway[g1d].Connectdevice3) %>
+                                                    <% } %>
+                                                    <% if(gateway[g1d].Connectdevice4 != null) {%>
+                                                        <% ar1d.push(gateway[g1d].Connectdevice4) %>
+                                                    <% } %>
+                                                <% } %>
+                                                <% var i1d=1; %>
+                                                <% for( d1mn=0;d1mn<device.length;d1mn++) {%>
+                                                    <% if(gateway[x].Connectdevice1 == device[d1mn].Mac) {%>
+                                                        <option value='<%= device[d1mn].Mac %>' selected="selected"><%= device[d1mn].Name %></option>
+                                                    <% } %>
+                                                    <% for(ar1dl=0;ar1dl<ar1d.length;ar1dl++) {%>
+                                                        <% if(device[d1mn].Mac == ar1d[ar1dl]) {%>
+                                                            <% i1d=0; %>
+                                                        <% } %>
+                                                    <% } %>
+                                                    <% if(i1d==1) {%>
+                                                        <option value='<%= device[d1mn].Mac %>'><%= device[d1mn].Name %></option>
+                                                    <% }else{ %>
+                                                        <% i1d=1; %>
+                                                    <% } %>
+                                                <% } %>
+                                            <% } %>
+                                        </select>
+
+                                        <label for="device2_modify" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    連接裝置-2:
+                                                <% }else if (language==1){%>
+                                                    连接装置-2:
+                                                <% }else if (language==2){%>
+                                                    Connecting device-2:
+                                                <% }%>
+                                        </label>
+                                        <select id="device2_modify<%= gateway[x].Mac %>" class="form-control" onmousedown="getnowvalue2('<%= gateway[x].Mac %>',this.value)" onchange="modifySelection_device2('<%= gateway[x].Mac %>',this.value)">
+                                            <% if(gateway[x].id == null) {%>
+                                                <option value='' selected="selected">
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%>
+                                                </option>
+                                                <% for(d2m=0;d2m<device.length;d2m++) {%>
+                                                <option value='<%= device[d2m].Mac %>'><%= device[d2m].Name %></option>
+                                                <% } %>
+                                            <% }else{ %>
+                                                <option value=''>
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%>
+                                                </option>
+                                                <% var ar2d = new Array(); %>
+                                                <% for(g2d=0;g2d<gateway.length;g2d++) {%>
+                                                    <% if(gateway[g2d].Connectdevice1 != null) {%>
+                                                        <% ar2d.push(gateway[g2d].Connectdevice1) %>
+                                                    <% } %>
+                                                    <% if(gateway[g2d].Connectdevice2 != null) {%>
+                                                        <% ar2d.push(gateway[g2d].Connectdevice2) %>
+                                                    <% } %>
+                                                    <% if(gateway[g2d].Connectdevice3 != null) {%>
+                                                        <% ar2d.push(gateway[g2d].Connectdevice3) %>
+                                                    <% } %>
+                                                    <% if(gateway[g2d].Connectdevice4 != null) {%>
+                                                        <% ar2d.push(gateway[g2d].Connectdevice4) %>
+                                                    <% } %>
+                                                <% } %>
+                                                <% var i2d=1; %>
+                                                <% for( d2mn=0;d2mn<device.length;d2mn++) {%>
+                                                    <% if(gateway[x].Connectdevice2 == device[d2mn].Mac) {%>
+                                                        <option value='<%= device[d2mn].Mac %>' selected="selected"><%= device[d2mn].Name %></option>
+                                                    <% } %>
+                                                    <% for(ar2dl=0;ar2dl<ar2d.length;ar2dl++) {%>
+                                                        <% if(device[d2mn].Mac == ar2d[ar2dl]) {%>
+                                                            <% i2d=0; %>
+                                                        <% } %>
+                                                    <% } %>
+                                                    <% if(i2d==1) {%>
+                                                        <option value='<%= device[d2mn].Mac %>'><%= device[d2mn].Name %></option>
+                                                    <% }else{ %>
+                                                        <% i2d=1; %>
+                                                    <% } %>
+                                                <% } %>
+                                            <% } %>
+                                        </select>
+
+                                        <label for="device3_modify" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    連接裝置-3:
+                                                <% }else if (language==1){%>
+                                                    连接装置-3:
+                                                <% }else if (language==2){%>
+                                                    Connecting device-3:
+                                                <% }%>
+                                        </label>
+                                        <select id="device3_modify<%= gateway[x].Mac %>" class="form-control" onmousedown="getnowvalue3('<%= gateway[x].Mac %>',this.value)" onchange="modifySelection_device3('<%= gateway[x].Mac %>',this.value)">
+                                            <% if(gateway[x].id == null) {%>
+                                                <option value='' selected="selected">
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%>
+                                                </option>
+                                                <% for(d3m=0;d3m<device.length;d3m++) {%>
+                                                <option value='<%= device[d3m].Mac %>'><%= device[d3m].Name %></option>
+                                                <% } %>
+                                            <% }else{ %>
+                                                <option value=''>
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%>
+                                                </option>
+                                                <% var ar3d = new Array(); %>
+                                                <% for(g3d=0;g3d<gateway.length;g3d++) {%>
+                                                    <% if(gateway[g3d].Connectdevice1 != null) {%>
+                                                        <% ar3d.push(gateway[g3d].Connectdevice1) %>
+                                                    <% } %>
+                                                    <% if(gateway[g3d].Connectdevice2 != null) {%>
+                                                        <% ar3d.push(gateway[g3d].Connectdevice2) %>
+                                                    <% } %>
+                                                    <% if(gateway[g3d].Connectdevice3 != null) {%>
+                                                        <% ar3d.push(gateway[g3d].Connectdevice3) %>
+                                                    <% } %>
+                                                    <% if(gateway[g3d].Connectdevice4 != null) {%>
+                                                        <% ar3d.push(gateway[g3d].Connectdevice4) %>
+                                                    <% } %>
+                                                <% } %>
+                                                <% var i3d=1; %>
+                                                <% for( d3mn=0;d3mn<device.length;d3mn++) {%>
+                                                    <% if(gateway[x].Connectdevice3 == device[d3mn].Mac) {%>
+                                                        <option value='<%= device[d3mn].Mac %>' selected="selected"><%= device[d3mn].Name %></option>
+                                                    <% } %>
+                                                    <% for(ar3dl=0;ar3dl<ar3d.length;ar3dl++) {%>
+                                                        <% if(device[d3mn].Mac == ar3d[ar3dl]) {%>
+                                                            <% i3d=0; %>
+                                                        <% } %>
+                                                    <% } %>
+                                                    <% if(i3d==1) {%>
+                                                        <option value='<%= device[d3mn].Mac %>'><%= device[d3mn].Name %></option>
+                                                    <% }else{ %>
+                                                        <% i3d=1; %>
+                                                    <% } %>
+                                                <% } %>
+                                            <% } %>
+                                        </select>
+
+                                        <label for="device4_modify" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    連接裝置-4:
+                                                <% }else if (language==1){%>
+                                                    连接装置-4:
+                                                <% }else if (language==2){%>
+                                                    Connecting device-4:
+                                                <% }%>
+                                        </label>
+                                        <select id="device4_modify<%= gateway[x].Mac %>" class="form-control" onmousedown="getnowvalue4('<%= gateway[x].Mac %>',this.value)" onchange="modifySelection_device4('<%= gateway[x].Mac %>',this.value)">
+                                            <% if(gateway[x].id == null) {%>
+                                                <option value='' selected="selected">
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%>
+                                                </option>
+                                                <% for(d4m=0;d4m<device.length;d4m++) {%>
+                                                <option value='<%= device[d4m].Mac %>'><%= device[d4m].Name %></option>
+                                                <% } %>
+                                            <% }else{ %>
+                                                <option value=''>
+                                                        <% if (language==0){%>
+                                                            暫無
+                                                        <% }else if (language==1){%>
+                                                            暂无
+                                                        <% }else if (language==2){%>
+                                                            No data
+                                                        <% }%>
+                                                </option>
+                                                <% var ar4d = new Array(); %>
+                                                <% for(g4d=0;g4d<gateway.length;g4d++) {%>
+                                                    <% if(gateway[g4d].Connectdevice1 != null) {%>
+                                                        <% ar4d.push(gateway[g4d].Connectdevice1) %>
+                                                    <% } %>
+                                                    <% if(gateway[g4d].Connectdevice2 != null) {%>
+                                                        <% ar4d.push(gateway[g4d].Connectdevice2) %>
+                                                    <% } %>
+                                                    <% if(gateway[g4d].Connectdevice3 != null) {%>
+                                                        <% ar4d.push(gateway[g4d].Connectdevice3) %>
+                                                    <% } %>
+                                                    <% if(gateway[g4d].Connectdevice4 != null) {%>
+                                                        <% ar4d.push(gateway[g4d].Connectdevice4) %>
+                                                    <% } %>
+                                                <% } %>
+                                                <% var i4d=1; %>
+                                                <% for( d4mn=0;d4mn<device.length;d4mn++) {%>
+                                                    <% if(gateway[x].Connectdevice4 == device[d4mn].Mac) {%>
+                                                        <option value='<%= device[d4mn].Mac %>' selected="selected"><%= device[d4mn].Name %></option>
+                                                    <% } %>
+                                                    <% for(ar4dl=0;ar4dl<ar4d.length;ar4dl++) {%>
+                                                        <% if(device[d4mn].Mac == ar4d[ar4dl]) {%>
+                                                            <% i4d=0; %>
+                                                        <% } %>
+                                                    <% } %>
+                                                    <% if(i4d==1) {%>
+                                                        <option value='<%= device[d4mn].Mac %>'><%= device[d4mn].Name %></option>
+                                                    <% }else{ %>
+                                                        <% i4d=1; %>
+                                                    <% } %>
+                                                <% } %>
+                                            <% } %>
+                                        </select>
+
+                                        <script>
+                                                var d1val,d2val,d3val,d4val;
+                                                var alloption = new Array();
+                                                var optionall = document.querySelector('#device1').querySelectorAll('option');
+                                                for(var weqw=0;weqw<optionall.length;weqw++){
+                                                    alloption.push(optionall[weqw].dataset.option);
+                                                };
+                                                function getnowvalue1(mac,Value){
+                                                    d1val=Value;
+                                                }
+                                                function getnowvalue2(mac,Value){
+                                                    d2val=Value;
+                                                }
+                                                function getnowvalue3(mac,Value){
+                                                    d3val=Value;
+                                                }
+                                                function getnowvalue4(mac,Value){
+                                                    d4val=Value;
+                                                }
+                                        
+                                                function modifySelection_device1(mac,Value) {
+                                                    var dev1m = document.querySelector('#device1_modify'+mac);
+                                                    var dev2m = document.querySelector('#device2_modify'+mac);                                            
+                                                    var dev3m = document.querySelector('#device3_modify'+mac);
+                                                    var dev4m = document.querySelector('#device4_modify'+mac);
+                                                    if(Value!=""){                                                       
+                                                        if(Value === dev2m.value || Value === dev3m.value || Value === dev4m.value) {
+                                                            if ('<%= language%>'==0)
+                                                                alert("連接裝置不可重複");
+                                                            else if('<%= language%>'==1)
+                                                                alert("連接裝置不可重複");
+                                                            else if('<%= language%>'==2)
+                                                                alert("Connection device is not repeatable");
+                                                            dev1m.selectedIndex=0;
+                                                    //     }else{
+                                                    //         var flag1=0;
+                                                    //         for(var qwe=0;qwe<alloption.length;qwe++){
+                                                    //             if(d1val==alloption[qwe]){
+                                                    //                 flag1=1;
+                                                    //             }
+                                                    //         }
+                                                    //         if(flag1==0){
+                                                    //             alloption.push(d1val);
+                                                    //         }
+                                                        }                                     
+                                                    // }else{
+                                                    //     var flag1=0;
+                                                    //     for(var qwe=0;qwe<alloption.length;qwe++){
+                                                    //         if(d1val==alloption[qwe]){
+                                                    //             flag1=1;
+                                                    //         }
+                                                    //     }
+                                                    //     if(flag1==0){
+                                                    //         alloption.push(d1val);
+                                                    //     }
+                                                    // }
+                                                    // console.log("array:"+alloption);
+                          
+                                                    // for(var qwe1=0;qwe1<alloption.length;qwe1++){
+                                                    //     dev2m.setAttribute(alloption[qwe1]);
+                                                    }
+
+                                                }         
+                                                
+                                                function modifySelection_device2(mac,Value) {
+                                                    var dev1m = document.querySelector('#device1_modify'+mac);
+                                                    var dev2m = document.querySelector('#device2_modify'+mac);
+                                                    var dev3m = document.querySelector('#device3_modify'+mac);
+                                                    var dev4m = document.querySelector('#device4_modify'+mac);
+                                                    if(Value!=""){
+                                                        if(Value === dev1m.value || Value === dev3m.value || Value === dev4m.value) {
+                                                            if ('<%= language%>'==0)
+                                                                alert("連接裝置不可重複");
+                                                            else if('<%= language%>'==1)
+                                                                alert("連接裝置不可重複");
+                                                            else if('<%= language%>'==2)
+                                                                alert("Connection device is not repeatable");
+                                                            dev2m.selectedIndex=0;
+                                                        }
+                                                    }                          
+                                                }
+
+                                                function modifySelection_device3(mac,Value) {
+                                                    var dev1m = document.querySelector('#device1_modify'+mac);
+                                                    var dev2m = document.querySelector('#device2_modify'+mac);
+                                                    var dev3m = document.querySelector('#device3_modify'+mac);
+                                                    var dev4m = document.querySelector('#device4_modify'+mac);
+                                                    if(Value!=""){
+                                                        if(Value === dev1m.value || Value === dev2m.value || Value === dev4m.value) {
+                                                            if ('<%= language%>'==0)
+                                                                alert("連接裝置不可重複");
+                                                            else if('<%= language%>'==1)
+                                                                alert("連接裝置不可重複");
+                                                            else if('<%= language%>'==2)
+                                                                alert("Connection device is not repeatable");
+                                                            dev3m.selectedIndex=0;
+                                                        }
+                                                    }                          
+                                                } 
+
+                                                function modifySelection_device4(mac,Value) {
+                                                    var dev1m = document.querySelector('#device1_modify'+mac);
+                                                    var dev2m = document.querySelector('#device2_modify'+mac);
+                                                    var dev3m = document.querySelector('#device3_modify'+mac);
+                                                    var dev4m = document.querySelector('#device4_modify'+mac);
+                                                    if(Value!=""){
+                                                        if(Value === dev1m.value || Value === dev2m.value || Value === dev3m.value) {
+                                                            if ('<%= language%>'==0)
+                                                                alert("連接裝置不可重複");
+                                                            else if('<%= language%>'==1)
+                                                                alert("連接裝置不可重複");
+                                                            else if('<%= language%>'==2)
+                                                                alert("Connection device is not repeatable");
+                                                            dev4m.selectedIndex=0;
+                                                        }
+                                                    }                          
+                                                } 
+                                        </script>
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if (language==0){%>
+                                                取消
+                                                <% }else if (language==1){%>
+                                                    取消
+                                                <% }else if (language==2){%>
+                                                    cancel
+                                                <% }%>
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                        onclick="modifyvalue_gateway('<%= gateway[x].Mac %>','<%= language %>')">
+                                        <% if (language==0){%>
+                                            確認
+                                            <% }else if (language==1){%>
+                                                确认
+                                            <% }else if (language==2){%>
+                                                confirm
+                                            <% }%>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td><button type="button" class="btn btn-secondary" data-toggle="modal"
+                        data-target="#modal-<%= gateway[x].Mac %>-del">
+                        <% if (language==0){%>
+                            刪除
+                        <% }else if (language==1){%>
+                            删除
+                        <% }else if (language==2){%>
+                            Delete
+                        <% }%>
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="modal-<%= gateway[x].Mac %>-del" tabindex="-1" role="dialog"
+                        aria-labelledby="<%= gateway[x].Mac %>-Label-del" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="<%= gateway[x].Mac %>-Label-del">
+                                            <% if (language==0){%>
+                                                刪除
+                                            <% }else if (language==1){%>
+                                                删除
+                                            <% }else if (language==2){%>
+                                                Delete
+                                            <% }%>
+                                        　<span
+                                            style="font-size: 25px;font-style:italic"><%= gateway[x].Name %></span>　
+                                            <% if (language==0){%>
+                                                資料
+                                            <% }else if (language==1){%>
+                                                资料
+                                            <% }else if (language==2){%>
+                                                data
+                                            <% }%>
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form style="text-align: left">
+                                        <label for="mac" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    識別碼：
+                                                <% }else if (language==1){%>
+                                                    识别码：
+                                                <% }else if (language==2){%>
+                                                    Identifier:
+                                                <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= gateway[x].Mac %>' readonly>
+
+                                        <label for="name" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    名稱:
+                                                <% }else if (language==1){%>
+                                                    名称:
+                                                <% }else if (language==2){%>
+                                                    name:
+                                                <% }%>
+                                        </label>
+                                        <input type="text" class="form-control" value='<%= gateway[x].Name %>' readonly>
+
+                                        <label for="description" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    描述:
+                                                    <% }else if (language==1){%>
+                                                        描述:
+                                                    <% }else if (language==2){%>
+                                                        description:
+                                                    <% }%>
+                                        </label>
+                                        <% if(gateway[x].Description == null) {%>
+                                            <% if (language==0){%>
+                                                <input type="text" class="form-control" readonly value="暫無">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" readonly value="暂无">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" readonly value="No data">
+                                            <% }%>
+                                        <% }else{ %>
+                                        <input type="text" class="form-control" value='<%= gateway[x].Description %>'
+                                            readonly>
+                                        <% } %>
+
+                                        <label for="floor" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    樓層:
+                                                <% }else if (language==1){%>
+                                                    楼层:
+                                                <% }else if (language==2){%>
+                                                    floor:
+                                                <% }%>
+                                        </label>
+                                        <% if(gateway[x].Floor == null) {%>
+                                            <% if (language==0){%>
+                                                <input type="text" class="form-control" readonly value="暫無">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" readonly value="暂无">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" readonly value="No data">
+                                            <% }%>
+                                        <% }else{ %>
+                                            <% for(fld=0;fld<floor.length;fld++) {%>
+                                                <% if(gateway[x].Floor == floor[fld].Number) {%>
+                                                <input type="number" class="form-control" value='<%= floor[fld].Number %>'
+                                                    readonly>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
+
+                                        <label for="device1" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    連接裝置-1:
+                                                <% }else if (language==1){%>
+                                                    连接装置-1:
+                                                <% }else if (language==2){%>
+                                                    Connecting device-1:
+                                                <% }%>
+                                        </label>
+                                        <% if(gateway[x].Connectdevice1 == null) {%>
+                                            <% if (language==0){%>
+                                                <input type="text" class="form-control" readonly value="暫無">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" readonly value="暂无">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" readonly value="No data">
+                                            <% }%>
+                                        <% }else{ %>
+                                    
+                                                <input type="text" class="form-control" value='<%= gateway[x].Connectdevice1 %>'
+                                                    readonly>
+                                                
+                                        <% } %>
+
+                                        <label for="device2" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    連接裝置-2:
+                                                <% }else if (language==1){%>
+                                                    连接装置-2:
+                                                <% }else if (language==2){%>
+                                                    Connecting device-2:
+                                                <% }%>
+                                        </label>
+                                        <% if(gateway[x].Connectdevice2 == null) {%>
+                                            <% if (language==0){%>
+                                                <input type="text" class="form-control" readonly value="暫無">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" readonly value="暂无">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" readonly value="No data">
+                                            <% }%>
+                                        <% }else{ %>
+                                            <% for(dev2=0;dev2<device.length;dev2++) {%>
+                                                <% if(device[dev2].Name == gateway[x].Connectdevice2) {%>
+                                                <input type="text" class="form-control" value='<%= gateway[x].Connectdevice2 %>'
+                                                    readonly>
+                                                <% } %>
+                                            <% } %>
+                                        <% } %>
+
+                                        <label for="device3" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    連接裝置-3:
+                                                <% }else if (language==1){%>
+                                                    连接装置-3:
+                                                <% }else if (language==2){%>
+                                                    Connecting device-3:
+                                                <% }%>
+                                        </label>
+                                        <% if(gateway[x].Connectdevice3 == null) {%>
+                                            <% if (language==0){%>
+                                                <input type="text" class="form-control" readonly value="暫無">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" readonly value="暂无">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" readonly value="No data">
+                                            <% }%>
+                                        <% }else{ %>
+                                                <input type="text" class="form-control" value='<%= gateway[x].Connectdevice3 %>'
+                                                    readonly>
+                                        <% } %>
+
+                                        <label for="device4" class="col-form-label">
+                                                <% if (language==0){%>
+                                                    連接裝置-4:
+                                                <% }else if (language==1){%>
+                                                    连接装置-4:
+                                                <% }else if (language==2){%>
+                                                    Connecting device-4:
+                                                <% }%>
+                                        </label>
+                                        <% if(gateway[x].Connectdevice4 == null) {%>
+                                            <% if (language==0){%>
+                                                <input type="text" class="form-control" readonly value="暫無">
+                                            <% }else if (language==1){%>
+                                                <input type="text" class="form-control" readonly value="暂无">
+                                            <% }else if (language==2){%>
+                                                <input type="text" class="form-control" readonly value="No data">
+                                            <% }%>
+                                        <% }else{ %>
+                                          
+                                                <input type="text" class="form-control" value='<%= gateway[x].Connectdevice4 %>'
+                                                    readonly>
+                                                
+                                        <% } %>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                            <% if (language==0){%>
+                                                取消
+                                                <% }else if (language==1){%>
+                                                    取消
+                                                <% }else if (language==2){%>
+                                                    cancel
+                                                <% }%>
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                        onclick="deletevalue_gateway('<%= gateway[x].Mac %>','<%= language %>')">
+                                        <% if (language==0){%>
+                                            確認
+                                            <% }else if (language==1){%>
+                                                确认
+                                            <% }else if (language==2){%>
+                                                confirm
+                                            <% }%>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <script>
+        if ('<%= language%>'==0){
+            $(document).ready(function () {
+                $('#gatawaytable').DataTable({
+                    language: {
+                        search: "搜尋：",
+                        sProcessing: "處理中...",
+                        sLengthMenu: "顯示 _MENU_ 項结果",
+                        sZeroRecords: "没有匹配结果",
+                        sInfo: "顯示第 _START_ 至 _END_ 項结果，共 _TOTAL_ 項",
+                        sInfoEmpty: "顯示第 0 至 0 項结果，共 0 項",
+                        sInfoFiltered: "(由 _MAX_ 項结果過濾)",
+                        sInfoPostFix: "",
+                        sSearch: "搜索:",
+                        sEmptyTable: "表中數據為空",
+                        sLoadingRecords: "載入中...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "首頁",
+                            sPrevious: "上頁",
+                            sNext: "下頁",
+                            sLast: "末頁"
+                        },
+                        oAria: {
+                            "sSortAscending": ": 以升排列",
+                            "sSortDescending": ": 以降排列"
+                        }
+                    }
+                });
+            });
+        }
+        else if('<%= language%>'==1){
+            $(document).ready(function () {
+                $('#gatawaytable').DataTable({
+                    language: {
+                        search: "搜尋：",
+                        sProcessing: "处理中...",
+                        sLengthMenu: "显示 _MENU_ 项结果",
+                        sZeroRecords: "没有匹配结果",
+                        sInfo: "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                        sInfoEmpty: "显示第 0 至 0 项结果，共 0 项",
+                        sInfoFiltered: "(由 _MAX_ 项结果过滤)",
+                        sInfoPostFix: "",
+                        sSearch: "搜索:",
+                        sEmptyTable: "表中数据为空",
+                        sLoadingRecords: "载入中...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "首页",
+                            sPrevious: "上页",
+                            sNext: "下页",
+                            sLast: "末页"
+                        },
+                        oAria: {
+                            "sSortAscending": ": 以升排列",
+                            "sSortDescending": ": 以降排列"
+                        }
+                    }
+                });
+            });
+        }
+        else if('<%= language%>'==2){
+            $(document).ready(function () {
+                $('#gatawaytable').DataTable({
+                    language: {
+                        search: "Search：",
+                        sProcessing: "Processing...",
+                        sLengthMenu: "Display _MENU_ results",
+                        sZeroRecords: "No matching results",
+                        sInfo: "Showing _START_ to _END_ results， _TOTAL_ items",
+                        sInfoEmpty: "Showing 0 to 0 results， 0 items",
+                        sInfoFiltered: "(Filtered by _MAX_ result)",
+                        sInfoPostFix: "",
+                        sSearch: "Search：",
+                        sEmptyTable: "The data in the table is empty",
+                        sLoadingRecords: "Processing...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "top page",
+                            sPrevious: "previous page",
+                            sNext: "next page",
+                            sLast: "last page"
+                        },
+                        oAria: {
+                            "sSortAscending": ": In ascending",
+                            "sSortDescending": ": In descending"
+                        }
+                    }
+                });
+            });
+        }
+        
+    </script>
+
+    <% } %>
+
+</div>
