@@ -15,7 +15,7 @@
     "bower": "^1.8.8",
     "chart.js": "^2.8.0",
     "cookie-parser": "^1.4.4",
-    "datatables.net": "^1.10.19",
+    "datatables.net": "^1.10.22",
     "debug": "^4.1.1",
     "ejs": "~0.8.5",
     "express": "^4.17.1",
