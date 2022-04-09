@@ -22,7 +22,7 @@
     "express-session": "^1.16.2",
     "heroku": "^7.29.0",
     "jquery": "^3.4.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "morgan": "^1.9.1",
     "mqtt": "^3.0.0",
     "mysql": "^2.17.1",
