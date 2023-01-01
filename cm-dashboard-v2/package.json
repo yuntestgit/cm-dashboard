@@ -30,7 +30,7 @@
     "pg": "^7.11.0",
     "silly-datetime": "^0.1.2",
     "static-favicon": "~1.0.0",
-    "webpack": "^4.39.2"
+    "webpack": "^5.75.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
