@@ -17,7 +17,7 @@
     "cookie-parser": "^1.4.4",
     "datatables.net": "^1.10.19",
     "debug": "^4.1.1",
-    "ejs": "~0.8.5",
+    "ejs": "~2.5.5",
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "heroku": "^7.29.0",
